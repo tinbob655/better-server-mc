@@ -21,6 +21,24 @@ h2 {
     font-family: Bruno Ace SC;
     font-weight: 100;
     font-size: 35px;
+
+    &.headerText {
+        padding-top: 0;
+        padding-bottom: 0;
+        $marginTopBottom: 20px;
+        margin-top: $marginTopBottom;
+        margin-bottom: $marginTopBottom;
+        font-size: 30px;
+        font-weight: bolder;
+        transition-property: transform;
+        transition-duration: 0.75s;
+        transition-timing-function: ease;
+        cursor: pointer;
+
+        &:hover {
+            transform: scale(1.15);
+        }
+    }
 }
 
 h3 {
@@ -82,6 +100,11 @@ button {
     width: fit-content;
 }
 
+table {
+    table-layout: fixed;
+    width: 100%;
+}
+
 div {
     margin-left: auto;
     margin-right: auto;
@@ -96,4 +119,41 @@ div {
         margin-top: $marginTopBottom;
         margin-bottom: $marginTopBottom;
     }
+
+    &#headerWrapper {
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        height: 100px;
+        background-color: rgba(14, 18, 20, 0.9);
+    }
+
+    &.headerLine {
+        width: 80%;
+        height: 2px;
+        background-color: white;
+
+        transition-property: transform;
+        transition-duration: 0.75s;
+        transition-timing-function: ease;
+        transform: scale(0, 1);
+        transform-origin: left;
+
+        &.shown {
+            transform: scale(1, 1);
+        }
+
+        &.headerLineBottom {
+            transform-origin: right !important;
+        }
+    }
+}
+
+.noVerticalSpacing {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
 }

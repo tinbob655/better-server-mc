@@ -5,13 +5,19 @@ import AppRoutes from './routes';
 import { BrowserRouter } from 'react-router-dom';
 import firebaseInit from './firebase';
 
+import Header from './components/multiPageComponents/header';
+
 //start firebase
 firebaseInit();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
-    <AppRoutes />
+    <Header/>
+
+    <div style={{marginTop: '100px'}}>
+      <AppRoutes />
+    </div>
     </BrowserRouter>
   </StrictMode>,
 );
