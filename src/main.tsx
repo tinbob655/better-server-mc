@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import firebaseInit from './firebase';
 
 import Header from './components/multiPageComponents/header';
+import Footer from './components/multiPageComponents/footer';
 
 //start firebase
 firebaseInit();
@@ -18,6 +19,8 @@ createRoot(document.getElementById('root')!).render(
     <div style={{marginTop: '100px'}}>
       <AppRoutes />
     </div>
+
+    <Footer/>
     </BrowserRouter>
   </StrictMode>,
 );

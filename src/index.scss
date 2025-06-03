@@ -149,6 +149,22 @@ div {
             transform-origin: right !important;
         }
     }
+
+    &#footerWrapper {
+        width: 100%;
+    }
+}
+
+img {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+
+    &#footerImage {
+        height: 50vh;
+        width: auto;
+        border-radius: 20px;
+    }
 }
 
 .noVerticalSpacing {
