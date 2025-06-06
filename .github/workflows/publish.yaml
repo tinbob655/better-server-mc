@@ -35,14 +35,16 @@ jobs:
       - name: Build client image
         run: |
           docker-compose build client
-          docker tag my-app_client $DOCKER_USER/client:latest
-          docker tag my-app_client $DOCKER_USER/client:$IMAGE_TAG
+          IMAGE_ID=$(docker inspect --format="{{.Id}}" $(docker-compose images -q client))
+          docker tag $IMAGE_ID $DOCKER_USER/client:latest
+          docker tag $IMAGE_ID $DOCKER_USER/client:$IMAGE_TAG
 
       - name: Build server image
         run: |
           docker-compose build server
-          docker tag my-app_server $DOCKER_USER/server:latest
-          docker tag my-app_server $DOCKER_USER/server:$IMAGE_TAG
+          IMAGE_ID=$(docker inspect --format="{{.Id}}" $(docker-compose images -q server))
+          docker tag $IMAGE_ID $DOCKER_USER/server:latest
+          docker tag $IMAGE_ID $DOCKER_USER/server:$IMAGE_TAG
 
       - name: Push client image
         run: |
