@@ -1,7 +1,55 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import PageHeader from '../../multiPageComponents/pageHeader';
 
 export default function Home():React.ReactElement {
+
+    const [playersOnline, setPlayersOnline] = useState<number>(-1);
+    const [serverOnline, setServerOnline] = useState<boolean>(false);
+    const [reportedOutages, setReportedOutages] = useState<number>(-1);
+
+    //use effect to fetch server status, players online and reported outages
+    useEffect(() => {
+
+        //asks the backend if the mc server is working
+        async function fetchServerStatus():Promise<boolean> {
+
+            try {
+                const response:Response = await fetch(`${import.meta.env.VITE_EXPRESS_URL}/serverStatus`);
+                const data:string = await response.text();
+
+                if (data === 'true') {
+                    return true;
+                }
+                else return false;
+            }
+            catch(error) {
+                console.error(error);
+                return false;
+            };
+        };
+
+        async function getReportedOutages():Promise<number> {
+
+            return -1;
+        };
+
+        async function getPlayersOnline():Promise<number> {
+
+            return -1;
+        };
+
+        fetchServerStatus().then((status:boolean) => {
+            setServerOnline(status)
+        });
+
+        getReportedOutages().then((outages:number) => {
+            setReportedOutages(outages);
+        });
+
+        getPlayersOnline().then((players:number) => {
+            setPlayersOnline(players);
+        });
+    }, []);
 
     return (
         <React.Fragment>
@@ -23,11 +71,13 @@ export default function Home():React.ReactElement {
                 Server Status
             </h2>
             <p className="alignRight">
-                Based on our current data, the server appears to be online.
+                Based on our current data, the server appears to be <b>{serverOnline ? 'ONLINE' : 'OFFLINE'}</b>
                 <br/><br/>
-                0 Players have reported an outage in the last hour.
+                {reportedOutages} Player{reportedOutages === 1 ? ' has' : 's have'} reported an outage in the last hour.
                 <br/><br/>
-                There are currently 0 players online.
+
+                {/*will display loading if fetching server data, otherwise will display the number of players online*/}
+                {playersOnline === -1 ? 'Loading...' : playersOnline === 1 ? 'There is currently 1 player online.' : `There are currently ${playersOnline} players online.`}
             </p>
             <button type="button">
                 <h3>
