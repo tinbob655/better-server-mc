@@ -2,6 +2,7 @@
 FROM node:18 AS builder
 WORKDIR /app
 COPY . .
+COPY .env .
 RUN npm install && npm run build
 
 FROM nginx:alpine
