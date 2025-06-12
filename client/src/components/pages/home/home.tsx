@@ -55,6 +55,8 @@ export default function Home():React.ReactElement {
             setServerOnline(response[0]);
             setPlayersOnline(response[1]);
         });
+
+        setReportedOutages(-1);
     }, []);
 
     return (
