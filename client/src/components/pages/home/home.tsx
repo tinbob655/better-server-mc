@@ -4,50 +4,56 @@ import PageHeader from '../../multiPageComponents/pageHeader';
 export default function Home():React.ReactElement {
 
     const [playersOnline, setPlayersOnline] = useState<number>(-1);
-    const [serverOnline, setServerOnline] = useState<boolean>(false);
+    const [serverOnline, setServerOnline] = useState<string>('loading...');
     const [reportedOutages, setReportedOutages] = useState<number>(-1);
+
+    interface mcServerResponse {
+        latency: number,
+        status: {
+            description: string,
+            favicon: string,
+            players: {
+                max: number,
+                online: number,
+            },
+            preventsChatReports: boolean,
+            version: {
+                name: string,
+                protocol: number,
+            },
+        },
+        statusRaw: string,
+    };
 
     //use effect to fetch server status, players online and reported outages
     useEffect(() => {
 
         //asks the backend if the mc server is working
-        async function fetchServerStatus():Promise<boolean> {
+        async function fetchServerStatus():Promise<[string, number]> {
 
             try {
                 const response:Response = await fetch(`${import.meta.env.VITE_EXPRESS_URL}/serverStatus`);
                 const data:string = await response.text();
 
-                if (data === 'true') {
-                    return true;
+                if (data) {
+                    const parsedData:mcServerResponse = JSON.parse(data);
+
+                    return [
+                        'ONLINE',
+                        parsedData.status.players.online
+                    ];
                 }
-                else return false;
+                else return ['OFFLINE', -1];
             }
             catch(error) {
                 console.error(error);
-                return false;
+                return ['OFFLINE', -1];
             };
         };
 
-        async function getReportedOutages():Promise<number> {
-
-            return -1;
-        };
-
-        async function getPlayersOnline():Promise<number> {
-
-            return -1;
-        };
-
-        fetchServerStatus().then((status:boolean) => {
-            setServerOnline(status)
-        });
-
-        getReportedOutages().then((outages:number) => {
-            setReportedOutages(outages);
-        });
-
-        getPlayersOnline().then((players:number) => {
-            setPlayersOnline(players);
+        fetchServerStatus().then((response) => {
+            setServerOnline(response[0]);
+            setPlayersOnline(response[1]);
         });
     }, []);
 
@@ -71,7 +77,7 @@ export default function Home():React.ReactElement {
                 Server Status
             </h2>
             <p className="alignRight">
-                Based on our current data, the server appears to be <b>{serverOnline ? 'ONLINE' : 'OFFLINE'}</b>
+                Based on our current data, the server appears to be <b>{serverOnline}</b>
                 <br/><br/>
                 {reportedOutages} Player{reportedOutages === 1 ? ' has' : 's have'} reported an outage in the last hour.
                 <br/><br/>
