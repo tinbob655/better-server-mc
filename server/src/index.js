@@ -10,13 +10,13 @@ app.use(cors());
 
 const PORT = process.env.PORT || 5000;
 
-app.get('/', (_req, res) => {
+app.get('/api', (_req, res) => {
   res.send("Hello from '/'");
 });
 
 
 //pings the mc server to see if it is online
-app.get('/serverStatus', (_req, res) => {
+app.get('/api/serverStatus', (_req, res) => {
 
   //need to ping the mc server ip to see if it is online
   async function getServerStatus() {

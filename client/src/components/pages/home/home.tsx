@@ -32,7 +32,7 @@ export default function Home():React.ReactElement {
         async function fetchServerStatus():Promise<[string, number]> {
 
             try {
-                const response:Response = await fetch(`${import.meta.env.VITE_EXPRESS_URL}/serverStatus`);
+                const response:Response = await fetch(`${import.meta.env.VITE_EXPRESS_URL}/api/serverStatus`);
                 const data:string = await response.text();
 
                 if (data) {
