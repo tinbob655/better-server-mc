@@ -16,7 +16,7 @@ export default function Home():React.ReactElement {
             <GenericTextSection header="Keep up to date" paragraph="The Better Server has a live feed where players can post what they have been up to and have a chat! All it takes is logging in to your account and getting verified before you're ready to get posting." linkText="Get posting here!" linkDestination="/feed" left={true}/>
 
             {/*playerbase section*/}
-            <GenericTextSection header="Our playerbase" paragraph="Players are free to write about themselves and their achievements on our playerbase page. Write your server autobiography, or view other people's biographies; you must of course be logged in and verified first." linkText="View our playerbase here!" linkDestination="/playerbase" left={false} noDividerLine={true} />
+            <GenericTextSection header="Our playerbase" paragraph="Players are free to write about themselves and their achievements on our playerbase page. Write your server autobiography, or view other people's biographies; you must of course be logged in and verified first." linkText="View our playerbase here!" linkDestination="/playerbase" left={false}/>
         </React.Fragment>
     );
 };
