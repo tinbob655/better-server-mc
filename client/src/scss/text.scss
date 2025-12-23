@@ -50,13 +50,13 @@ h1, h2, h3, p {
 
     &.alignLeft {
         text-align: left;
-        margin-left: 0.75%;
+        margin-left: 2%;
         transform-origin: left;
     }
 
     &.alignRight {
         text-align: right;
-        margin-right: 0.75%;
+        margin-right: 2%;
         transform-origin: right;
     }
 }
