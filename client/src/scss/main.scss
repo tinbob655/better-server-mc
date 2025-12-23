@@ -5,6 +5,7 @@
 @use 'header.scss';
 @use 'fancyButton.scss';
 @use 'pageHeader.scss';
+@use 'card.scss';
 @import url('https://fonts.googleapis.com/css2?family=Bellota+Text:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
 
 
@@ -31,30 +32,6 @@ div {
         opacity: 0.85;
         margin-left: auto;
         margin-right: auto;
-    }
-
-    &.card {
-        background: linear-gradient(120deg, rgba(24,28,43,0.82) 0%, rgba(58,110,219,0.18) 100%);
-        backdrop-filter: blur(12px) saturate(1.2);
-        -webkit-backdrop-filter: blur(12px) saturate(1.2);
-        border-radius: 1.2rem;
-        box-shadow: 0 6px 24px 0 rgba(0,0,0,0.16), 0 1.5px 0 vars.$primary-blue;
-        color: vars.$star-white;
-        border: 1.5px solid rgba(126,196,124,0.12);
-        padding: 2.5rem 2.2rem;
-        margin-bottom: 2.5rem;
-        opacity: 0.97;
-        transition: box-shadow 0.22s, background 0.22s, border 0.22s;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        max-width: 85vw;
-
-        &:hover {
-            box-shadow: 0 10px 32px 0 vars.$shadow;
-            background: linear-gradient(120deg, rgba(58,110,219,0.22) 0%, rgba(24,28,43,0.92) 100%);
-            border: 1.5px solid vars.$primary-blue;
-        }
     }
 
     &#content {
