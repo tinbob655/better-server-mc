@@ -1,0 +1,57 @@
+
+// Better Server Colour Scheme
+@use 'variables.scss' as vars;
+@import 'text.scss';
+@import url('https://fonts.googleapis.com/css2?family=Bellota+Text:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
+
+
+body {
+	min-height: 100vh;
+	background: linear-gradient(135deg, vars.$secondary-bg 0%, vars.$primary-bg 100%);
+	background-color: vars.$primary-bg;
+	color: vars.$star-white;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+div {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+    &.dividerLine {
+        width: 75%;
+        background-color: vars.$earth-green;
+        height: 2px;
+    }
+
+    &.card {
+        background: vars.$secondary-bg;
+        border-radius: 1rem;
+        box-shadow: 0 2px 8px vars.$shadow;
+        color: vars.$star-white;
+    }
+}
+
+.noVerticalSpacing {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+    &.logo {
+        background: none;
+        color: vars.$primary-blue;
+        filter: drop-shadow(0 2px 8px vars.$shadow);
+    }
+}
