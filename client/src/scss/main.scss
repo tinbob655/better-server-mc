@@ -1,7 +1,8 @@
 
 // Better Server Colour Scheme
 @use 'variables.scss' as vars;
-@import 'text.scss';
+@use 'text.scss';
+@use 'footer.scss';
 @import url('https://fonts.googleapis.com/css2?family=Bellota+Text:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
 
 
@@ -48,10 +49,13 @@ img {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    max-height: 80vh;
+    max-width: 50vw;
 
     &.logo {
         background: none;
         color: vars.$primary-blue;
         filter: drop-shadow(0 2px 8px vars.$shadow);
+        border-radius: 2%;
     }
 }
