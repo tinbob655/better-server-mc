@@ -15,7 +15,9 @@ createRoot(document.getElementById('root')!).render(
         <Header/>
       </header>
 
-      <AllRoutes/>
+      <div id="content">
+        <AllRoutes/>
+      </div>
 
       <footer>
         <Footer/>

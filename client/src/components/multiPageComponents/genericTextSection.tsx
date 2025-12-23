@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import FancyButton from './fancyButton';
 
 
 interface params {
@@ -8,43 +8,30 @@ interface params {
     linkDestination?: string,
     linkText?: string,
     left: Boolean,
-    noDividerLine?: Boolean,
 };
 
-export default function GenericTextSection({header, paragraph, linkDestination, linkText, left, noDividerLine}:params):React.ReactElement {
-
+export default function GenericTextSection({header, paragraph, linkDestination, linkText, left}:params):React.ReactElement {
     const alignment:string = left ? "alignLeft" : "alignRight";
 
     function getLink():React.ReactElement {
-        let tempLink = <></>;
-
-        //we have a link that needs to be got
+        let tempLink:React.ReactElement = <></>;
         if (linkDestination && linkText) {
             tempLink = (
-                <React.Fragment>
-                    <Link to={linkDestination}>
-                        <h3 className={alignment}>
-                            {linkText}
-                        </h3>
-                    </Link>
-                </React.Fragment>
+                <FancyButton text={linkText} destination={linkDestination} transformOrigin="left" />
             )
         };
         return tempLink;
     };
 
     return (
-        <React.Fragment>
+        <div className="card" style={{marginLeft: left ? '2vw' : "auto", marginRight: left ? "auto" : '2vw'}}>
             <h2 className={alignment}>
                 {header}
             </h2>
             <p className={alignment}>
                 {paragraph}
             </p>
-
             {getLink()}
-
-            {noDividerLine ? null : <div className="dividerLine"></div>}
-        </React.Fragment>
+        </div>
     );
 };
