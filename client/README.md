@@ -1,73 +1,47 @@
-# React + TypeScript + Vite
+# Better Server Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to the official website for **Better Server**, a Minecraft server hosted by our community! This site is designed to enhance your experience, connect players, and showcase everything happening on the server.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Interactive World Map**: Explore the Minecraft world in real-time with an interactive map. See builds, landmarks, and navigate the server visually.
+- **Wiki**: Access a comprehensive wiki with guides, server rules, lore, and player-contributed articles to help you get the most out of your time on Better Server.
+- **Live Who's Online**: Instantly see which players are currently online, so you can join your friends or meet new ones.
+- **Live Server Status**: Check the server's status, including uptime, player count, and important announcements, all updated live.
+- **Screenshot Sharing**: Upload your favorite in-game screenshots, browse the gallery, and interact with others by liking and commenting on their posts.
+- **Player Profiles & Journals**: Log in to create your own profile, write about your adventures, and share your achievements with the community.
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+- **Frontend**: [React](https://react.dev/) + [Vite](https://vitejs.dev/) for a fast, modern, and interactive user experience.
+- **Backend**: [Express](https://expressjs.com/) for a robust and scalable server API.
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. **Clone the repository**
+2. **Install dependencies** for both `client` and `server`:
+	 ```sh
+	 cd client
+	 npm install
+	 cd ../server
+	 npm install
+	 ```
+3. **Run the development servers**:
+	 - For the frontend:
+		 ```sh
+		 cd client
+		 npm run dev
+		 ```
+	 - For the backend:
+		 ```sh
+		 cd server
+		 npm start
+		 ```
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Contributing
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Contributions are welcome! Feel free to open issues or submit pull requests to help improve the site.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## License
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+This project is for the Better Server Minecraft community.
