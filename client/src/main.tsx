@@ -5,6 +5,7 @@ import './scss/main.scss';
 import Header from './components/multiPageComponents/header';
 import Footer from './components/multiPageComponents/footer';
 import AllRoutes from './routes';
+import ServerStatusOverlay from './components/multiPageComponents/serverStatusOverlay';
 
 import { BrowserRouter } from 'react-router';
 
@@ -16,6 +17,7 @@ createRoot(document.getElementById('root')!).render(
       </header>
 
       <div id="content">
+        <ServerStatusOverlay/>
         <AllRoutes/>
       </div>
 
