@@ -15,14 +15,13 @@ export default function ServerStatusOverlay():React.ReactElement {
             axios.get('http://localhost:8080/serverStatus').then((res) => {
     
                 //if we managed to successfully get the server status
-                if (res && typeof(res.data) != 'string') {
+                if (!res.data.error) {
                     const data: statusObj = res.data;
                     setPlayerCount(data.players.online);
                     setServerOnline(true);
                 }
                 else {
-                    setServerOnline(false);
-                    setPlayerCount(-1);
+                    throw new Error('Cannot get server information');
                 };
             });
         };
