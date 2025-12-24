@@ -1,13 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import type { statusObj } from './statusObj';
+import type { statusObj } from '../pages/serverStatus/statusObj';
 import { Link } from 'react-router';
 
 
 export default function ServerStatusOverlay():React.ReactElement {
 
     const [serverOnline, setServerOnline] = useState<boolean>(false);
-    const [playerCount, setPlayerCount] = useState<number>(-1);
+    const [playerCount, setPlayerCount] = useState<number>(0);
 
     useEffect(() => {
 
@@ -21,7 +21,8 @@ export default function ServerStatusOverlay():React.ReactElement {
                     setServerOnline(true);
                 }
                 else {
-                    throw new Error('Cannot get server information');
+                    setServerOnline(false);
+                    setPlayerCount(0);
                 };
             });
         };
