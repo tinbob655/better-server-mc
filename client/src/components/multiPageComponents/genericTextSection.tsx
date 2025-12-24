@@ -30,7 +30,7 @@ export default function GenericTextSection({header, paragraph, linkDestination, 
             <h2 className={alignment}>
                 {header}
             </h2>
-            <p className={alignment}>
+            <p className={`fancy ${alignment}`}>
                 {paragraph}
             </p>
             {getLink()}

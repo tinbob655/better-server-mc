@@ -13,7 +13,7 @@ export default function PageHeader({title, subtitle}:params):React.ReactElement 
             <h1 className="alignLeft pageHeaderTitle">
                 {title}
             </h1>
-            <p className="alignLeft pageHeaderSubtitle">
+            <p className="alignLeft pageHeaderSubtitle fancy">
                 {subtitle}
             </p>
         </div>
