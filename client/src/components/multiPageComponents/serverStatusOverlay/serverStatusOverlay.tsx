@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import type { statusObj } from './statusObj';
+import { Link } from 'react-router';
 
 
 export default function ServerStatusOverlay():React.ReactElement {
@@ -39,17 +40,18 @@ export default function ServerStatusOverlay():React.ReactElement {
     }, []);
 
     return (
-        <div id="serverStatusOverlayWrapper">
+        <Link to="/serverStatus">
+            <div id="serverStatusOverlayWrapper">
+                {/*server status dot*/}
+                <span className={`statusDot ${serverOnline ? "statusOn" : "statusOff"}`} />
 
-            {/*server status dot*/}
-            <span className={`statusDot ${serverOnline ? "statusOn" : "statusOff"}`} />
-
-            {/*server details (will show on hover)*/}
-            <div className="statusDetails">
-                <p>
-                    {serverOnline ? `Players Online: ${playerCount}` : "Server offline"}
-                </p>
+                {/*server details (will show on hover)*/}
+                <div className="statusDetails">
+                    <p>
+                        {serverOnline ? `Players Online: ${playerCount}` : "Server offline"}
+                    </p>
+                </div>
             </div>
-        </div>
+        </Link>
     );
 };

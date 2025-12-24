@@ -1,7 +1,7 @@
 @use 'variables.scss' as vars;
 
 div#serverStatusOverlayWrapper {
-    cursor: default !important;
+    cursor: pointer !important;
     position: fixed;
     top: 80px;
     right: 0.75vw;
