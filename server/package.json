@@ -1,12 +1,15 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "description": "backend for the better server website",
-  "license": "ISC",
-  "author": "",
-  "type": "commonjs",
-  "main": "index.ts",
+  "description": "Better server express backend",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1"
   }
 }
