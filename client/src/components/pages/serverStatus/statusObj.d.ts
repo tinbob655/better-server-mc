@@ -6,7 +6,7 @@ export interface statusObj {
     players: {
         online: number,
         max: number,
-        sample: string[],
+        sample: {id, name}[],
     },
     motd: {
         raw: string,
