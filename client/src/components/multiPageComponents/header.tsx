@@ -6,7 +6,7 @@ export default function Header():React.ReactElement {
 
     function getHeaderLinks():React.ReactElement[] {
         let tempHeaderLinks:React.ReactElement[] = [];
-        const pages:string[] = ['home', 'feed', 'playerbase', 'wiki'];
+        const pages:string[] = ['home', 'map', 'feed', 'players', 'wiki'];
         
         pages.forEach((page) => {
             const id:number = Math.random();
