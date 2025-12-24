@@ -6,6 +6,7 @@ import Header from './components/multiPageComponents/header';
 import Footer from './components/multiPageComponents/footer';
 import AllRoutes from './routes';
 import ServerStatusOverlay from './components/multiPageComponents/serverStatusOverlay/serverStatusOverlay';
+import ScrollToTop from './components/multiPageComponents/scrollToTop';
 
 import { BrowserRouter } from 'react-router';
 
@@ -19,6 +20,7 @@ createRoot(document.getElementById('root')!).render(
       <div id="content">
         <ServerStatusOverlay/>
         <AllRoutes/>
+        <ScrollToTop/>
       </div>
 
       <footer>
