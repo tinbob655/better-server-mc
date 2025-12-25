@@ -9,7 +9,11 @@ app.use(cors());
 //routes
 app.use('/serverStatus', serverStatus);
 
-// Fallback: serve index.html for React Router
+
+// Serve static files from React build
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
+// Fallback: serve index.html for React Router (SPA)
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
