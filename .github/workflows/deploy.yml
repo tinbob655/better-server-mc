@@ -2,7 +2,7 @@ name: Deploy to Server
 
 on:
   push:
-    branches: [main] # or your deployment branch
+    branches: [main]
 
 jobs:
   deploy:
@@ -19,9 +19,10 @@ jobs:
 
     - name: Deploy via SSH
       run: |
-        ssh -o StrictHostKeyChecking=no william@86.168.2.246"
-          cd ~/better-server-mc &&
+        ssh -o StrictHostKeyChecking=no william@86.168.2.246 '
+          cd /home/william/Desktop/WEBSITE &&
           git pull &&
           cd client && npm install && npm run build &&
-          cd ../server && npm install && pm2 restart all || node index.js
-        "
+          cd ../server && npm install &&
+          pm2 restart better-server-mc || node index.js
+        '
