@@ -41,6 +41,7 @@ Welcome to the official website for **Better Server**, a Minecraft server hosted
 ## Contributing
 
 Contributions are welcome! Feel free to open issues or submit pull requests to help improve the site.
+Pushes to the main branch will trigger the website to update.
 
 ## License
 
