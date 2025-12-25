@@ -18,9 +18,12 @@ jobs:
       - name: Deploy via SSH
         run: |
           ssh -o StrictHostKeyChecking=no william@86.168.2.246 '
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm use 22.19.0
             cd /home/william/Desktop/WEBSITE &&
             git pull &&
             cd client && npm install && npm run build &&
             cd ../server && npm install &&
-            pm2 restart better-server-mc || node index.js
+            pm2 restart better-server-mc || pm2 start index.js --name better-server-mc
           '
