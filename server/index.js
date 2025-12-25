@@ -6,14 +6,11 @@ const serverStatus = require('./routes/serverStatus');
 
 app.use(cors());
 
-// Serve static files from the React build
-app.use(express.static(path.join(__dirname, '../client/dist')));
-
 //routes
 app.use('/serverStatus', serverStatus);
 
 // Fallback: serve index.html for React Router
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
