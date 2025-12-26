@@ -7,7 +7,7 @@ export default function Home():React.ReactElement {
     
     return (
         <React.Fragment>
-            <PageHeader title="Better Server" subtitle="The official better server website"/>
+            <PageHeader title="TESTING" subtitle="The official better server website"/>
 
             {/*who are we section*/}
             <GenericTextSection header="Who are we?" paragraph="Welcome to our Minecraft server! We offer a survival experience in a friendly environment that encourages collaboration among players. Join us to build, explore, and make new friends in a supportive community." left={false} linkText="Find out more on our wiki page!" linkDestination="/wiki" />
