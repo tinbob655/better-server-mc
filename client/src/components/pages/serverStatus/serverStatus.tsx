@@ -21,7 +21,7 @@ export default function ServerStatus():React.ReactElement {
     useEffect(() => {
 
         async function getServerInfo():Promise<void> {
-            const res = await axios.get('http://localhost:8080/serverStatus');
+            const res = await axios.get('/serverStatus');
             
             //deal with potential errors
             if (res.data.error) {
