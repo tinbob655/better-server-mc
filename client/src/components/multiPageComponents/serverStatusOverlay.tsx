@@ -12,7 +12,7 @@ export default function ServerStatusOverlay():React.ReactElement {
     useEffect(() => {
 
         function getServerInformation():void {
-            axios.get('/serverStatus').then((res) => {
+            axios.get('/api/serverStatus').then((res) => {
     
                 //if we managed to successfully get the server status
                 if (!res.data.error) {
