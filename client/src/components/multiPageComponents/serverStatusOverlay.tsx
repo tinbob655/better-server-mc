@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
-import type { statusObj } from '../pages/serverStatus/statusObj';
+import type { statusObj } from '../pages/serviceStatus/statusObj';
 import { Link } from 'react-router';
 
 
@@ -40,7 +40,7 @@ export default function ServerStatusOverlay():React.ReactElement {
     }, []);
 
     return (
-        <Link to="/serverStatus">
+        <Link to="/serviceStatus">
             <div id="serverStatusOverlayWrapper">
                 {/*server status dot*/}
                 <span className={`statusDot ${serverOnline ? "statusOn" : "statusOff"}`} />

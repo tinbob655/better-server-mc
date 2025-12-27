@@ -5,7 +5,7 @@ import axios from 'axios';
 import GenericTextSection from '../../multiPageComponents/genericTextSection';
 
 
-export default function ServerStatus():React.ReactElement {
+export default function ServiceStatus():React.ReactElement {
 
     //server state vars
     const [online, setOnline] = useState<boolean>(false);

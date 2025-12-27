@@ -9,7 +9,7 @@ import Feed from './components/pages/feed/feed';
 import Playerbase from './components/pages/playerbase/playerbase';
 import Wiki from './components/pages/wiki/wiki';
 import MapPage from './components/pages/map/mapPage';
-import ServerStatus from './components/pages/serverStatus/serverStatus';
+import ServiceStatus from './components/pages/serviceStatus/serviceStatus';
 
 export default function AllRoutes():React.ReactElement {
 
@@ -22,7 +22,7 @@ export default function AllRoutes():React.ReactElement {
             ['feed', <Feed/>],
             ['playerbase', <Playerbase/>],
             ['wiki', <Wiki/>],
-            ['serverStatus', <ServerStatus/>],
+            ['serviceStatus', <ServiceStatus/>],
         ];
 
         //generate routes
