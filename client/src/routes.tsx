@@ -6,7 +6,7 @@ import { Route, Routes } from 'react-router';
 import Home from './components/pages/home/home';
 import Admin from './components/pages/admin/admin';
 import Feed from './components/pages/feed/feed';
-import Playerbase from './components/pages/playerbase/playerbase';
+import Players from './components/pages/players/players';
 import Wiki from './components/pages/wiki/wiki';
 import MapPage from './components/pages/map/mapPage';
 import ServiceStatus from './components/pages/serviceStatus/serviceStatus';
@@ -20,7 +20,7 @@ export default function AllRoutes():React.ReactElement {
             ['map', <MapPage/>],
             ['admin', <Admin/>],
             ['feed', <Feed/>],
-            ['playerbase', <Playerbase/>],
+            ['players', <Players/>],
             ['wiki', <Wiki/>],
             ['serviceStatus', <ServiceStatus/>],
         ];
