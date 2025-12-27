@@ -14,7 +14,7 @@ app.use('/api/serverStatus', serverStatus);
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
 // Fallback: serve index.html for React Router (SPA)
-app.get(/^\/(?!serverStatus|.*\..*).*/, (req, res) => {
+app.get(/^\/(?!.*\..*).*/, (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
