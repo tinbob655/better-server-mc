@@ -26,7 +26,7 @@ export default function GenericTextSection({header, paragraph, linkDestination, 
     // Add a class to control rotation direction
     const cardClass = `card ${left ? 'card-left' : 'card-right'}`;
     return (
-        <div className={cardClass} style={{marginLeft: left ? '2vw' : "auto", marginRight: left ? "auto" : '2vw'}}>
+        <div className={cardClass}>
             <h2 className={alignment}>
                 {header}
             </h2>

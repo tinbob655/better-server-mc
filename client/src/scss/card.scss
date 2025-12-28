@@ -25,27 +25,40 @@ div {
         position: relative;
         overflow: hidden;
 
-        &.card-left:hover {
-            box-shadow: 0 4px 12px 0 vars.$primary-blue, 0 3px 9px 0 vars.$shadow;
-            background: linear-gradient(120deg, rgba(58,110,219,0.22) 0%, rgba(24,28,43,0.92) 100%);
-            border: 2px solid vars.$primary-blue;
-            transform: scale(1.018) rotate(0.5deg);
-            filter: brightness(1.03) drop-shadow(0 0 2.5px vars.$primary-blue);
-            animation: cardGlowInLeft 0.5s cubic-bezier(0.22,1,0.36,1);
+        &.card-left {
+            margin-left: 2vw;
+            margin-right: auto;
+
+            &:hover{
+                box-shadow: 0 4px 12px 0 vars.$primary-blue, 0 3px 9px 0 vars.$shadow;
+                background: linear-gradient(120deg, rgba(58,110,219,0.22) 0%, rgba(24,28,43,0.92) 100%);
+                border: 2px solid vars.$primary-blue;
+                transform: scale(1.018) rotate(0.5deg);
+                filter: brightness(1.03) drop-shadow(0 0 2.5px vars.$primary-blue);
+                animation: cardGlowInLeft 0.5s cubic-bezier(0.22,1,0.36,1);
+            }
+
+            &:not(:hover) {
+                animation: cardGlowOutLeft 0.5s cubic-bezier(0.22,1,0.36,1);
+            }
         }
-        &.card-left:not(:hover) {
-            animation: cardGlowOutLeft 0.5s cubic-bezier(0.22,1,0.36,1);
-        }
-        &.card-right:hover {
-            box-shadow: 0 4px 12px 0 vars.$primary-blue, 0 3px 9px 0 vars.$shadow;
-            background: linear-gradient(120deg, rgba(58,110,219,0.22) 0%, rgba(24,28,43,0.92) 100%);
-            border: 2px solid vars.$primary-blue;
-            transform: scale(1.018) rotate(-0.5deg);
-            filter: brightness(1.03) drop-shadow(0 0 2.5px vars.$primary-blue);
-            animation: cardGlowInRight 0.5s cubic-bezier(0.22,1,0.36,1);
-        }
-        &.card-right:not(:hover) {
-            animation: cardGlowOutRight 0.5s cubic-bezier(0.22,1,0.36,1);
+
+        &.card-right {
+            margin-right: 2vw;
+            margin-left: auto;
+
+            &:hover {
+                box-shadow: 0 4px 12px 0 vars.$primary-blue, 0 3px 9px 0 vars.$shadow;
+                background: linear-gradient(120deg, rgba(58,110,219,0.22) 0%, rgba(24,28,43,0.92) 100%);
+                border: 2px solid vars.$primary-blue;
+                transform: scale(1.018) rotate(-0.5deg);
+                filter: brightness(1.03) drop-shadow(0 0 2.5px vars.$primary-blue);
+                animation: cardGlowInRight 0.5s cubic-bezier(0.22,1,0.36,1);
+            }
+
+            &:not(:hover) {
+                animation: cardGlowOutRight 0.5s cubic-bezier(0.22,1,0.36,1);
+            }
         }
     }
 
