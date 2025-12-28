@@ -2,15 +2,21 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const app = express();
-const serverStatus = require('./routes/serverStatus');
+const bodyParser = require('body-parser');
 
 app.use(cors());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
 //routes
+const serverStatus = require('./routes/serverStatus');
 app.use('/api/serverStatus', serverStatus);
 
+const playerDB = require('./routes/player');
+app.use('/api/db', playerDB);
 
-// Serve static files from React build
+
+//server the frontend
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
 // Fallback: serve index.html for React Router (SPA)
