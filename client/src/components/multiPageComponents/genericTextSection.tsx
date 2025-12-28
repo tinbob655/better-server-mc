@@ -8,9 +8,10 @@ interface params {
     linkDestination?: string,
     linkText?: string,
     left: Boolean,
+    headerImage?:string,
 };
 
-export default function GenericTextSection({header, paragraph, linkDestination, linkText, left}:params):React.ReactElement {
+export default function GenericTextSection({header, paragraph, linkDestination, linkText, left, headerImage}:params):React.ReactElement {
     const alignment:string = left ? "alignLeft" : "alignRight";
 
     function getLink():React.ReactElement {
@@ -27,9 +28,23 @@ export default function GenericTextSection({header, paragraph, linkDestination, 
     const cardClass = `card ${left ? 'card-left' : 'card-right'}`;
     return (
         <div className={cardClass}>
-            <h2 className={alignment}>
-                {header}
-            </h2>
+            <table style={{width: '25%', tableLayout: 'unset', marginLeft: left ? 0 : 'auto'}}>
+                <thead>
+                    <tr>
+                        <td>
+                            <h2 className={alignment}>
+                                {header}
+                            </h2>
+                        </td>
+                        {headerImage ? (
+                            <td>
+                                <img src={headerImage} className="rounded" style={{width: '50px'}} />
+                            </td>
+                        ) : <></>}
+                    </tr>
+                </thead>
+            </table>
+
             <p className={`fancy ${alignment}`}>
                 {paragraph}
             </p>
