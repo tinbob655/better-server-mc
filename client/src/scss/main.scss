@@ -7,6 +7,7 @@
 @use 'pageHeader.scss';
 @use 'card.scss';
 @use 'serverStatusOverlay.scss';
+@use 'worldMap.scss';
 @import url('https://fonts.googleapis.com/css2?family=Bellota+Text:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap');
 
 
@@ -42,6 +43,14 @@ div {
     }
 }
 
+button {
+    background-color: transparent;
+    border: none;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
 img {
     display: block;
     margin-left: auto;
@@ -54,6 +63,21 @@ img {
         color: vars.$primary-blue;
         filter: drop-shadow(0 2px 8px vars.$shadow);
         border-radius: 2%;
+    }
+
+    &.button {
+        width: 30px;
+        height: auto;
+        background-color: transparent;
+
+        transition-property: transform;
+        transition-duration: 0.25s;
+        transition-timing-function: ease;
+
+        &:hover {
+            transform: scale(1.2);
+            cursor: pointer;
+        }
     }
 }
 
@@ -68,11 +92,6 @@ iframe {
     display: block;
     border: 2px solid vars.$secondary-bg;
     border-radius: 20px;
-
-    &#worldMapIframe {
-        width: 85vw;
-        height: 60vh;
-    }
 }
 
 .noVerticalSpacing {
