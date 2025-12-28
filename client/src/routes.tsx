@@ -10,6 +10,7 @@ import Players from './components/pages/players/players';
 import Wiki from './components/pages/wiki/wiki';
 import MapPage from './components/pages/map/mapPage';
 import ServiceStatus from './components/pages/serviceStatus/serviceStatus';
+import Account from './components/pages/account/account';
 
 export default function AllRoutes():React.ReactElement {
 
@@ -23,6 +24,7 @@ export default function AllRoutes():React.ReactElement {
             ['players', <Players/>],
             ['wiki', <Wiki/>],
             ['serviceStatus', <ServiceStatus/>],
+            ['account', <Account/>],
         ];
 
         //generate routes

@@ -6,7 +6,7 @@ export default function Header():React.ReactElement {
 
     function getHeaderLinks():React.ReactElement[] {
         let tempHeaderLinks:React.ReactElement[] = [];
-        const pages:string[] = ['home', 'map', 'feed', 'players', 'wiki'];
+        const pages:string[] = ['home', 'map', 'feed', 'players', 'wiki', 'account'];
         
         pages.forEach((page) => {
             const id:number = Math.random();
@@ -25,7 +25,7 @@ export default function Header():React.ReactElement {
 
     return (
         <div id="header">
-            <table style={{width: '50%'}}>
+            <table style={{width: '70%'}}>
                 <thead>
                     <tr>
                         {getHeaderLinks()}
