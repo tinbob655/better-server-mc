@@ -10,7 +10,7 @@ export default function MapPage():React.ReactElement {
 
             {/* actual map. NOTE: will only render on the server */}
             <iframe
-                src="https://better-server.world:8100/" title="Bluemap" id="worldMapIframe" allowFullScreen />
+                src="https://better-server.world/bluemap/" title="Bluemap" id="worldMapIframe" allowFullScreen />
         </React.Fragment>
     );
 };
