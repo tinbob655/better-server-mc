@@ -5,9 +5,11 @@ require('dotenv').config();
 const session = require('express-session');
 const SQLiteStore = require('connect-sqlite3')(session);
 const app = express();
+
 const bodyParser = require('body-parser');
 
-
+// Trust first proxy (needed for secure cookies behind reverse proxies)
+app.set('trust proxy', 1);
 app.use(cors({
   origin: true,
   credentials: true
