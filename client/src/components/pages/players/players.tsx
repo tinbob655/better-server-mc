@@ -4,10 +4,9 @@ import type { playerObj } from './playerObj';
 import type { playerRecord } from './playerRecord';
 import axios from 'axios';
 import FancyButton from '../../multiPageComponents/fancyButton';
-import GenericTextSection from '../../multiPageComponents/genericTextSection'
 import NewPlayerPopup from './newPlayerPopup';
 import {makeNewPlayer, deleteEntry} from './playerAPI';
-import deleteIcon from '../../../assets/images/deleteIcon.svg';
+import Post from '../feed/post';
 
 
 export default function Players():React.ReactElement {
@@ -66,21 +65,9 @@ export default function Players():React.ReactElement {
             let tempPlayersHTML:React.ReactElement[] = [];
             let index:number = 0;
             playerList.forEach((player) => {
+                let left:boolean = !(index % 2 === 0);
                 tempPlayersHTML.push(
-                    <React.Fragment>
-
-                        {/*if this is the user's post give them the option to delete it*/}
-                        {player.name === username ? (
-                            <React.Fragment>
-                                <button type="button" onClick={() => {deleteEntry(player.name).then((res) => {setDbContent([...res])})}} style={{position: 'absolute', zIndex: 1, left: '8vw', marginTop: '10px'}}>
-                                    <img src={deleteIcon} className="button" />
-                                </button>
-                            </React.Fragment>
-                        ) : <></>}
-
-
-                        <GenericTextSection header={player.name} paragraph={player.description}  left={false} headerImage={URL.createObjectURL(player.profilePicture)} />
-                    </React.Fragment>
+                    <Post postContent={player.description} username={player.name} userProfile={player.profilePicture} deleteFunction={() => {deleteEntry(player.name).then((res) => {setDbContent([...res])})}} left={left} />
                 );
                 index++;
             });
