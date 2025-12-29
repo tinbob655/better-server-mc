@@ -15,12 +15,25 @@ export default function Players():React.ReactElement {
     const [playerList, setPlayerList] = useState<playerObj[]>([]);
     const [playersHTML, setPlayersHTML] = useState<React.ReactElement[]>([]);
     const [newSectionPopup, setNewSectionPopup] = useState<React.ReactElement>(<></>);
+    const [username, setUsername] = useState<string|null>(null);
 
 
-    //initially we need to query all
+    //initial queries
     useEffect(() => {
+
+        //get the player entries
         axios.get('/api/playerDb').then((res) => {
             setDbContent(res.data);
+        });
+
+        //find out if the user is logged in
+        axios.get('/api/accountDb/queryLoggedIn').then((res) => {
+            if (res && res.data && res.data.loggedIn) {
+                setUsername(res.data.username);
+            }
+            else {
+                setUsername(null);
+            };
         });
     }, []);
 
@@ -63,10 +76,19 @@ export default function Players():React.ReactElement {
     }, [playerList]);
 
 
-    function newPlayerPopupFormSubmitted(event:React.FormEvent) {
+    async function newPlayerPopupFormSubmitted(event:React.FormEvent):Promise<void> {
         event.preventDefault();
 
-        //check if the end user is logged into a microsoft account
+        //users cannot post if they are not logged in
+        if (!username) {
+            throw new Error('You may only post if you are logged in');
+        };
+
+        //users may only post about themselves
+        const target = event.target as typeof event.target & {name: {value: string}};
+        if (username != target.name.value) {
+            throw new Error('You may only post about yourself');
+        };
 
         //hide the popup
         document.getElementById('newPlayerPopupWrapper')?.classList.remove('shown');
@@ -75,16 +97,16 @@ export default function Players():React.ReactElement {
         }, 1000);
 
         //make the new player and update local copy of db
-        makeNewPlayer(event, playerList).then((res) => {
-            if (res) {
-                const exists:boolean = dbContent.some(player => player.name === res.name);
-                if (exists) {
-                    setDbContent(dbContent.map(player => player.name === res.name ? res : player));
-                } else {
-                    setDbContent([...dbContent, res]);
-                };
+        const res = await makeNewPlayer(event, playerList)
+        if (res) {
+            const exists:boolean = dbContent.some(player => player.name === res.name);
+            if (exists) {
+                setDbContent(dbContent.map(player => player.name === res.name ? res : player));
+            }
+            else {
+                setDbContent([...dbContent, res]);
             };
-        });
+        };
     };
 
 
@@ -105,7 +127,7 @@ export default function Players():React.ReactElement {
                     Add & Update
                 </h2>
                 <p className="alignRight fancy">
-                    You can add yourself to this page right now and it's easy! All you need to do is log into your Minecraft account and write yourself a description. Make sure you have an image for your profile picture as well!
+                    You can add yourself to this page right now and it's easy! All you need to do is log into your Better Server account and write yourself a description. Make sure you have an image for your profile picture as well!
                 </p>
                 <FancyButton text="Click here to get started!" transformOrigin="left"
                 action={() => {

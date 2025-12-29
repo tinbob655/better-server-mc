@@ -15,13 +15,15 @@ export default function NewPlayerPopup({closeFunc}:params):React.ReactElement {
                 Add & Update
             </h2>
 
+            <div id="playerPopupErrorBox"></div>
+
             <div className="dividerLine"></div>
 
             <form id="newPlayerPopupForm" onSubmit={(event) => {closeFunc(event)}}>
 
                 {/*name text input*/}
                 <p className="aboveInput">
-                    Enter player name:
+                    Enter player name (must match account username):
                 </p>
                 <input name="name" type="text" placeholder="Enter player name..." required />
 
