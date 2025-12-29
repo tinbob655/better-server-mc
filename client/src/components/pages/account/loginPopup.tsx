@@ -11,6 +11,7 @@ export default function LoginPopup({closeFunc}:params):React.ReactElement {
     const loginWrapper = useRef<HTMLDivElement>(null);
     const signUpWrapper = useRef<HTMLDivElement>(null);
     const [activeForm, setActiveForm] = useState<'login' | 'signUp'>('login');
+    const [profilePicture, setProfilePicture] = useState<File | null>(null);
 
     function loginSelected(): void {
         setActiveForm('login');
@@ -83,12 +84,25 @@ export default function LoginPopup({closeFunc}:params):React.ReactElement {
                             <p className="aboveInput">
                                 Create password:
                             </p>
-                            <input type="text" name="password" placeholder="Password..." required />
+                            <input type="password" name="password" placeholder="Password..." required />
 
                             <p className="aboveInput">
                                 Confirm password:
                             </p>
-                            <input type="text" name="confirmPassword" placeholder="Password... " required />
+                            <input type="password" name="confirmPassword" placeholder="Password... " required />
+
+                            <p className="aboveInput">
+                                Upload profile picture:
+                            </p>
+                            <input id="signUpProfilePictureInput" name="profilePicture" type="file" onChange={e => setProfilePicture(e.target.files ? e.target.files[0] : null)} accept="image/*" required />
+                            <label htmlFor="signUpProfilePictureInput" className="fileInput" style={{marginBottom: '20px'}}>
+                                {profilePicture ? (
+                                    <React.Fragment>
+                                        <img src={URL.createObjectURL(profilePicture)} alt="Preview" style={{maxHeight: '20vh', marginBottom: '5px'}} />
+                                        {profilePicture.name}
+                                    </React.Fragment>
+                                ) : 'Choose file...'}
+                            </label>
 
                             <input type="submit" value="Submit" style={{marginTop: '20px'}} />
                         </form>

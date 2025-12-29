@@ -2,6 +2,9 @@ const express = require('express');
 const router = express.Router();
 const {Sequelize, Model, DataTypes} = require('sequelize');
 const bcrypt = require('bcryptjs');
+const multer = require('multer');
+const upload = multer();
+const sharp = require('sharp');
 
 const sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -12,6 +15,7 @@ class Account extends Model {};
 Account.init({
     username: DataTypes.STRING,
     passwordHash: DataTypes.STRING,
+    profilePicture: DataTypes.BLOB,
 }, {sequelize, modelName: 'account'});
 sequelize.sync();
 
@@ -27,12 +31,12 @@ router.get('/queryLoggedIn', (req, res) => {
 });
 
 //create a new account
-router.post('/createAccount', async (req, res) => {
+router.post('/createAccount', upload.single('profilePicture'), async (req, res) => {
     const {username, password} = req.body;
 
-    //make sure we have a username and a password
-    if (!username || !password) {
-         return res.status(400).json({message: "Did not receive both a username and a password"});
+    //make sure we have a username, password, and profile picture
+    if (!username || !password || !req.file) {
+         return res.status(400).json({message: "Did not receive username, password, and profile picture"});
     };
 
     //make sure the username provided is unique
@@ -49,11 +53,15 @@ router.post('/createAccount', async (req, res) => {
             return res.status(409).json({message: "Password was not valid"});
         };
 
+        //process the profile picture
+        const profilePicture = await cropToCircle(req.file.buffer);
+
         //we are good to go, store the username and a hash of the user's password
         const passwordHash = await bcrypt.hash(password, 10);
         await Account.create({
             username: username,
             passwordHash: passwordHash,
+            profilePicture: profilePicture,
         });
 
         // Log the user in by setting session
@@ -108,11 +116,46 @@ router.post('/usernameExists', async (req, res) => {
 });
 
 
+//get profile picture by username
+router.get('/profilePicture/:username', async (req, res) => {
+    const { username } = req.params;
+    
+    if (!username) {
+        return res.status(400).json({ message: "No username provided" });
+    };
+    
+    try {
+        const user = await Account.findOne({ where: { username } });
+        
+        if (!user || !user.profilePicture) {
+            return res.status(404).json({ message: "Profile picture not found" });
+        };
+        
+        res.set('Content-Type', 'image/png');
+        res.send(user.profilePicture);
+    }
+    catch (error) {
+        res.status(500).json({ message: "Error fetching profile picture" });
+    };
+});
+
+
 function validatePassword(password) {
 
     //min 5 chars, one uppercase, one lowercase, one number, one symbol
     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{5,}$/;
     return ((typeof password === 'string') && (regex.test(password)));
+};
+
+
+//helper function to crop any image to be a circle and be a *.png
+async function cropToCircle(buffer, size = 256) {
+    const svg = `<svg width="${size}" height="${size}"><circle cx="${size/2}" cy="${size/2}" r="${size/2}" fill="white"/></svg>`;
+    return await sharp(buffer)
+        .resize(size, size, { fit: 'cover' })
+        .composite([{ input: Buffer.from(svg), blend: 'dest-in' }])
+        .png()
+        .toBuffer();
 };
 
 module.exports = router;

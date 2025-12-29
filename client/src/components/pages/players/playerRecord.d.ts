@@ -3,5 +3,4 @@ export interface playerRecord {
     name: string,
     description: string,
     date: Date,
-    profilePicture: Buffer,
 };

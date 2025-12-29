@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 
 
 interface params {
@@ -6,8 +6,6 @@ interface params {
 };
 
 export default function NewPlayerPopup({closeFunc}:params):React.ReactElement {
-
-    const [profilePicture, setProfilePicture] = useState<File | null>(null);
 
     return(
         <div className="popupWrapper" id="newPlayerPopupWrapper">
@@ -34,25 +32,12 @@ export default function NewPlayerPopup({closeFunc}:params):React.ReactElement {
                 </p>
                 <textarea name="description" placeholder="Enter description..." required />
 
-
-                {/*profile picture file input*/}
-                <p className="aboveInput">
-                    Add your profile picture:
+                <p className="aboveInput" style={{marginTop: '10px', fontSize: '0.9em', opacity: 0.8}}>
+                    Your profile picture from your account will be used.
                 </p>
-                <input id="profilePictureInput" name="profilePicture" type="file" onChange={e => setProfilePicture(e.target.files ? e.target.files[0] : null)} accept="image/*" required />
-                <label htmlFor="profilePictureInput" className="fileInput" style={{marginBottom: '20px'}}>
-                    {profilePicture ? (
-
-                        //show a preview of the image after the user chooses one
-                        <React.Fragment>
-                            <img src={URL.createObjectURL(profilePicture)} alt="Preview" style={{maxHeight: '20vh', marginBottom: '5px'}} />
-                            {profilePicture.name}
-                        </React.Fragment>
-                    ) : 'Choose file...'}
-                </label>
 
                 {/*submit button*/}
-                <input type="submit" value="Submit" />
+                <input type="submit" value="Submit" style={{marginTop: '20px'}} />
             </form>
         </div>
     );

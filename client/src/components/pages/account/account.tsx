@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import PageHeader from '../../multiPageComponents/pageHeader';
 import axios from 'axios';
-import {logOut, handleLogin} from './accountAPI';
+import {logOut, handleLogin, handleSignUp} from './accountAPI';
 import type { accountObj } from './accountObj';
 import LoginPopup from './loginPopup';
 import FancyButton from '../../multiPageComponents/fancyButton';
@@ -42,19 +42,30 @@ export default function Account():React.ReactElement {
             username: {value: string},
             password: {value: string},
             confirmPassword?: {value: string},
+            profilePicture?: {files: FileList},
         };
         
-        //if we are signing up then we need to make sure passwords match
-        if (type === 'signUp' && (target.password.value != target.confirmPassword?.value)) {
+        if (type === 'signUp') {
+            //make sure passwords match
+            if (target.password.value != target.confirmPassword?.value) {
+                throw new Error('Passwords do not match');
+            };
 
-            //passwords do not match
-            throw new Error('Passwords do not match');
+            //make sure profile picture is provided
+            if (!target.profilePicture?.files?.[0]) {
+                throw new Error('Profile picture is required');
+            };
+
+            //sign up with profile picture
+            const res = await handleSignUp(target.username.value, target.password.value, target.profilePicture.files[0]);
+            setLoggedIn(res.loggedIn);
+            setUsername(res.username);
+        } else {
+            //login
+            const res = await handleLogin(target.username.value, target.password.value);
+            setLoggedIn(res.loggedIn);
+            setUsername(res.username);
         };
-
-        //login
-        const res = await handleLogin(target.username.value, target.password.value);
-        setLoggedIn(res.loggedIn);
-        setUsername(res.username);
     };
 
     async function handleLogOut() {

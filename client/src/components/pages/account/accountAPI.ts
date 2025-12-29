@@ -7,9 +7,14 @@ async function logIn(username:string, password:string):Promise<accountObj> {
     return res;
 };
 
-//create a new account
-async function createAccount(username:string, password:string):Promise<accountObj> {
-    const res = (await axios.post('/api/accountDb/createAccount', {username, password}, {withCredentials: true})).data;
+//create a new account with profile picture
+async function createAccount(username:string, password:string, profilePicture:File):Promise<accountObj> {
+    const formData = new FormData();
+    formData.append('username', username);
+    formData.append('password', password);
+    formData.append('profilePicture', profilePicture);
+    
+    const res = (await axios.post('/api/accountDb/createAccount', formData, {withCredentials: true})).data;
     return res;
 };
 
@@ -19,27 +24,19 @@ export async function logOut():Promise<accountObj> {
     return res;
 };
 
-//see if a user is logged in
-async function usernameExists(username: string) {
-    const res = (await axios.post('/api/accountDb/usernameExists', {username})).data;
-    return res.exists;
+//deal with a user logging in (for existing accounts)
+export async function handleLogin(username: string, password: string):Promise<accountObj> {
+    const res = await logIn(username, password);
+    return res;
 };
 
-//deal with a user logging in
-export async function handleLogin(username: string, password: string) {
+//deal with a user signing up (for new accounts)
+export async function handleSignUp(username: string, password: string, profilePicture: File):Promise<accountObj> {
+    const res = await createAccount(username, password, profilePicture);
+    return res;
+};
 
-    //need to find out if we are making a new account or logging into one
-    let acc;
-    const newUser:boolean = !(await usernameExists(username));
-    if (newUser) {
-
-        //we need to make a new account
-        acc = await createAccount(username, password);
-    }
-    else {
-        
-        //we need to log into an existing account
-        acc = await logIn(username, password);
-    };
-    return acc;
+//get profile picture URL for a username
+export function getProfilePictureUrl(username: string): string {
+    return `/api/accountDb/profilePicture/${encodeURIComponent(username)}`;
 };

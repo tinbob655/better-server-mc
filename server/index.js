@@ -19,13 +19,14 @@ app.use(bodyParser.json());
 
 // Session middleware setup
 const sessionLengthDays = 7;
+const isProduction = process.env.NODE_ENV === 'production';
 app.use(session({
   store: new SQLiteStore({db: 'sessions.sqlite', dir: './db'}),
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: true,
+    secure: isProduction,
     httpOnly: true,
     sameSite: 'lax',
     maxAge: 1000 * 60 * 60 * 24 * sessionLengthDays,

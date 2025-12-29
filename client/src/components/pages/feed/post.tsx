@@ -1,19 +1,20 @@
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import binIcon from '../../../assets/images/deleteIcon.svg';
+import {getProfilePictureUrl} from '../account/accountAPI';
 
 
 interface params {
     username: string,
-    userProfile: File,
     postContent: string,
     deleteFunction: Function,
     left: boolean,
 };
 
-export default function Post({username, userProfile, postContent, deleteFunction, left}:params):React.ReactElement {
+export default function Post({username, postContent, deleteFunction, left}:params):React.ReactElement {
 
     const [showBin, setShowBin] = useState<boolean>(false);
+    const [profilePictureUrl, setProfilePictureUrl] = useState<string>('');
 
     //see if the user is logged in and if so get their username
     useEffect(() => {
@@ -32,6 +33,13 @@ export default function Post({username, userProfile, postContent, deleteFunction
         });
     }, []);
 
+    //fetch the profile picture URL based on username
+    useEffect(() => {
+        if (username) {
+            setProfilePictureUrl(getProfilePictureUrl(username));
+        }
+    }, [username]);
+
     return (
         <React.Fragment>
             <div className={`card ${left ? "card-left" : "card-right"}`}>
@@ -46,7 +54,9 @@ export default function Post({username, userProfile, postContent, deleteFunction
                     <h2 className={left ? "alignLeft" : "alignRight"} style={{marginRight: 0}} >
                         {username}
                     </h2>
-                    <img src={URL.createObjectURL(userProfile)} className="rounded" style={{ height: '50px', margin: 0, marginLeft: '10px'}} />
+                    {profilePictureUrl && (
+                        <img src={profilePictureUrl} className="rounded" style={{ height: '50px', margin: 0, marginLeft: '10px'}} />
+                    )}
                 </div>
                 <p className={`fancy ${left ? "alignLeft" : "alignRight"}`}>
                     {postContent}

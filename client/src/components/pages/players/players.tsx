@@ -46,11 +46,6 @@ export default function Players():React.ReactElement {
                 name: record.name,
                 description: record.description,
                 date: new Date(record.date),
-                profilePicture: new File(
-                    [new Uint8Array(record.profilePicture.data)],
-                    "profilePicture.png",
-                    {type: "image/png"}
-                ),
             });
         });
         setPlayerList([...data]);
@@ -67,7 +62,7 @@ export default function Players():React.ReactElement {
             playerList.forEach((player) => {
                 let left:boolean = !(index % 2 === 0);
                 tempPlayersHTML.push(
-                    <Post postContent={player.description} username={player.name} userProfile={player.profilePicture} deleteFunction={() => {deleteEntry(player.name).then((res) => {setDbContent([...res])})}} left={left} />
+                    <Post key={player.name} postContent={player.description} username={player.name} deleteFunction={() => {deleteEntry(player.name).then((res) => {setDbContent([...res])})}} left={left} />
                 );
                 index++;
             });
