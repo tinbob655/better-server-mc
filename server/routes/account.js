@@ -1,0 +1,119 @@
+const express = require('express');
+const router = express.Router();
+const {Sequelize, Model, DataTypes} = require('sequelize');
+const bcrypt = require('bcryptjs');
+
+const sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: './db/account.sqlite',
+});
+
+class Account extends Model {};
+Account.init({
+    username: DataTypes.STRING,
+    passwordHash: DataTypes.STRING,
+}, {sequelize, modelName: 'account'});
+sequelize.sync();
+
+
+//routes
+//query if a user is logged in
+router.get('/queryLoggedIn', (req, res) => {
+    if (req.session && req.session.user) {
+        res.json({ loggedIn: true, username: req.session.user.username });
+    } else {
+        res.json({ loggedIn: false });
+    };
+});
+
+//create a new account
+router.post('/createAccount', async (req, res) => {
+    const {username, password} = req.body;
+
+    //make sure we have a username and a password
+    if (!username || !password) {
+         return res.status(400).json({message: "Did not receive both a username and a password"});
+    };
+
+    //make sure the username provided is unique
+    try {
+        const duplicates = await Account.findAll({where: {username: username}});
+        if (duplicates?.length > 0) {
+            return res.status(409).json({message: "Username was not unique"});
+        };
+
+        //validate password
+        if (!validatePassword(password)) {
+
+            //password was invalid
+            return res.status(409).json({message: "Password was not valid"});
+        };
+
+        //we are good to go, store the username and a hash of the user's password
+        const passwordHash = await bcrypt.hash(password, 10);
+        await Account.create({
+            username: username,
+            passwordHash: passwordHash,
+        });
+
+        // Log the user in by setting session
+        req.session.user = { username };
+
+        res.json({
+            loggedIn: true,
+            username: username,
+        });
+    }
+    catch (error) {
+        res.status(400).json(error);
+    };
+});
+
+//log a new user in
+router.post('/login', async (req, res) => {
+    const {username, password} = req.body;
+
+    //make sure we got a username and a password
+    if (!username || !password) {
+        return res.status(400).json({message: "Did not receive either a username or a password"});
+    };
+
+    const user = await Account.findOne({where: {username}});
+    const valid = await bcrypt.compare(password, user?.passwordHash);
+
+    //make sure the username was valid
+    if (!user || !valid) {
+        return res.status(401).json({message: "Invalid credentials"});
+    };
+
+    req.session.user = {username: user.username};
+    res.json({loggedIn: true, username: user.username});
+});
+
+//log a user out
+router.post('/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.json({loggedIn: false});
+    });
+});
+
+//query if a username exists
+router.post('/usernameExists', async (req, res) => {
+    const { username } = req.body;
+    if (!username) {
+        return res.status(400).json({ exists: false, message: "No username provided" });
+    };
+    const user = await Account.findOne({ where: { username } });
+    console.log(user);
+    res.json({ exists: !!user });
+});
+
+
+function validatePassword(password) {
+
+    //min 5 chars, one uppercase, one lowercase, one number, one symbol
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{5,}$/;
+    return ((typeof password === 'string') && (regex.test(password)));
+};
+
+module.exports = router;

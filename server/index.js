@@ -1,12 +1,32 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
+require('dotenv').config();
+const session = require('express-session');
 const app = express();
 const bodyParser = require('body-parser');
 
-app.use(cors());
+
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+
+// Session middleware setup
+const sessionLengthDays = 7;
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: true,
+    httpOnly: true,
+    sameSite: 'lax',
+    maxAge: 1000 * 60 * 60 * 24 * sessionLengthDays,
+  }
+}));
 
 //routes
 const serverStatus = require('./routes/serverStatus');
