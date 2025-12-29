@@ -2,7 +2,7 @@ import type { playerObj } from "./playerObj";
 import type { playerRecord } from "./playerRecord";
 import axios from "axios";
 
-export default async function makeNewPlayer(event: React.FormEvent, playerList: playerObj[]): Promise<playerRecord | null> {
+export async function makeNewPlayer(event: React.FormEvent, playerList: playerObj[]): Promise<playerRecord | null> {
     const data = event.target as typeof event.target & {
         name: { value: string },
         description: { value: string },
@@ -34,5 +34,17 @@ export default async function makeNewPlayer(event: React.FormEvent, playerList: 
     } catch (error) {
         console.error(error);
         return null;
+    };
+};
+
+export async function deleteEntry(playerName: string): Promise<playerRecord[]> {
+    try {
+        //send DELETE request to the API with the player name in the URL
+        const res = await axios.delete(`/api/playerDb/${encodeURIComponent(playerName)}`);
+        return res.data as playerRecord[];
+    } 
+    catch (error) {
+        console.error(error);
+        return [];
     };
 };

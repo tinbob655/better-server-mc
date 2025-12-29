@@ -3,6 +3,7 @@ const path = require('path');
 const cors = require('cors');
 require('dotenv').config();
 const session = require('express-session');
+const SQLiteStore = require('connect-sqlite3')(session);
 const app = express();
 const bodyParser = require('body-parser');
 
@@ -17,6 +18,7 @@ app.use(bodyParser.json());
 // Session middleware setup
 const sessionLengthDays = 7;
 app.use(session({
+  store: new SQLiteStore({db: 'sessions.sqlite', dir: './db'}),
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,

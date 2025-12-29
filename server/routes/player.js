@@ -48,7 +48,6 @@ router.post('/', upload.single('profilePicture'), async (req, res) => {
 });
 
 
-
 //update an existing player
 router.put('/:name', upload.single('profilePicture'), async (req, res) => {
     const playerToEdit = await Player.findOne({ where: { name: req.params.name } });
@@ -66,6 +65,27 @@ router.put('/:name', upload.single('profilePicture'), async (req, res) => {
         res.json(playerToEdit);
     } else {
         res.status(404).json({ message: "Could not find user to edit." });
+    }
+});
+
+
+//delete a player
+router.delete('/:name', async (req, res) => {
+    try {
+        const playerToDelete = await Player.findOne({ where: { name: req.params.name } });
+        if (!playerToDelete) {
+            return res.status(404).json({ message: "Could not find user to delete." });
+        }
+
+        await playerToDelete.destroy();
+
+        // Return the updated list of players
+        const players = await Player.findAll();
+        res.json(players);
+    } 
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error deleting player." });
     }
 });
 
