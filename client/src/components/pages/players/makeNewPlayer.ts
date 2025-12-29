@@ -24,11 +24,11 @@ export default async function makeNewPlayer(event: React.FormEvent, playerList: 
     try {
         if (newPlayer) {
             // Creating a new player
-            const res: playerRecord = (await axios.post('/api/db', formData)).data;
+            const res: playerRecord = (await axios.post('/api/playerDb', formData)).data;
             return res;
         } else {
             // Updating an existing player's record
-            const res: playerRecord = (await axios.put(`/api/db/${encodeURIComponent(data.name.value)}`, formData)).data;
+            const res: playerRecord = (await axios.put(`/api/playerDb/${encodeURIComponent(data.name.value)}`, formData)).data;
             return res;
         }
     } catch (error) {

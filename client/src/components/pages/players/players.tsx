@@ -19,7 +19,7 @@ export default function Players():React.ReactElement {
 
     //initially we need to query all
     useEffect(() => {
-        axios.get('/api/db').then((res) => {
+        axios.get('/api/playerDb').then((res) => {
             setDbContent(res.data);
         });
     }, []);

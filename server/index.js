@@ -13,7 +13,10 @@ const serverStatus = require('./routes/serverStatus');
 app.use('/api/serverStatus', serverStatus);
 
 const playerDB = require('./routes/player');
-app.use('/api/db', playerDB);
+app.use('/api/playerDb', playerDB);
+
+const accountDB = require('./routes/account');
+app.use('/api/accountDb', accountDB);
 
 
 //server the frontend
