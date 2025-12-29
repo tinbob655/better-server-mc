@@ -48,6 +48,7 @@ export default function Players():React.ReactElement {
                 date: new Date(record.date),
             });
         });
+        data.sort((a, b) => b.date.getTime() - a.date.getTime());
         setPlayerList([...data]);
     }, [dbContent]);
 
