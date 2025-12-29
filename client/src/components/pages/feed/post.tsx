@@ -35,9 +35,13 @@ export default function Post({username, userProfile, postContent, deleteFunction
     return (
         <React.Fragment>
             <div className={`card ${left ? "card-left" : "card-right"}`}>
-                <button type="button" onClick={() => {deleteFunction()}} style={{position: 'absolute', top: 10, left: left ? "unset" : 10, right: left ? 10 : "unset"}}>
-                    <img src={binIcon} className="button" />
-                </button>
+                {showBin ? (
+                    <React.Fragment>
+                        <button type="button" onClick={() => {deleteFunction()}} style={{position: 'absolute', top: 10, left: left ? "unset" : 10, right: left ? 10 : "unset"}}>
+                            <img src={binIcon} className="button" />
+                        </button>
+                    </React.Fragment>
+                ) : <></>}
                 <div style={{ display: 'flex', alignItems: 'center', gap: 0, justifyContent: left ? 'flex-start' : 'flex-end' }}>
                     <h2 className={left ? "alignLeft" : "alignRight"} style={{marginRight: 0}} >
                         {username}
