@@ -104,7 +104,6 @@ router.post('/usernameExists', async (req, res) => {
         return res.status(400).json({ exists: false, message: "No username provided" });
     };
     const user = await Account.findOne({ where: { username } });
-    console.log(user);
     res.json({ exists: !!user });
 });
 
