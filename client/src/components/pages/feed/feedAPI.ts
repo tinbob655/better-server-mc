@@ -13,12 +13,6 @@ export async function newPost(posterUsername: string, textContent: string): Prom
     return res;
 };
 
-//edit an existing post
-export async function editPost(posterUsername: string, textContent: string, id: string): Promise<postObj[]> {
-    const res = (await axios.put(`/api/feedDb/${encodeURIComponent(id)}`, { posterUsername, textContent })).data;
-    return res;
-};
-
 //remove a post
 export async function deletePost(id: string): Promise<postObj[]> {
     const res = (await axios.delete(`/api/feedDb/${encodeURIComponent(id)}`)).data;

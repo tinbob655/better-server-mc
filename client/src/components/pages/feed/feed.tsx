@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import PageHeader from '../../multiPageComponents/pageHeader';
-import {getPosts, newPost, editPost, deletePost} from './feedAPI';
+import {getPosts, newPost, deletePost} from './feedAPI';
 import type { postObj } from './postObj';
 import Post from './post';
 import FancyButton from '../../multiPageComponents/fancyButton';

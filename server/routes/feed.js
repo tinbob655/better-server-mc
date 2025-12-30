@@ -53,27 +53,6 @@ router.post('/', async (req, res) => {
 });
 
 
-//edit an existing post to the feed
-router.put('/:id', async (req, res) => {
-    const feedToEdit = await Feed.findOne({where: {id: req.params.id}});
-    if (!feedToEdit) {
-        return res.status(400).json({message: "Could not find feed to edit"});
-    };
-    const {newUsername, newTextContent} = req.body;
-    if (!newUsername || !newTextContent) {
-        return res.status(400).json({message: "Did not receive either a username or content"});
-    };
-    await feedToEdit.update({
-        posterUsername: newUsername,
-        textContent: newTextContent,
-    });
-
-    //return all feeds
-    const feeds = await Feed.findAll();
-    res.json(feeds);
-});
-
-
 //delete a post
 router.delete('/:id', async (req, res) => {
     const id = req.params.id;
