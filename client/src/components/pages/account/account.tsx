@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import PageHeader from '../../multiPageComponents/pageHeader';
-import axios from 'axios';
-import {logOut, handleLogin, handleSignUp} from './accountAPI';
+import {logOut, handleLogin, handleSignUp, queryLoggedIn} from './accountAPI';
 import type { accountObj } from './accountObj';
 import LoginPopup from './loginPopup';
 import FancyButton from '../../multiPageComponents/fancyButton';
@@ -16,11 +15,11 @@ export default function Account():React.ReactElement {
 
     //find out if the user is logged in
     useEffect(() => {
-        axios.get('/api/accountDb/queryLoggedIn', {withCredentials: true}).then((res:{data: accountObj}) => {
+        queryLoggedIn().then((res:accountObj) => {
 
             //user is logged in
-            setLoggedIn(res.data.loggedIn);
-            setUsername(res.data.username);
+            setLoggedIn(res.loggedIn);
+            setUsername(res.username);
         }).catch(() => {
 
             //user is not logged in

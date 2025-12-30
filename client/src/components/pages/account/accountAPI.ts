@@ -1,6 +1,16 @@
 import type { accountObj } from "./accountObj";
 import axios from "axios";
 
+
+//query if a user is logged in
+export async function queryLoggedIn():Promise<accountObj> {
+    const res = (await axios.get('/api/accountDb/queryLoggedIn', {withCredentials: true})).data;
+    return {
+        loggedIn: res.loggedIn,
+        username: res.loggedIn ? res.username : '',
+    };
+};
+
 //log a user in
 async function logIn(username:string, password:string):Promise<accountObj> {
     const res = (await axios.post('/api/accountDb/login', {username, password}, {withCredentials: true})).data;

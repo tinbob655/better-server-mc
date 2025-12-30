@@ -43,6 +43,9 @@ app.use('/api/playerDb', playerDB);
 const accountDB = require('./routes/account');
 app.use('/api/accountDb', accountDB);
 
+const feedDb = require('./routes/feed');
+app.use('/api/feedDb', feedDb);
+
 
 //server the frontend
 app.use(express.static(path.join(__dirname, '../client/dist')));

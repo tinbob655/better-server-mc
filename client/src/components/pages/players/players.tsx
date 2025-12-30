@@ -7,6 +7,7 @@ import FancyButton from '../../multiPageComponents/fancyButton';
 import NewPlayerPopup from './newPlayerPopup';
 import {makeNewPlayer, deleteEntry} from './playerAPI';
 import Post from '../feed/post';
+import { queryLoggedIn } from '../account/accountAPI';
 
 
 export default function Players():React.ReactElement {
@@ -27,9 +28,9 @@ export default function Players():React.ReactElement {
         });
 
         //find out if the user is logged in
-        axios.get('/api/accountDb/queryLoggedIn').then((res) => {
-            if (res && res.data && res.data.loggedIn) {
-                setUsername(res.data.username);
+        queryLoggedIn().then((res) => {
+            if (res && res && res.loggedIn) {
+                setUsername(res.username);
             }
             else {
                 setUsername(null);

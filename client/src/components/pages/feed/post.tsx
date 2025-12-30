@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import axios from 'axios';
 import binIcon from '../../../assets/images/deleteIcon.svg';
-import {getProfilePictureUrl} from '../account/accountAPI';
+import {getProfilePictureUrl, queryLoggedIn} from '../account/accountAPI';
 
 
 interface params {
@@ -18,8 +17,8 @@ export default function Post({username, postContent, deleteFunction, left}:param
 
     //see if the user is logged in and if so get their username
     useEffect(() => {
-        axios.get('/api/accountDb/queryLoggedIn').then((res) => {
-            if (res.data.loggedIn && res.data.username == username) {
+        queryLoggedIn().then((res) => {
+            if (res.loggedIn && res.username == username) {
 
                 //this is the user's post
                 setShowBin(true);
