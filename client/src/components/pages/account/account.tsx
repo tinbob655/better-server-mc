@@ -4,7 +4,7 @@ import {logOut, handleLogin, handleSignUp, queryLoggedIn} from './accountAPI';
 import type { accountObj } from './accountObj';
 import LoginPopup from './loginPopup';
 import FancyButton from '../../multiPageComponents/fancyButton';
-
+import PostImage from '../../multiPageComponents/post/postImage';
 
 export default function Account():React.ReactElement {
 
@@ -82,9 +82,12 @@ export default function Account():React.ReactElement {
 
                     {/*the user is logged in*/}
                     <div className="card card-right">
-                        <h2 className="alignRight">
-                            Welcome back {username}
-                        </h2>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 0, justifyContent: 'flex-end'}}>
+                            <h2 className="alignRight" style={{marginRight: 0}}>
+                                Welcome back,  {username}!
+                            </h2>
+                            <PostImage username={username} />
+                        </div>
                         <p className="alignRight fancy">
                             Welcome back to the better server! You are currently logged in as {username}. To log out, click below.
                         </p>
