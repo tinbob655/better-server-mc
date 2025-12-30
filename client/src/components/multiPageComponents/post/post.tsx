@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import binIcon from '../../../assets/images/deleteIcon.svg';
-import {getProfilePictureUrl, queryLoggedIn} from '../../pages/account/accountAPI';
+import {queryLoggedIn} from '../../pages/account/accountAPI';
+import PostImage from './postImage';
 
 
 interface params {
@@ -13,7 +14,7 @@ interface params {
 export default function Post({username, postContent, deleteFunction, left}:params):React.ReactElement {
 
     const [showBin, setShowBin] = useState<boolean>(false);
-    const [profilePictureUrl, setProfilePictureUrl] = useState<string>('');
+    const [postImage, setPostImage] = useState<React.ReactElement>(<></>);
 
     //see if the user is logged in and if so get their username
     useEffect(() => {
@@ -24,20 +25,20 @@ export default function Post({username, postContent, deleteFunction, left}:param
                 setShowBin(true);
             }
             else {
+
+                //this is not the user's post
                 setShowBin(false);
             }
+
+
+            //we also need to set an image
+            setPostImage(<PostImage username={username} />);
+            
         }).catch((error) => {
             console.error(error);
             setShowBin(false);
         });
     }, []);
-
-    //fetch the profile picture URL based on username
-    useEffect(() => {
-        if (username) {
-            setProfilePictureUrl(getProfilePictureUrl(username));
-        }
-    }, [username]);
 
     return (
         <React.Fragment>
@@ -53,9 +54,7 @@ export default function Post({username, postContent, deleteFunction, left}:param
                     <h2 className={left ? "alignLeft" : "alignRight"} style={{marginRight: 0}} >
                         {username}
                     </h2>
-                    {profilePictureUrl && (
-                        <img src={profilePictureUrl} className="rounded" style={{ height: '50px', margin: 0, marginLeft: '10px'}} />
-                    )}
+                    {postImage}
                 </div>
                 <p className={`fancy ${left ? "alignLeft" : "alignRight"}`}>
                     {postContent}
