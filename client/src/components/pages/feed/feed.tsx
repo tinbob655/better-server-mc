@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import PageHeader from '../../multiPageComponents/pageHeader';
 import {getPosts, newPost, deletePost} from './feedAPI';
 import type { postObj } from './postObj';
-import Post from './post';
+import Post from '../../multiPageComponents/post/post';
 import FancyButton from '../../multiPageComponents/fancyButton';
 import NewPostPopup from './newPostPopup';
 import { queryLoggedIn } from '../account/accountAPI';

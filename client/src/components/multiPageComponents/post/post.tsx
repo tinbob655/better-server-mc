@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import binIcon from '../../../assets/images/deleteIcon.svg';
-import {getProfilePictureUrl, queryLoggedIn} from '../account/accountAPI';
+import {getProfilePictureUrl, queryLoggedIn} from '../../pages/account/accountAPI';
 
 
 interface params {

@@ -6,7 +6,7 @@ import axios from 'axios';
 import FancyButton from '../../multiPageComponents/fancyButton';
 import NewPlayerPopup from './newPlayerPopup';
 import {makeNewPlayer, deleteEntry} from './playerAPI';
-import Post from '../feed/post';
+import Post from '../../multiPageComponents/post/post';
 import { queryLoggedIn } from '../account/accountAPI';
 
 
