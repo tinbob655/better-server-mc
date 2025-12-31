@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
     const util = require('minecraft-server-util');
-    util.status('thursday-rug.gl.joinmc.link')
+    util.status('thursday-threefold.gl.joinmc.link')
         .then((result) => {
             res.json(result);
         })
