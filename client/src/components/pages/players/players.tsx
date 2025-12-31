@@ -73,36 +73,46 @@ export default function Players():React.ReactElement {
     }, [playerList]);
 
 
-    async function newPlayerPopupFormSubmitted(event:React.FormEvent):Promise<void> {
+    async function newPlayerPopupFormSubmitted(event: React.FormEvent, setErrorMsg: (msg: string) => void): Promise<void> {
         event.preventDefault();
+        setErrorMsg('');
 
         //users cannot post if they are not logged in
         if (!username) {
-            throw new Error('You may only post if you are logged in');
+            setErrorMsg('You may only post if you are logged in');
+            return;
         };
 
-        //users may only post about themselves
-        const target = event.target as typeof event.target & {name: {value: string}};
-        if (username != target.name.value) {
-            throw new Error('You may only post about yourself');
-        };
-
-        //hide the popup
-        document.getElementById('newPlayerPopupWrapper')?.classList.remove('shown');
-        setTimeout(() => {
-            setNewSectionPopup(<></>);
-        }, 1000);
-
-        //make the new player and update local copy of db
-        const res = await makeNewPlayer(event, playerList)
-        if (res) {
-            const exists:boolean = dbContent.some(player => player.name === res.name);
-            if (exists) {
-                setDbContent(dbContent.map(player => player.name === res.name ? res : player));
-            }
-            else {
-                setDbContent([...dbContent, res]);
+        try {
+            //make the new player and update local copy of db
+            const res = await makeNewPlayer(event, playerList);
+            if (res) {
+                const exists: boolean = dbContent.some(player => player.name === res.name);
+                if (exists) {
+                    setDbContent(dbContent.map(player => player.name === res.name ? res : player));
+                } 
+                else {
+                    setDbContent([...dbContent, res]);
+                };
             };
+
+            //hide the popup on success
+            document.getElementById('newPlayerPopupWrapper')?.classList.remove('shown');
+            setTimeout(() => {
+                setNewSectionPopup(<></>);
+            }, 1000);
+        }
+        catch (err: unknown) {
+            let msg = 'An error occurred.';
+            if (err && typeof err === 'object' && 'response' in err) {
+                const axiosErr = err as { response?: { data?: { message?: string } } };
+                if (axiosErr.response?.data?.message) {
+                    msg = axiosErr.response.data.message;
+                }
+            } else if (err instanceof Error) {
+                msg = err.message;
+            };
+            setErrorMsg(msg);
         };
     };
 
@@ -128,9 +138,9 @@ export default function Players():React.ReactElement {
                 </p>
                 <FancyButton text="Click here to get started!" transformOrigin="left"
                 action={() => {
-                    setNewSectionPopup(<NewPlayerPopup closeFunc={(event:React.FormEvent) => {
-                        newPlayerPopupFormSubmitted(event);
-                }}/>)
+                    setNewSectionPopup(<NewPlayerPopup closeFunc={(event: React.FormEvent, setErrorMsg: (msg: string) => void) => {
+                        newPlayerPopupFormSubmitted(event, setErrorMsg);
+                    }}/>);
                     setTimeout(() => {
                         document.getElementById('newPlayerPopupWrapper')?.classList.add('shown');
                     }, 10);

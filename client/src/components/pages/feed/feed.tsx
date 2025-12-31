@@ -43,33 +43,49 @@ export default function Feed():React.ReactElement {
     }, [postList]);
 
 
-    async function newPostPopupSubmitted(event:React.FormEvent):Promise<void> {
+    async function newPostPopupSubmitted(event: React.FormEvent, setErrorMsg: (msg: string) => void): Promise<void> {
         event.preventDefault();
+        setErrorMsg('');
 
         //make sure we have the required fields
         const target = event.target as typeof event.target & {
             textContent: {value: string},
         };
         if (!target.textContent || !target.textContent.value) {
-            throw new Error("Didn't get any text for the new post");
-        };
+            setErrorMsg("Didn't get any text for the new post");
+            return;
+        }
 
-        //we need to know the logged in user's username to make the post
-        const loggedIn = await queryLoggedIn();
-        if (!loggedIn.loggedIn) {
-            throw new Error('Can only post when logged in');
-        };
+        try {
+            //we need to know the logged in user's username to make the post
+            const loggedIn = await queryLoggedIn();
+            if (!loggedIn.loggedIn) {
+                setErrorMsg('Can only post when logged in');
+                return;
+            }
 
-        //make a post
-        const res = await newPost(loggedIn.username, target.textContent.value);
-        setPostList([...postList, res]);
+            //make a post
+            const res = await newPost(loggedIn.username, target.textContent.value);
+            setPostList([...postList, res]);
 
-        //close the popup
-        document.getElementById('newPostPopupWrapper')?.classList.remove('shown');
-        setTimeout(() => {
-            setNewPostPopup(<></>);
-        }, 1000);
-    };
+            //close the popup
+            document.getElementById('newPostPopupWrapper')?.classList.remove('shown');
+            setTimeout(() => {
+                setNewPostPopup(<></>);
+            }, 1000);
+        } catch (err: unknown) {
+            let msg = 'An error occurred.';
+            if (err && typeof err === 'object' && 'response' in err) {
+                const axiosErr = err as { response?: { data?: { message?: string } } };
+                if (axiosErr.response?.data?.message) {
+                    msg = axiosErr.response.data.message;
+                }
+            } else if (err instanceof Error) {
+                msg = err.message;
+            }
+            setErrorMsg(msg);
+        }
+    }
 
     return (
         <React.Fragment>
@@ -87,7 +103,7 @@ export default function Feed():React.ReactElement {
                     Making a post is easy: just log into your Better Server account and click the button below to get posting! Please remember that we do not tolerate offensive or inappropriate content on this website and posting such content may result in a ban.
                 </p>
                 <FancyButton text="Click here to make a post" transformOrigin="left" action={() => {
-                    setNewPostPopup(<NewPostPopup closeFunc={(event:React.FormEvent) => {newPostPopupSubmitted(event)}} />);
+                    setNewPostPopup(<NewPostPopup closeFunc={(event: React.FormEvent, setErrorMsg: (msg: string) => void) => {newPostPopupSubmitted(event, setErrorMsg)}} />);
                     setTimeout(() => {
                         document.getElementById('newPostPopupWrapper')?.classList.add('shown');
                     }, 10);

@@ -2,7 +2,7 @@ import React, {useRef, useState} from 'react';
 
 
 interface params {
-    closeFunc: Function,
+    closeFunc: (event: React.FormEvent, type: string, setErrorMsg: (msg: string) => void) => void;
 }
 
 export default function LoginPopup({closeFunc}:params):React.ReactElement {
@@ -12,6 +12,8 @@ export default function LoginPopup({closeFunc}:params):React.ReactElement {
     const signUpWrapper = useRef<HTMLDivElement>(null);
     const [activeForm, setActiveForm] = useState<'login' | 'signUp'>('login');
     const [profilePicture, setProfilePicture] = useState<File | null>(null);
+    const [loginErrorMsg, setLoginErrorMsg] = useState<string>('');
+    const [signUpErrorMsg, setSignUpErrorMsg] = useState<string>('');
 
     function loginSelected(): void {
         setActiveForm('login');
@@ -59,7 +61,7 @@ export default function LoginPopup({closeFunc}:params):React.ReactElement {
                     }}
                 >
                     <div id="loginWrapper" ref={loginWrapper} className="formPanel">
-                        <form id="loginForm" onSubmit={(event) => {closeFunc(event, 'login')}}>
+                        <form id="loginForm" onSubmit={(event) => {closeFunc(event, 'login', setLoginErrorMsg)}}>
                             <p className="aboveInput">
                                 Enter username:
                             </p>
@@ -70,12 +72,16 @@ export default function LoginPopup({closeFunc}:params):React.ReactElement {
                             </p>
                             <input name="password" type="password" placeholder="Password..." required />
 
+                            <p className="errorText">
+                                {loginErrorMsg}
+                            </p>
+
                             <input type="submit" value="Submit" style={{marginTop: '20px'}} />
                         </form>
                     </div>
 
                     <div id="signUpWrapper" ref={signUpWrapper} className="formPanel">
-                        <form id="signUpForm" onSubmit={(event) => {closeFunc(event, 'signUp')}}>
+                        <form id="signUpForm" onSubmit={(event) => {closeFunc(event, 'signUp', setSignUpErrorMsg)}}>
                             <p className="aboveInput">
                                 Create username:
                             </p>
@@ -103,6 +109,10 @@ export default function LoginPopup({closeFunc}:params):React.ReactElement {
                                     </React.Fragment>
                                 ) : 'Choose file...'}
                             </label>
+
+                            <p className="errorText">
+                                {signUpErrorMsg}
+                            </p>
 
                             <input type="submit" value="Submit" style={{marginTop: '20px'}} />
                         </form>

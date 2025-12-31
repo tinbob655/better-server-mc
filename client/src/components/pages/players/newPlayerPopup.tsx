@@ -1,11 +1,13 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 
 interface params {
-    closeFunc: Function,
-};
+    closeFunc: (event: React.FormEvent, setErrorMsg: (msg: string) => void) => void;
+}
 
 export default function NewPlayerPopup({closeFunc}:params):React.ReactElement {
+
+    const [errorMsg, setErrorMsg] = useState<string>('');
 
     return(
         <div className="popupWrapper" id="newPlayerPopupWrapper">
@@ -13,18 +15,9 @@ export default function NewPlayerPopup({closeFunc}:params):React.ReactElement {
                 Add & Update
             </h2>
 
-            <div id="playerPopupErrorBox"></div>
-
             <div className="dividerLine"></div>
 
-            <form id="newPlayerPopupForm" onSubmit={(event) => {closeFunc(event)}}>
-
-                {/*name text input*/}
-                <p className="aboveInput">
-                    Enter player name (must match account username):
-                </p>
-                <input name="name" type="text" placeholder="Enter player name..." required />
-
+            <form id="newPlayerPopupForm" onSubmit={(event) => {closeFunc(event, setErrorMsg)}}>
 
                 {/*description text input*/}
                 <p className="aboveInput">
@@ -33,7 +26,11 @@ export default function NewPlayerPopup({closeFunc}:params):React.ReactElement {
                 <textarea name="description" placeholder="Enter description..." required />
 
                 <p className="aboveInput" style={{marginTop: '10px', fontSize: '0.9em', opacity: 0.8}}>
-                    Your profile picture from your account will be used.
+                    Your profile picture and username from your account will be used.
+                </p>
+
+                <p className="errorText">
+                    {errorMsg}
                 </p>
 
                 {/*submit button*/}
@@ -41,4 +38,4 @@ export default function NewPlayerPopup({closeFunc}:params):React.ReactElement {
             </form>
         </div>
     );
-};
+}

@@ -28,14 +28,9 @@ export default function Account():React.ReactElement {
         });
     }, []);
 
-    async function loginPopupSubmitted(event:React.FormEvent, type:string,) {
+    async function loginPopupSubmitted(event: React.FormEvent, type: string, setErrorMsg: (msg: string) => void) {
         event.preventDefault();
-
-        //close the popup
-        document.getElementById('loginPopupWrapper')?.classList.remove('shown');
-        setTimeout(() => {
-            setLoginPopup(<></>);
-        }, 1000);
+        setErrorMsg('');
 
         const target = event.target as typeof event.target & {
             username: {value: string},
@@ -43,27 +38,55 @@ export default function Account():React.ReactElement {
             confirmPassword?: {value: string},
             profilePicture?: {files: FileList},
         };
-        
-        if (type === 'signUp') {
-            //make sure passwords match
-            if (target.password.value != target.confirmPassword?.value) {
-                throw new Error('Passwords do not match');
+
+        try {
+            if (type === 'signUp') {
+
+                //make sure passwords match
+                if (target.password.value !== target.confirmPassword?.value) {
+                    setErrorMsg('Passwords do not match');
+                    return;
+                };
+
+                //make sure profile picture is provided
+                if (!target.profilePicture?.files?.[0]) {
+                    setErrorMsg('Profile picture is required');
+                    return;
+                };
+
+                //sign up with profile picture
+                const res = await handleSignUp(target.username.value, target.password.value, target.profilePicture.files[0]);
+                setLoggedIn(res.loggedIn);
+                setUsername(res.username);
+            } 
+            else {
+
+                //login
+                const res = await handleLogin(target.username.value, target.password.value);
+                setLoggedIn(res.loggedIn);
+                setUsername(res.username);
             };
 
-            //make sure profile picture is provided
-            if (!target.profilePicture?.files?.[0]) {
-                throw new Error('Profile picture is required');
-            };
+            //close the popup on success
+            document.getElementById('loginPopupWrapper')?.classList.remove('shown');
+            setTimeout(() => {
+                setLoginPopup(<></>);
+            }, 1000);
+        } 
+        catch (err: unknown) {
 
-            //sign up with profile picture
-            const res = await handleSignUp(target.username.value, target.password.value, target.profilePicture.files[0]);
-            setLoggedIn(res.loggedIn);
-            setUsername(res.username);
-        } else {
-            //login
-            const res = await handleLogin(target.username.value, target.password.value);
-            setLoggedIn(res.loggedIn);
-            setUsername(res.username);
+            // Extract error message from axios or generic error
+            let msg = 'An error occurred.';
+            if (err && typeof err === 'object' && 'response' in err) {
+                const axiosErr = err as { response?: { data?: { message?: string } } };
+                if (axiosErr.response?.data?.message) {
+                    msg = axiosErr.response.data.message;
+                };
+            } 
+            else if (err instanceof Error) {
+                msg = err.message;
+            };
+            setErrorMsg(msg);
         };
     };
 
@@ -106,7 +129,7 @@ export default function Account():React.ReactElement {
                             To access the full features of this site, you'll need to make an account. This is done to reduce spamming and help our moderators to filter the content posted to our website. NOTE: I will not store your password however I would recommend using a different password to the one you usually use as I'm can't be 100% sure the process of this website are secure.
                         </p>
                         <FancyButton text="Click here to log in / sign up" action={() => {
-                            setLoginPopup(<LoginPopup closeFunc={(event:React.FormEvent, type:string) => {loginPopupSubmitted(event, type)}} />)
+                            setLoginPopup(<LoginPopup closeFunc={(event: React.FormEvent, type: string, setErrorMsg: (msg: string) => void) => {loginPopupSubmitted(event, type, setErrorMsg)}} />)
                             setTimeout(() => {
                                 document.getElementById('loginPopupWrapper')?.classList.add('shown');
                             }, 10);

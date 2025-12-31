@@ -43,14 +43,14 @@ router.post('/createAccount', upload.single('profilePicture'), async (req, res) 
     try {
         const duplicates = await Account.findAll({where: {username: username}});
         if (duplicates?.length > 0) {
-            return res.status(409).json({message: "Username was not unique"});
+            return res.status(409).json({message: "An account with that username already exists"});
         };
 
         //validate password
         if (!validatePassword(password)) {
 
             //password was invalid
-            return res.status(409).json({message: "Password was not valid"});
+            return res.status(409).json({message: "Password was not valid (must have at least: 5 characters, 1 uppercase character, 1 lowercase character, 1 number and 2 symbol)"});
         };
 
         //process the profile picture
@@ -87,10 +87,14 @@ router.post('/login', async (req, res) => {
     };
 
     const user = await Account.findOne({where: {username}});
-    const valid = await bcrypt.compare(password, user?.passwordHash);
 
-    //make sure the username was valid
-    if (!user || !valid) {
+    if (!user) {
+        return res.status(401).json({message: "No account with that username exists"});
+    }
+
+    const valid = await bcrypt.compare(password, user.passwordHash);
+
+    if (!valid) {
         return res.status(401).json({message: "Invalid credentials"});
     };
 

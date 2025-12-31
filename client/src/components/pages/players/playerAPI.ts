@@ -1,33 +1,40 @@
 import type { playerObj } from "./playerObj";
 import type { playerRecord } from "./playerRecord";
 import axios from "axios";
+import { queryLoggedIn } from "../account/accountAPI";
 
 export async function makeNewPlayer(event: React.FormEvent, playerList: playerObj[]): Promise<playerRecord | null> {
     const data = event.target as typeof event.target & {
-        name: { value: string },
         description: { value: string },
     };
 
+    //find out the user's username
+    const username = (await queryLoggedIn()).username;
+
     // Find out if we are creating a new player or editing an existing one
-    const newPlayer: boolean = !playerList.some((value) => value.name === data.name.value);
+    const newPlayer: boolean = !playerList.some((value) => value.name === username);
 
     const inputData = {
-        name: data.name.value,
+        name: username,
         description: data.description.value,
         date: new Date(),
     };
 
     try {
         if (newPlayer) {
+
             // Creating a new player
             const res: playerRecord = (await axios.post('/api/playerDb', inputData)).data;
             return res;
-        } else {
+        } 
+        else {
+
             // Updating an existing player's record
-            const res: playerRecord = (await axios.put(`/api/playerDb/${encodeURIComponent(data.name.value)}`, inputData)).data;
+            const res: playerRecord = (await axios.put(`/api/playerDb/${encodeURIComponent(username)}`, inputData)).data;
             return res;
-        }
-    } catch (error) {
+        };
+    } 
+    catch (error) {
         console.error(error);
         return null;
     };
