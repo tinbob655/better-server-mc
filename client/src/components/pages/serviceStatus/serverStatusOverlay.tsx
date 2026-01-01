@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import axios from 'axios';
-import type { statusObj } from '../pages/serviceStatus/statusObj';
+import type { statusObj } from './statusObj';
 import { Link } from 'react-router';
+import { getServiceStatus } from './serviceStatusAPI';
 
 
 export default function ServerStatusOverlay():React.ReactElement {
@@ -11,20 +11,19 @@ export default function ServerStatusOverlay():React.ReactElement {
 
     useEffect(() => {
 
-        function getServerInformation():void {
-            axios.get('/api/serverStatus').then((res) => {
-    
-                //if we managed to successfully get the server status
-                if (!res.data.error) {
-                    const data: statusObj = res.data;
-                    setPlayerCount(data.players.online);
-                    setServerOnline(true);
-                }
-                else {
-                    setServerOnline(false);
-                    setPlayerCount(0);
-                };
-            });
+        async function getServerInformation():Promise<void> {
+            const res = await getServiceStatus();
+
+            //check for error
+            if ('error' in res) {
+                setServerOnline(false);
+                setPlayerCount(0);
+            }
+            else {
+                const data:statusObj = res;
+                setServerOnline(true);
+                setPlayerCount(data.players.online);
+            };
         };
 
         //refresh server status every 10 seconds

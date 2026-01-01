@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import PageHeader from '../../multiPageComponents/pageHeader';
 import type { statusObj } from './statusObj';
-import axios from 'axios';
 import GenericTextSection from '../../multiPageComponents/genericTextSection';
+import { getServiceStatus } from './serviceStatusAPI';
 
 
 export default function ServiceStatus():React.ReactElement {
@@ -21,16 +21,16 @@ export default function ServiceStatus():React.ReactElement {
     useEffect(() => {
 
         async function getServerInfo():Promise<void> {
-            const res = await axios.get('/api/serverStatus');
+            const res = await getServiceStatus();
             
             //deal with potential errors
-            if (res.data.error) {
+            if ('error' in res) {
                 setOnline(false);
                 setServer(null);
                 setJoinMessage(<span style={{color: 'red', fontWeight: 900}}>unavailable</span>)
             }
             else {
-                const data:statusObj = res.data;
+                const data:statusObj = res;
                 setOnline(true);
                 setServer(data);
                 setPlayers(data.players.online);
