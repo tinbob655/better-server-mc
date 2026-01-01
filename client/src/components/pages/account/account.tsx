@@ -5,12 +5,14 @@ import type { accountObj } from './accountObj';
 import LoginPopup from './loginPopup';
 import FancyButton from '../../multiPageComponents/fancyButton';
 import PostImage from '../../multiPageComponents/post/postImage';
+import GenericTextSection from '../../multiPageComponents/genericTextSection';
 
 export default function Account():React.ReactElement {
 
     const [loggedIn, setLoggedIn] = useState<boolean>(false);
     const [username, setUsername] = useState<string>('');
     const [loginPopup, setLoginPopup] = useState<React.ReactElement>(<></>);
+    const [sudo, setSudo] = useState<boolean>(false);
 
 
     //find out if the user is logged in
@@ -20,11 +22,16 @@ export default function Account():React.ReactElement {
             //user is logged in
             setLoggedIn(res.loggedIn);
             setUsername(res.username);
+
+            //check if the user is sudo
+            const sudoUsers:string[] = import.meta.env.VITE_SUDO_USERS.split(',');
+            setSudo(sudoUsers.includes(res.username));
         }).catch(() => {
 
             //user is not logged in
             setLoggedIn(false);
             setUsername('');
+            setSudo(false);
         });
     }, []);
 
@@ -116,6 +123,12 @@ export default function Account():React.ReactElement {
                         </p>
                         <FancyButton text="Click here to log out" action={handleLogOut} />
                     </div>
+
+
+                    {/*if the user is sudo, show them a button to the admin page*/}
+                    {sudo ? (
+                        <GenericTextSection header="HELLO ADMIN" paragraph="YOU ARE AN ADMIN. CLICK BELOW TO GET TO THE SUPER SECRET ADMIN PAGE" linkDestination='/admin' linkText="CLICK HERE TO ACCESS THE ADMIN PAGE" left={true} />
+                    ) : <></>}
                 </React.Fragment>
             ) : (
                 <React.Fragment>
