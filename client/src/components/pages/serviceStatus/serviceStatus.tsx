@@ -41,11 +41,20 @@ export default function ServiceStatus():React.ReactElement {
                 if (data.players.online < data.players.max) {
 
                     if (data.roundTripLatency > 100 || data.players.online >= data.players.max - 5) {
+
+                        //server has high ping
                         setJoinMessage(<span style={{color: 'orange', fontWeight: 900}}>joinable, but may be slow</span>)
                     }
                     else {
+
+                        //server is fine
                         setJoinMessage(<span style={{color: 'green', fontWeight: 900}}>joinable</span>)
                     };
+                }
+                else {
+
+                    //server is full
+                    setJoinMessage(<span style={{color:  'red', fontWeight: 900}}>full</span>)
                 };
             };
         };
