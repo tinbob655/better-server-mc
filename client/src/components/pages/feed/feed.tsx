@@ -99,7 +99,7 @@ export default function Feed():React.ReactElement {
                 <h2 className="alignRight">
                     Make a post
                 </h2>
-                <p className="alignRight">
+                <p className="alignRight fancy">
                     Making a post is easy: just log into your Better Server account and click the button below to get posting! Please remember that we do not tolerate offensive or inappropriate content on this website and posting such content may result in a ban.
                 </p>
                 <FancyButton text="Click here to make a post" transformOrigin="left" action={() => {
