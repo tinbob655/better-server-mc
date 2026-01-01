@@ -30,6 +30,7 @@ router.get('/queryLoggedIn', (req, res) => {
     };
 });
 
+
 //create a new account
 router.post('/createAccount', upload.single('profilePicture'), async (req, res) => {
     const {username, password} = req.body;
@@ -77,6 +78,7 @@ router.post('/createAccount', upload.single('profilePicture'), async (req, res) 
     };
 });
 
+
 //log a new user in
 router.post('/login', async (req, res) => {
     const {username, password} = req.body;
@@ -102,12 +104,14 @@ router.post('/login', async (req, res) => {
     res.json({loggedIn: true, username: user.username});
 });
 
+
 //log a user out
 router.post('/logout', (req, res) => {
     req.session.destroy(() => {
         res.json({loggedIn: false});
     });
 });
+
 
 //query if a username exists
 router.post('/usernameExists', async (req, res) => {
@@ -141,6 +145,23 @@ router.get('/profilePicture/:username', async (req, res) => {
     catch (error) {
         res.status(500).json({ message: "Error fetching profile picture" });
     };
+});
+
+
+//query if a user is sudo
+router.get('/querySudo', (req, res) => {
+    const sudoUsers = process.env.SUDO_USERS.split(',');
+    let username;
+    if (req.session && req.session.user) {
+        username = req.session.user.username;
+    };
+
+    if (!username) {
+        return res.status(401).json({message: "No username received"});
+    };
+    res.json({
+        sudo: sudoUsers.includes(username),
+    });
 });
 
 

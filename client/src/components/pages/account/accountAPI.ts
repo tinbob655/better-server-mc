@@ -50,3 +50,14 @@ export async function handleSignUp(username: string, password: string, profilePi
 export function getProfilePictureUrl(username: string): string {
     return `/api/accountDb/profilePicture/${encodeURIComponent(username)}`;
 };
+
+//query if a user is sudo
+export async function querySudo():Promise<boolean> {
+    const res = (await axios.get('/api/accountDb/querySudo')).data;
+    if (res.sudo) {
+        return true;
+    }
+    else {
+        return false;
+    };
+};

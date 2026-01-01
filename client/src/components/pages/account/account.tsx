@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import PageHeader from '../../multiPageComponents/pageHeader';
-import {logOut, handleLogin, handleSignUp, queryLoggedIn} from './accountAPI';
+import {logOut, handleLogin, handleSignUp, queryLoggedIn, querySudo} from './accountAPI';
 import type { accountObj } from './accountObj';
 import LoginPopup from './loginPopup';
 import FancyButton from '../../multiPageComponents/fancyButton';
@@ -22,10 +22,6 @@ export default function Account():React.ReactElement {
             //user is logged in
             setLoggedIn(res.loggedIn);
             setUsername(res.username);
-
-            //check if the user is sudo
-            const sudoUsers:string[] = import.meta.env.VITE_SUDO_USERS.split(',');
-            setSudo(sudoUsers.includes(res.username));
         }).catch(() => {
 
             //user is not logged in
@@ -34,6 +30,13 @@ export default function Account():React.ReactElement {
             setSudo(false);
         });
     }, []);
+
+    //always find out if a user is sudo
+    useEffect(() => {
+        querySudo().then((res) => {
+            setSudo(res);
+        });
+    }, [username]);
 
     async function loginPopupSubmitted(event: React.FormEvent, type: string, setErrorMsg: (msg: string) => void) {
         event.preventDefault();
@@ -121,7 +124,7 @@ export default function Account():React.ReactElement {
                         <p className="alignRight fancy">
                             Welcome back to the better server! You are currently logged in as {username}. To log out, click below.
                         </p>
-                        <FancyButton text="Click here to log out" action={handleLogOut} />
+                        <FancyButton text="Click here to log out" action={handleLogOut} transformOrigin='left'/>
                     </div>
 
 

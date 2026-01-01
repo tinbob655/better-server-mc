@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import PageHeader from '../../multiPageComponents/pageHeader';
 import { deleteEntry as delPlayer } from '../players/playerAPI';
 import {deletePost as delFeed, getPosts} from '../feed/feedAPI';
-import { queryLoggedIn } from '../account/accountAPI';
+import { querySudo } from '../account/accountAPI';
 
 
 export default function Admin():React.ReactElement {
@@ -14,9 +14,8 @@ export default function Admin():React.ReactElement {
     
     //find out if the user is logged in as sudo
     useEffect(() => {
-        queryLoggedIn().then((res) => {
-            const sudoUsernames:string[] = import.meta.env.VITE_SUDO_USERS.split(',');
-            setSudo(sudoUsernames.includes(res.username));
+        querySudo().then((res) => {
+            setSudo(res);
         });
     }, []);
 
