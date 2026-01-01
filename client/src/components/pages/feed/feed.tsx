@@ -17,7 +17,11 @@ export default function Feed():React.ReactElement {
     //get all the posts
     useEffect(() => {
         getPosts().then((res) => {
-            setPostList(res);
+            setPostList(res.sort((a, b) => {
+
+                //sort the list from newest post to oldest post
+                return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+            }));
         });
     }, []);
 
@@ -32,7 +36,9 @@ export default function Feed():React.ReactElement {
                 tempPostHTML.push(
                     <Post username={post.posterUsername} postContent={post.textContent} left={left} deleteFunction={() => {
                         deletePost(post.id).then((res) => {
-                            setPostList([...res]);
+                            setPostList([...res].sort((a, b) => {
+                                return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+                            }));
                         });
                     }} />
                 );
@@ -66,26 +72,33 @@ export default function Feed():React.ReactElement {
 
             //make a post
             const res = await newPost(loggedIn.username, target.textContent.value);
-            setPostList([...postList, res]);
+            const orderedRes:postObj[] = [...postList, res].sort((a, b) => {
+                return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+            });
+            setPostList([...orderedRes]);
 
             //close the popup
             document.getElementById('newPostPopupWrapper')?.classList.remove('shown');
             setTimeout(() => {
                 setNewPostPopup(<></>);
             }, 1000);
-        } catch (err: unknown) {
+        } 
+
+        //deal with errors
+        catch (err: unknown) {
             let msg = 'An error occurred.';
             if (err && typeof err === 'object' && 'response' in err) {
                 const axiosErr = err as { response?: { data?: { message?: string } } };
                 if (axiosErr.response?.data?.message) {
                     msg = axiosErr.response.data.message;
                 }
-            } else if (err instanceof Error) {
+            } 
+            else if (err instanceof Error) {
                 msg = err.message;
-            }
+            };
             setErrorMsg(msg);
-        }
-    }
+        };
+    };
 
     return (
         <React.Fragment>
