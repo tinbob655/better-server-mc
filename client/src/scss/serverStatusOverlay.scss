@@ -54,5 +54,54 @@ div#serverStatusOverlayWrapper {
             margin-left: 12px;
             transition-delay: 0.1s;
         }
+
+        // Disable hover/focus expansion on touch devices
+        @media (hover: none) and (pointer: coarse) {
+            width: 36px;
+            border-radius: 50%;
+
+            .statusDetails {
+                width: 0;
+                margin: 0;
+                padding: 0;
+            }
+        }
+    }
+}
+
+// Mobile responsive styles
+@media (max-width: vars.$mobile-breakpoint) {
+    div#serverStatusOverlayWrapper {
+        top: 60px;
+        right: 2vw;
+        width: 40px;
+        height: 40px;
+
+        .statusDot {
+            width: 14px;
+            height: 14px;
+        }
+
+        .statusDetails {
+            font-size: 0.85rem;
+        }
+    }
+}
+
+@media (max-width: vars.$mobile-small-breakpoint) {
+    div#serverStatusOverlayWrapper {
+        top: 50px;
+        right: 2vw;
+        width: 36px;
+        height: 36px;
+
+        .statusDot {
+            width: 12px;
+            height: 12px;
+        }
+
+        .statusDetails {
+            font-size: 0.75rem;
+        }
     }
 }

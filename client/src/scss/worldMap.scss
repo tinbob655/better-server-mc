@@ -38,3 +38,46 @@ iframe#worldMapIframe {
     border-image-slice: 1;
     mask-image: -webkit-radial-gradient(white, black);
 }
+
+// Mobile responsive styles
+@media (max-width: vars.$mobile-breakpoint) {
+    button#worldMapFullscreenButton {
+        margin-left: 8px;
+
+        &.shown {
+            transform: translateY(40px);
+        }
+    }
+
+    div#worldMapWrapper {
+        width: 90vw;
+        height: 60vh;
+        margin-bottom: 25px;
+    }
+
+    iframe#worldMapIframe {
+        width: 90vw;
+        height: 60vh;
+        border-width: 3px;
+    }
+}
+
+@media (max-width: vars.$mobile-small-breakpoint) {
+    button#worldMapFullscreenButton {
+        &.shown {
+            transform: translateY(35px);
+        }
+    }
+
+    div#worldMapWrapper {
+        width: 90vw;
+        height: 60vh;
+        margin-bottom: 20px;
+    }
+
+    iframe#worldMapIframe {
+        width: 90vw;
+        height: 60vh;
+        border-width: 2px;
+    }
+}

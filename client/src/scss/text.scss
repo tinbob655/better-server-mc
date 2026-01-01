@@ -88,3 +88,69 @@ h1, h2, h3, p {
         transform-origin: right;
     }
 }
+
+// Mobile responsive styles
+@media (max-width: vars.$mobile-breakpoint) {
+    h1 {
+        font-size: 36px;
+
+        &.pageHeaderTitle {
+            font-size: 2.2rem;
+        }
+    }
+
+    h2 {
+        font-size: 26px;
+    }
+
+    h3 {
+        font-size: 18px;
+    }
+
+    p {
+        font-size: 15px;
+        line-height: 1.6;
+
+        &.fancy {
+            padding: 0.8em 1em;
+            margin-bottom: 1em;
+        }
+    }
+
+    h1, h2, h3, p {
+        max-width: 95vw;
+
+        &.alignLeft, &.alignRight {
+            text-align: left;
+            margin-left: 3%;
+            margin-right: 3%;
+        }
+    }
+}
+
+@media (max-width: vars.$mobile-small-breakpoint) {
+    h1 {
+        font-size: 28px;
+
+        &.pageHeaderTitle {
+            font-size: 1.8rem;
+        }
+    }
+
+    h2 {
+        font-size: 22px;
+    }
+
+    h3 {
+        font-size: 16px;
+    }
+
+    p {
+        font-size: 14px;
+        line-height: 1.5;
+
+        &.fancy {
+            padding: 0.6em 0.8em;
+        }
+    }
+}

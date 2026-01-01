@@ -21,3 +21,40 @@ footer {
     opacity: 0.96;
     transition: background 0.3s, box-shadow 0.3s, border-top 0.3s;
 }
+
+// Mobile responsive styles
+@media (max-width: vars.$mobile-breakpoint) {
+    div#footer {
+        margin-bottom: 15px;
+
+        img.logo {
+            height: 250px !important;
+            max-width: 90vw;
+        }
+
+        p {
+            padding: 0 15px;
+            text-align: center;
+        }
+    }
+
+    footer {
+        padding: 1.5rem 0 1rem 0;
+        font-size: 0.95em;
+    }
+}
+
+@media (max-width: vars.$mobile-small-breakpoint) {
+    div#footer {
+        margin-bottom: 10px;
+
+        img.logo {
+            height: 180px !important;
+        }
+    }
+
+    footer {
+        padding: 1rem 0 0.8rem 0;
+        font-size: 0.9em;
+    }
+}

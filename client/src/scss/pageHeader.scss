@@ -27,3 +27,31 @@ p.pageHeaderSubtitle {
     text-shadow: 0 1px 4px vars.$shadow;
     letter-spacing: 0.5px;
 }
+
+// Mobile responsive styles
+@media (max-width: vars.$mobile-breakpoint) {
+    div.pageHeaderGlass {
+        padding: 1.5rem 1.5rem 1rem 1.5rem;
+        margin: 1.5rem 2vw 1.5rem 2vw;
+        max-width: 96vw;
+        border-radius: 1rem;
+    }
+
+    p.pageHeaderSubtitle {
+        font-size: 1.1rem;
+        margin-left: 0.8rem;
+    }
+}
+
+@media (max-width: vars.$mobile-small-breakpoint) {
+    div.pageHeaderGlass {
+        padding: 1rem 1rem 0.8rem 1rem;
+        margin: 1rem 1vw 1rem 1vw;
+        border-radius: 0.8rem;
+    }
+
+    p.pageHeaderSubtitle {
+        font-size: 0.95rem;
+        margin-left: 0.5rem;
+    }
+}

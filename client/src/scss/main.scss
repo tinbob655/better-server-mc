@@ -185,3 +185,72 @@ iframe {
     padding-top: 0;
     padding-bottom: 0;
 }
+
+// Mobile responsive styles
+@media (max-width: vars.$mobile-breakpoint) {
+    div {
+        &#content {
+            margin-top: 80px;
+            padding-top: 12px;
+        }
+
+        &.popupWrapper {
+            min-width: 92vw;
+            max-width: 96vw;
+            max-height: 85vh;
+            padding-left: 16px;
+            padding-right: 16px;
+            border-radius: 18px;
+        }
+
+        &.dividerLine {
+            width: 90%;
+        }
+    }
+
+    img {
+        max-width: 90vw;
+        max-height: 50vh;
+
+        &.logo {
+            max-width: 85vw;
+        }
+
+        &.button {
+            width: 36px;
+        }
+    }
+
+    table {
+        table-layout: auto;
+    }
+
+    iframe {
+        max-width: 95vw;
+    }
+}
+
+@media (max-width: vars.$mobile-small-breakpoint) {
+    div {
+        &#content {
+            margin-top: 70px;
+            padding-top: 8px;
+        }
+
+        &.popupWrapper {
+            min-width: 80vw;
+            max-width: 88vw;
+            padding-left: 10px;
+            padding-right: 10px;
+            border-radius: 14px;
+        }
+    }
+
+    img {
+        max-width: 95vw;
+
+        &.button {
+            width: 32px;
+        }
+    }
+}
