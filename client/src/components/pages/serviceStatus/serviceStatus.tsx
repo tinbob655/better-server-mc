@@ -66,33 +66,38 @@ export default function ServiceStatus():React.ReactElement {
 
     //keep an up to date list of all the players
     useEffect(() => {
-        let tempPlayers:React.ReactElement[] = [];
-        let index:number = 0;
-        let suffix:string;
+        let tempPlayers: React.ReactElement[] = [];
         const sample = server?.players.sample;
 
-        //make sure the stuff exists
-        if (sample) {
+        if (sample && sample.length > 0) {
+            sample.forEach((player, idx) => {
 
-            //work out if we need to end with a ', ', ' and ' or ''
-            if (index == sample.length -1) {
-                suffix = '';
-            }
-            else if (index == sample.length -2) {
-                suffix = ' and ';
-            }
-            else {
-                suffix = ', ';
-            }
-            sample.forEach((player) => {
+                //work out our suffix
+                let suffix = '';
+
+                //if there 0 or 1 elements then we don't need a suffix
+                if (sample.length <= 1) {
+
+                    suffix = '';
+                } 
+                else if (idx === sample.length - 2) {
+
+                    //the penultimate element needs the world 'and'
+                    suffix = ' and ';
+                } 
+                else {
+                    
+                    //in any other case, the suffix will be a comma
+                    suffix = ', ';
+                };
+
                 tempPlayers.push(
-                    <React.Fragment>
+                    <React.Fragment key={player.id || player.name}>
                         {player.name}{suffix}
                     </React.Fragment>
                 );
             });
-            index++;
-        };
+        }
         setPlayerNames(tempPlayers);
     }, [players]);
 
