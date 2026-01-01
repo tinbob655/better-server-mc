@@ -72,25 +72,24 @@ export default function ServiceStatus():React.ReactElement {
         if (sample && sample.length > 0) {
             sample.forEach((player, idx) => {
 
-                //work out our suffix
+                // Determine suffix for each player name
                 let suffix = '';
+                if (sample.length === 1) {
 
-                //if there 0 or 1 elements then we don't need a suffix
-                if (sample.length <= 1) {
-
+                    //if there is only one player then we do not need a suffix
                     suffix = '';
-                } 
+                }
                 else if (idx === sample.length - 2) {
 
-                    //the penultimate element needs the world 'and'
+                    //penultimate player needs 'and'
                     suffix = ' and ';
-                } 
-                else {
+                }
+                else if (idx < sample.length - 2) {
                     
-                    //in any other case, the suffix will be a comma
+                    //in other cases, have a comma
                     suffix = ', ';
                 };
-
+                
                 tempPlayers.push(
                     <React.Fragment key={player.id || player.name}>
                         {player.name}{suffix}
