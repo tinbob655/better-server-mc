@@ -7,16 +7,16 @@ import FancyButton from '../../multiPageComponents/fancyButton';
 import NewPlayerPopup from './newPlayerPopup';
 import {makeNewPlayer, deleteEntry} from './playerAPI';
 import Post from '../../multiPageComponents/post/post';
-import { queryLoggedIn } from '../account/accountAPI';
+import { useAuth } from '../../../context/AuthContext';
 
 
 export default function Players():React.ReactElement {
 
+    const { loggedIn, username } = useAuth();
     const [dbContent, setDbContent] = useState<playerRecord[]>([]);
     const [playerList, setPlayerList] = useState<playerObj[]>([]);
     const [playersHTML, setPlayersHTML] = useState<React.ReactElement[]>([]);
     const [newSectionPopup, setNewSectionPopup] = useState<React.ReactElement>(<></>);
-    const [username, setUsername] = useState<string|null>(null);
 
 
     //initial queries
@@ -25,16 +25,6 @@ export default function Players():React.ReactElement {
         //get the player entries
         axios.get('/api/playerDb').then((res) => {
             setDbContent(res.data);
-        });
-
-        //find out if the user is logged in
-        queryLoggedIn().then((res) => {
-            if (res && res && res.loggedIn) {
-                setUsername(res.username);
-            }
-            else {
-                setUsername(null);
-            };
         });
     }, []);
 
@@ -85,7 +75,7 @@ export default function Players():React.ReactElement {
 
         try {
             //make the new player and update local copy of db
-            const res = await makeNewPlayer(event, playerList);
+            const res = await makeNewPlayer(event, playerList, username);
             if (res) {
                 const exists: boolean = dbContent.some(player => player.name === res.name);
                 if (exists) {

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import binIcon from '../../../assets/images/deleteIcon.svg';
-import {queryLoggedIn} from '../../pages/account/accountAPI';
+import { useAuth } from '../../../context/AuthContext';
 import PostImage from './postImage';
 
 
@@ -13,32 +13,23 @@ interface params {
 
 export default function Post({username, postContent, deleteFunction, left}:params):React.ReactElement {
 
+    const { loggedIn, username: currentUsername } = useAuth();
     const [showBin, setShowBin] = useState<boolean>(false);
     const [postImage, setPostImage] = useState<React.ReactElement>(<></>);
 
-    //see if the user is logged in and if so get their username
+    //see if the user is logged in and if so check if this is their post
     useEffect(() => {
-        queryLoggedIn().then((res) => {
-            if (res.loggedIn && res.username == username) {
-
-                //this is the user's post
-                setShowBin(true);
-            }
-            else {
-
-                //this is not the user's post
-                setShowBin(false);
-            }
-
-
-            //we also need to set an image
-            setPostImage(<PostImage username={username} />);
-            
-        }).catch((error) => {
-            console.error(error);
+        if (loggedIn && currentUsername === username) {
+            //this is the user's post
+            setShowBin(true);
+        } else {
+            //this is not the user's post
             setShowBin(false);
-        });
-    }, []);
+        }
+
+        //we also need to set an image
+        setPostImage(<PostImage username={username} />);
+    }, [loggedIn, currentUsername, username]);
 
     return (
         <React.Fragment>

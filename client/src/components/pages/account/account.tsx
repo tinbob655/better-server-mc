@@ -1,35 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import PageHeader from '../../multiPageComponents/pageHeader';
-import {logOut, handleLogin, handleSignUp, queryLoggedIn, querySudo} from './accountAPI';
-import type { accountObj } from './accountObj';
+import {logOut, handleLogin, handleSignUp, querySudo} from './accountAPI';
 import LoginPopup from './loginPopup';
 import FancyButton from '../../multiPageComponents/fancyButton';
 import PostImage from '../../multiPageComponents/post/postImage';
 import GenericTextSection from '../../multiPageComponents/genericTextSection';
+import { useAuth } from '../../../context/AuthContext';
 
 export default function Account():React.ReactElement {
 
-    const [loggedIn, setLoggedIn] = useState<boolean>(false);
-    const [username, setUsername] = useState<string>('');
+    const { loggedIn, username, refreshAuth } = useAuth();
     const [loginPopup, setLoginPopup] = useState<React.ReactElement>(<></>);
     const [sudo, setSudo] = useState<boolean>(false);
-
-
-    //find out if the user is logged in
-    useEffect(() => {
-        queryLoggedIn().then((res:accountObj) => {
-
-            //user is logged in
-            setLoggedIn(res.loggedIn);
-            setUsername(res.username);
-        }).catch(() => {
-
-            //user is not logged in
-            setLoggedIn(false);
-            setUsername('');
-            setSudo(false);
-        });
-    }, []);
 
     //always find out if a user is sudo
     useEffect(() => {
@@ -65,16 +47,14 @@ export default function Account():React.ReactElement {
                 };
 
                 //sign up with profile picture
-                const res = await handleSignUp(target.username.value, target.password.value, target.profilePicture.files[0]);
-                setLoggedIn(res.loggedIn);
-                setUsername(res.username);
+                await handleSignUp(target.username.value, target.password.value, target.profilePicture.files[0]);
+                await refreshAuth();
             } 
             else {
 
                 //login
-                const res = await handleLogin(target.username.value, target.password.value);
-                setLoggedIn(res.loggedIn);
-                setUsername(res.username);
+                await handleLogin(target.username.value, target.password.value);
+                await refreshAuth();
             };
 
             //close the popup on success
@@ -101,9 +81,8 @@ export default function Account():React.ReactElement {
     };
 
     async function handleLogOut() {
-        const res = await logOut();
-        setLoggedIn(res.loggedIn);
-        setUsername(res.username);
+        await logOut();
+        await refreshAuth();
     };
 
     return (

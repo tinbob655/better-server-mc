@@ -5,11 +5,12 @@ import type { postObj } from './postObj';
 import Post from '../../multiPageComponents/post/post';
 import FancyButton from '../../multiPageComponents/fancyButton';
 import NewPostPopup from './newPostPopup';
-import { queryLoggedIn } from '../account/accountAPI';
+import { useAuth } from '../../../context/AuthContext';
 
 
 export default function Feed():React.ReactElement {
 
+    const { loggedIn, username } = useAuth();
     const [postList, setPostList] = useState<postObj[]>([]);
     const [postHTML, setPostHTML] = useState<React.ReactElement[]>([]);
     const [newPostPopup, setNewPostPopup] = useState<React.ReactElement>(<></>);
@@ -63,15 +64,14 @@ export default function Feed():React.ReactElement {
         }
 
         try {
-            //we need to know the logged in user's username to make the post
-            const loggedIn = await queryLoggedIn();
-            if (!loggedIn.loggedIn) {
+            //check if user is logged in
+            if (!loggedIn) {
                 setErrorMsg('Can only post when logged in');
                 return;
             }
 
             //make a post
-            const res = await newPost(loggedIn.username, target.textContent.value);
+            const res = await newPost(username, target.textContent.value);
             const orderedRes:postObj[] = [...postList, res].sort((a, b) => {
                 return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
             });
