@@ -7,10 +7,10 @@ import Home from './components/pages/home/home';
 import Admin from './components/pages/admin/admin';
 import Feed from './components/pages/feed/feed';
 import Players from './components/pages/players/players';
-import Wiki from './components/pages/wiki/wiki';
 import MapPage from './components/pages/map/mapPage';
 import ServiceStatus from './components/pages/serviceStatus/serviceStatus';
 import Account from './components/pages/account/account';
+import Mods from './components/pages/mods/mods';
 
 export default function AllRoutes():React.ReactElement {
 
@@ -22,9 +22,9 @@ export default function AllRoutes():React.ReactElement {
             ['admin', <Admin/>],
             ['feed', <Feed/>],
             ['players', <Players/>],
-            ['wiki', <Wiki/>],
             ['serviceStatus', <ServiceStatus/>],
             ['account', <Account/>],
+            ['mods', <Mods/>],
         ];
 
         //generate routes
