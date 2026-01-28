@@ -54,7 +54,7 @@ export default function Players():React.ReactElement {
             playerList.forEach((player) => {
                 let left:boolean = !(index % 2 === 0);
                 tempPlayersHTML.push(
-                    <Post key={player.name} postContent={player.description} username={player.name} deleteFunction={() => {deleteEntry(player.name).then((res) => {setDbContent([...res])})}} left={left} />
+                    <Post key={player.name} postContent={player.description} username={loggedIn ? player.name : ''} deleteFunction={() => {deleteEntry(player.name).then((res) => {setDbContent([...res])})}} left={left} />
                 );
                 index++;
             });

@@ -3,7 +3,6 @@ import PageHeader from '../../multiPageComponents/pageHeader';
 import AnchorList from '../../multiPageComponents/anchorList';
 import FancyButton from '../../multiPageComponents/fancyButton';
 import { useAuth } from '../../../context/AuthContext';
-import Profile from './profile';
 import type {profile} from './profile';
 
 
@@ -49,6 +48,7 @@ export default function Mods():React.ReactElement {
                 ],
             },
         ];
+        console.log(profileData);
         return tempProfilesHTML;
     };
 

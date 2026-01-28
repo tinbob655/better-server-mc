@@ -12,7 +12,7 @@ export default function Profile({name, pros, cons}:profile):React.ReactElement {
     return (
         <React.Fragment>
             <h2>
-                {name}
+                {name} {pros} {cons}
             </h2>
         </React.Fragment>
     );
