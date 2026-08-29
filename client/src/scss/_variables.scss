@@ -1,0 +1,146 @@
+@use 'sass:color';
+
+// =============================================================================
+// _variables.scss
+// Theme tokens derived from the "BS" logo: planet-textured letters (ocean blue
+// + landmass green), a small cratered moon, a silver orbit ring, and a dark
+// starfield background with a faint green nebula glow.
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// 1. Base palette
+// These are the raw colors lifted from the logo. Don't use these directly in
+// components — use the semantic aliases in section 2 instead, so the meaning
+// of a color (not just its hue) is documented at the point of use.
+// -----------------------------------------------------------------------------
+$void:            #0a0e16;  // near-black background, deep space
+$nebula:          #142620;  // faint green glow bleeding through the starfield
+$ocean:           #4a72c9;  // main planet-letter blue
+$ocean-light:     #8fb2ec;  // specular highlight on the globes
+$ocean-dark:      #223561;  // shaded underside of the globes
+$continent:       #7fa66b;  // landmass green
+$continent-dark:  #43593a;  // land outline / shadow green
+$regolith:        #b3a186;  // moon surface tan
+$regolith-shadow: #7c7061;  // crater shadow on the moon
+$orbit:           #c9ccd6;  // silver ring that circles the logo
+$star:            #f5f6fa;  // starlight white
+
+// -----------------------------------------------------------------------------
+// 2. Semantic colors
+// What the site's components should actually reference. Keeping this layer
+// separate means a future re-theme only touches section 1.
+// -----------------------------------------------------------------------------
+$color-bg:            $void;
+$color-bg-elevated:   #101826;  // cards / panels, one step up from the void
+$color-bg-nebula:     radial-gradient(ellipse at 50% 0%, $nebula 0%, $void 60%);
+
+$color-text:          $star;
+$color-text-muted:    rgba($star, 0.64);
+$color-text-faint:    rgba($star, 0.38);
+
+$color-primary:       $ocean;
+$color-primary-hover: $ocean-light;
+$color-primary-muted: rgba($ocean, 0.16); // tinted backgrounds, badges
+
+$color-secondary:       $continent;
+$color-secondary-hover: color.adjust($continent, $lightness: 10%);
+
+$color-accent:        $regolith; // reserved for sparing use — moon is the odd one out in the logo, so treat it as a rare highlight, not a workhorse color
+
+$color-border:        rgba($orbit, 0.18);
+$color-border-strong:  rgba($orbit, 0.4);
+$color-divider:        $color-border;
+
+$color-link:          $ocean-light;
+$color-link-hover:    $star;
+
+// Server status indicators — kept in-family so they read as part of the same
+// world instead of stock traffic-light red/yellow/green.
+$color-status-online:      $continent;
+$color-status-offline:     #c0605a;   // muted rust-red, not a jarring pure red
+$color-status-maintenance: $regolith; // moon tan doubles as the "in-between" state
+
+// -----------------------------------------------------------------------------
+// 3. Typography
+// -----------------------------------------------------------------------------
+$font-display: 'Space Grotesk', 'Segoe UI', sans-serif; // headings — geometric, slightly technical
+$font-body:    'Inter', 'Segoe UI', sans-serif;          // paragraphs, UI copy
+$font-mono:    'JetBrains Mono', 'Consolas', monospace;  // server IP, player count, version tags
+
+$font-size-xs:   0.75rem;   // 12px — timestamps, fine print
+$font-size-sm:   0.875rem;  // 14px — secondary UI text
+$font-size-base: 1rem;      // 16px — body copy
+$font-size-md:   1.125rem;  // 18px — lead paragraphs
+$font-size-lg:   1.5rem;    // 24px — section headings
+$font-size-xl:   2.25rem;   // 36px — page headings
+$font-size-2xl:  3.5rem;    // 56px — hero headline
+
+$font-weight-regular:  400;
+$font-weight-medium:   500;
+$font-weight-bold:     700;
+
+$line-height-tight:  1.15; // headings
+$line-height-normal: 1.5;  // body copy
+$line-height-loose:  1.75; // long-form text
+
+// -----------------------------------------------------------------------------
+// 4. Spacing scale (rem-based, 4px base unit)
+// -----------------------------------------------------------------------------
+$space-1: 0.25rem;  // 4px
+$space-2: 0.5rem;   // 8px
+$space-3: 0.75rem;  // 12px
+$space-4: 1rem;     // 16px
+$space-5: 1.5rem;   // 24px
+$space-6: 2rem;     // 32px
+$space-7: 3rem;     // 48px
+$space-8: 4.5rem;   // 72px
+
+$global-edge-margin: 7.5%;
+
+// -----------------------------------------------------------------------------
+// 5. Radius, shadow & glow
+// The logo has soft painterly highlights and a glowing orbit ring — echoing
+// that with a subtle glow (instead of a flat box-shadow) ties UI elements
+// back to the source art.
+// -----------------------------------------------------------------------------
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 16px;
+$radius-pill: 999px;
+
+$shadow-sm: 0 1px 2px rgba($void, 0.4);
+$shadow-md: 0 4px 12px rgba($void, 0.5);
+$shadow-lg: 0 12px 32px rgba($void, 0.6);
+
+$glow-primary:   0 0 24px rgba($ocean, 0.35);
+$glow-secondary: 0 0 24px rgba($continent, 0.3);
+$glow-orbit:     0 0 16px rgba($orbit, 0.25); // for dividers/rings that should shimmer like the logo's ring
+
+// -----------------------------------------------------------------------------
+// 6. Motion
+// -----------------------------------------------------------------------------
+$transition-fast: 150ms ease;
+$transition-base: 250ms ease;
+$transition-slow: 400ms ease;
+
+// -----------------------------------------------------------------------------
+// 7. Breakpoints
+// -----------------------------------------------------------------------------
+$breakpoint-sm: 480px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+
+// -----------------------------------------------------------------------------
+// 8. Z-index scale
+// Named layers instead of raw numbers, so stacking order stays intentional
+// as the site grows.
+// -----------------------------------------------------------------------------
+$z-index: (
+        base:     0,
+        dropdown: 10,
+        sticky:   20,
+        overlay:  30,
+        modal:    40,
+        toast:    50
+);

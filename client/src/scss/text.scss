@@ -1,0 +1,53 @@
+@use 'variables' as vars;
+
+h1 {
+  font-family: vars.$font-display;
+  font-size: vars.$font-size-xl;
+  font-weight: vars.$font-weight-bold;
+  line-height: vars.$line-height-tight;
+  color: vars.$color-primary;
+}
+
+h2 {
+  font-family: vars.$font-display;
+  font-size: vars.$font-size-lg;
+  font-weight: vars.$font-weight-medium;
+  line-height: vars.$line-height-tight;
+  color: vars.$color-secondary;
+}
+
+p, span, a {
+  font-family: vars.$font-body;
+  font-size: vars.$font-size-md;
+  font-weight: vars.$font-weight-regular;
+  line-height: vars.$line-height-normal;
+  color: vars.$color-text;
+}
+
+%textAlignLeft {
+  margin-left: vars.$global-edge-margin;
+  margin-right: auto;
+  text-align: left;
+  transform-origin: left;
+}
+
+%textAlignRight {
+  margin-right: vars.$global-edge-margin;
+  margin-left: auto;
+  text-align: right;
+  transform-origin: right;
+}
+
+section.alignLeft > p,
+section.alignLeft > h2,
+p.alignLeft,
+h2.alignLeft {
+  @extend %textAlignLeft;
+}
+
+section.alignRight > p,
+section.alignRight > h2,
+p.alignRight,
+h2.alignRight {
+  @extend %textAlignRight;
+}

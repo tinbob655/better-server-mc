@@ -1,4 +1,5 @@
-@use '_variables' as vars;
+@use 'variables' as vars;
 
 //delegate to other stylesheets
 @use 'text';
+@use 'components';
