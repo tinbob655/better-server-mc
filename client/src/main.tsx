@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client';
-import 'scss/index.scss';
+import "./scss/index.scss";
 import {BrowserRouter} from "react-router";
 
 import Header from "./components/header/Header.tsx";
