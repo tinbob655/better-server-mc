@@ -37,6 +37,8 @@ export default function GenericMarkupSection({title, children, left}: GenericMar
                 {title}
             </h2>
             {children}
+
+            <div className={"sectionDivider"} style={{marginTop: '1rem', marginBottom: '1rem'}} />
         </section>
     )
 }
