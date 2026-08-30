@@ -63,9 +63,9 @@ $color-status-maintenance: $regolith; // moon tan doubles as the "in-between" st
 // -----------------------------------------------------------------------------
 // 3. Typography
 // -----------------------------------------------------------------------------
-$font-display: 'Space Grotesk', 'Segoe UI', sans-serif; // headings — geometric, slightly technical
-$font-body:    'Inter', 'Segoe UI', sans-serif;          // paragraphs, UI copy
-$font-mono:    'JetBrains Mono', 'Consolas', monospace;  // server IP, player count, version tags
+$font-display: 'Orbitron', 'Segoe UI', sans-serif;    // headings — sci-fi, echoes the orbit ring in the logo
+$font-body:    'Sora', 'Segoe UI', sans-serif;         // paragraphs, UI copy
+$font-mono:    'Space Mono', 'Consolas', monospace;    // server IP, player count, version tags
 
 $font-size-xs:   0.75rem;   // 12px — timestamps, fine print
 $font-size-sm:   0.875rem;  // 14px — secondary UI text
