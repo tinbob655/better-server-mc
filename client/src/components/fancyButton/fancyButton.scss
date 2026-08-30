@@ -1,0 +1,75 @@
+@use '../../scss/variables' as vars;
+
+.fancyButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  isolation: isolate;
+
+  padding: vars.$space-2 vars.$space-6;
+  border-radius: vars.$radius-pill;
+  border: 1px solid vars.$color-border-strong;
+  background-color: transparent;
+
+  font-family: vars.$font-body;
+  font-size: vars.$font-size-sm;
+  font-weight: vars.$font-weight-medium;
+  color: vars.$color-text;
+  text-decoration: none;
+  cursor: pointer;
+
+  transition: border-color vars.$transition-base,
+  box-shadow vars.$transition-base,
+  transform vars.$transition-fast;
+
+  // fill that charges in from the left on hover
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: rgba(vars.$color-primary, 0.18);
+    opacity: 0;
+    transition: opacity vars.$transition-base;
+    z-index: -1;
+  }
+
+  &:hover {
+    border-color: vars.$color-primary;
+    box-shadow: 0 0 12px rgba(vars.$color-primary, 0.25);
+    transform: translateY(-3px) scale(1.025);
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.fancyButtonLabel {
+  position: relative;
+  z-index: 1;
+}
+
+//follow alignment rules
+section.alignLeft > .fancyButton, .fancyButton.alignLeft {
+  display: flex;
+  width: fit-content;
+  margin-left: vars.$global-edge-margin;
+  margin-right: auto;
+}
+
+section.alignRight > .fancyButton, .fancyButton.alignRight {
+  display: flex;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: vars.$global-edge-margin;
+}
