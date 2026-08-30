@@ -1,4 +1,4 @@
-package world.betterserver.server.dto;
+package world.betterserver.server.model.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

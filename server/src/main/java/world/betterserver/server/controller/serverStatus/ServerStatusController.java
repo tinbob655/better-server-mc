@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
-import world.betterserver.server.dto.ServerStatusMessage;
+import world.betterserver.server.model.dto.response.ServerStatusMessage;
 
 @RestController
-public class ServerStatusController implements ServerStatusControllerTemplate {
+public final class ServerStatusController implements ServerStatusControllerTemplate {
 
     @Value("${mcstatus.api.base-url}")
     String mcstatusBaseURL;
