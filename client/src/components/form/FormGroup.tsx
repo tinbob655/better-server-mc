@@ -33,11 +33,18 @@ export default function FormGroup<T>({
                 {value: (formState[name] as string) ?? ''};
 
     return (
-        <div className={"formGroup"}>
-            <label htmlFor={inputId}>
+        <div className={"formGroup"} style={{marginBottom: '2rem'}}>
+            <label htmlFor={inputId} style={{marginBottom: '7px'}}>
                 {label}
             </label>
-            <input id={inputId} name={name} type={type} onChange={handleChange} {...valueProps} {...inputProps} />
+            <input
+                id={inputId}
+                name={name}
+                type={type}
+                onChange={handleChange}
+                {...valueProps}
+                {...inputProps}
+            />
         </div>
     )
 }

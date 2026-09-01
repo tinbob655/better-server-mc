@@ -1,0 +1,116 @@
+@use 'variables' as vars;
+
+label {
+  position: relative;
+  display: block;
+  width: fit-content;
+  font-family: vars.$font-body;
+  font-size: vars.$font-size-sm;
+  font-weight: vars.$font-weight-medium;
+  color: vars.$color-text-muted;
+  margin-bottom: vars.$space-1;
+  letter-spacing: 2px;
+
+  transition: color vars.$transition-fast;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 1px;
+    background-color: vars.$color-primary;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform vars.$transition-base;
+  }
+}
+
+input,
+textarea,
+select {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: vars.$font-body;
+  font-size: vars.$font-size-base;
+  color: vars.$color-text;
+  background-color: vars.$color-bg-elevated;
+  border: 1px solid vars.$color-border-strong;
+  border-radius: vars.$radius-sm;
+  padding: vars.$space-2 vars.$space-3;
+
+  transition: border-color vars.$transition-base, box-shadow vars.$transition-base;
+
+  &::placeholder {
+    color: vars.$color-text-faint;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: vars.$color-primary;
+    box-shadow: vars.$glow-primary;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// checkboxes/radios shouldn't stretch to full width like text inputs
+input[type="checkbox"],
+input[type="radio"] {
+  display: inline-block;
+  width: auto;
+  accent-color: vars.$color-primary;
+}
+
+//file inputs render their own browser chrome so need to strip the box treatment
+input[type="file"] {
+  border: none;
+  background: none;
+  padding: vars.$space-1 0;
+  color: vars.$color-text-muted;
+}
+
+div.formGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: vars.$space-4;
+
+  // checkbox/radio groups read better as "box then label", inline
+  &:has(input[type="checkbox"]),
+  &:has(input[type="radio"]) {
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: flex-end;
+    gap: vars.$space-2;
+
+    label {
+      margin-bottom: 0;
+    }
+  }
+
+  &:has(
+  input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):focus,
+  textarea:focus) label {
+    color: vars.$color-primary;
+
+    &::after {
+      transform: scaleX(1);
+    }
+  }
+}
+
+// LoginPopup renders <form className="horizontal"> to lay fields side by side
+form.horizontal {
+  display: flex;
+  gap: vars.$space-4;
+
+  .formGroup {
+    flex: 1;
+    margin-bottom: 0;
+  }
+}
