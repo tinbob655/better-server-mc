@@ -1,12 +1,102 @@
+@use 'sass:map';
 @use '../../scss/variables' as vars;
 
-$popupHeight: 75vh;
+$popup-width: min(90vw, 560px);
+$popup-max-height: 75vh;
+
+// -----------------------------------------------------------------------------
+// Entrance / exit animation. Duration comes from the --popup-anim-duration
+// custom property set inline by PopupWrapper.tsx — the fallback (320ms) only
+// kicks in if that ever fails to be set.
+// -----------------------------------------------------------------------------
+@keyframes popupOverlayFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes popupOverlayFadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes popupScaleIn {
+  from { opacity: 0; transform: scale(0.92) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes popupScaleOut {
+  from { opacity: 1; transform: scale(1) translateY(0); }
+  to   { opacity: 0; transform: scale(0.92) translateY(12px); }
+}
+
+div.popupOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: map.get(vars.$z-index, modal);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background-color: rgba(vars.$color-bg, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  animation: popupOverlayFadeIn var(--popup-anim-duration, 320ms) ease forwards;
+
+  &.closing {
+    animation-name: popupOverlayFadeOut;
+  }
+}
 
 div.popupWrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
 
-  position: fixed;
-  height: $popupHeight;
-  top: calc((100vh - $popupHeight) / 2);
+  width: $popup-width;
+  max-height: $popup-max-height;
+  overflow-y: auto;
 
+  padding: vars.$space-6 vars.$space-5 vars.$space-5;
   background-color: vars.$color-bg-elevated;
+  border: 1px solid vars.$color-border-strong;
+  border-radius: vars.$radius-lg;
+  box-shadow: vars.$shadow-lg, vars.$glow-orbit;
+
+  animation: popupScaleIn var(--popup-anim-duration, 320ms) ease forwards;
+
+  // when the overlay is closing, swap this element's animation to the exit keyframes
+  .popupOverlay.closing & {
+    animation-name: popupScaleOut;
+  }
+}
+
+.closePopupButton {
+  position: absolute;
+  top: vars.$space-3;
+  right: vars.$space-3;
+
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+
+  font-size: vars.$font-size-sm;
+  line-height: 1;
+  color: vars.$color-text-muted;
+  background-color: transparent;
+  border: 1px solid vars.$color-border;
+  border-radius: vars.$radius-pill;
+  cursor: pointer;
+
+  transition: color vars.$transition-fast, border-color vars.$transition-fast, transform vars.$transition-fast;
+
+  &:hover {
+    color: vars.$color-text;
+    border-color: vars.$color-primary;
+  }
 }
