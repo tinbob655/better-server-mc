@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import world.betterserver.server.model.dto.request.AccountRequest;
+import world.betterserver.server.model.dto.response.CurrentUserResponse;
 
 @RequestMapping("/api/auth")
 public sealed interface AuthControllerTemplate permits AuthController {
@@ -23,5 +24,5 @@ public sealed interface AuthControllerTemplate permits AuthController {
     ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response);
 
     @GetMapping("/me")
-    ResponseEntity<String> getCurrentUser(Authentication auth);
+    ResponseEntity<CurrentUserResponse> getCurrentUser(Authentication auth);
 }

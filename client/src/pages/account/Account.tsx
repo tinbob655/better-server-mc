@@ -8,15 +8,13 @@ const LoginPopup = lazy(() => import("../../components/popups/loginPopup/LoginPo
 
 export default function Account(): React.ReactElement {
 
-    const {logout} = useAuth();
+    const {logout, isAuthenticated, user} = useAuth();
 
     const [showLoginPopup, setShowLoginPopup] = useState<boolean>(false);
 
     async function handleLogOutClick() {
         await logout();
     }
-
-    const isAuthenticated = false;
 
 
     return (
@@ -26,7 +24,7 @@ export default function Account(): React.ReactElement {
             {isAuthenticated ? (
 
                 //log out
-                <GenericMarkupSection title={"Sign out"}>
+                <GenericMarkupSection title={`Welcome back ${user?.username ?? 'UNKNOWN_USERNAME'}`}>
                     <p>
                         You are currently logged in to your Better Server account! If you wish to log out, please use
                         the below button. Be aware that logging out will restrict the functionalities of this web app.

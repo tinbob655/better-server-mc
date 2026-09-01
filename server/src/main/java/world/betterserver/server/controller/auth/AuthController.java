@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.RestController;
 import world.betterserver.server.model.dto.request.AccountRequest;
+import world.betterserver.server.model.dto.response.CurrentUserResponse;
 import world.betterserver.server.model.entity.user.User;
 import world.betterserver.server.model.entity.user.UserRepository;
 
@@ -76,7 +77,7 @@ public final class AuthController implements AuthControllerTemplate {
     }
 
     @Override
-    public ResponseEntity<String> getCurrentUser(Authentication auth) {
-        return ResponseEntity.ok(auth.getName());
+    public ResponseEntity<CurrentUserResponse> getCurrentUser(Authentication auth) {
+        return ResponseEntity.ok(new CurrentUserResponse(auth.getName()));
     }
 }
