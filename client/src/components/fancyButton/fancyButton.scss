@@ -73,3 +73,9 @@ section.alignRight > .fancyButton, .fancyButton.alignRight {
   margin-left: auto;
   margin-right: vars.$global-edge-margin;
 }
+
+//grey out disabled buttons
+.fancyButton.disabled {
+  filter: grayscale(0.75);
+  cursor: not-allowed;
+}

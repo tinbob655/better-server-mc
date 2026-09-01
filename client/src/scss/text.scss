@@ -85,3 +85,17 @@ a {
     }
   }
 }
+
+.errorText {
+  color: vars.$color-error;
+  font-weight: vars.$font-weight-bold;
+}
+
+.warningText {
+  color: vars.$color-warning;
+  font-weight: vars.$font-weight-medium;
+}
+
+.successText {
+  color: vars.$color-success;
+}

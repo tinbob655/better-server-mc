@@ -1,0 +1,12 @@
+@use '../../scss/variables' as vars;
+
+$popupHeight: 75vh;
+
+div.popupWrapper {
+
+  position: fixed;
+  height: $popupHeight;
+  top: calc((100vh - $popupHeight) / 2);
+
+  background-color: vars.$color-bg-elevated;
+}

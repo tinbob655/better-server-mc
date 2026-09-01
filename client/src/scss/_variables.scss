@@ -54,6 +54,11 @@ $color-divider:        $color-border;
 $color-link:          $ocean-light;
 $color-link-hover:    $star;
 
+//warnings
+$color-error: #c0605a;
+$color-warning: $regolith;
+$color-success: $continent;
+
 // Server status indicators — kept in-family so they read as part of the same
 // world instead of stock traffic-light red/yellow/green.
 $color-status-online:      $continent;

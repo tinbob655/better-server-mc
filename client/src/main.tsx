@@ -6,18 +6,22 @@ import {BrowserRouter} from "react-router";
 import Header from "./components/header/Header.tsx";
 import AllRoutes from "./AllRoutes.tsx";
 import Footer from "./components/footer/Footer.tsx";
+import {AuthProvider} from "./context/auth/AuthProvider.tsx";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
 
-      <Header/>
+          <Header/>
 
-      <div id={"content"}>
-        <AllRoutes/>
-      </div>
+          <div id={"content"}>
+            <AllRoutes/>
+          </div>
 
-      <Footer/>
-    </BrowserRouter>
+          <Footer/>
+
+        </BrowserRouter>
+      </AuthProvider>
   </StrictMode>,
 )
