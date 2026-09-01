@@ -11,14 +11,3 @@ div.sectionDivider {
   margin: vars.$space-1 auto;
   display: block;
 }
-
-button {
-  background-color: transparent;
-  border: none;
-  padding: vars.$space-1;
-
-  transition: transform vars.$transition-base;
-  &:hover {
-    transform: scale(1.1);
-  }
-}

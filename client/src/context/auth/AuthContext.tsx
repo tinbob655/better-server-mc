@@ -9,6 +9,8 @@ export interface AuthContextValue {
     user: AuthUser | null;
     isAuthenticated: boolean;
     isLoading: boolean;
+
+    register: (username: string, password: string) => Promise<{success: boolean, error?: string}>;
     login: (username: string, password: string) => Promise<boolean>;
     logout: () => Promise<void>;
 }
