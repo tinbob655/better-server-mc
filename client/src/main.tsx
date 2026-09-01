@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+import { StrictMode, Suspense } from 'react'
 import { createRoot } from 'react-dom/client';
 import "./scss/index.scss";
 import {BrowserRouter} from "react-router";
@@ -16,7 +16,9 @@ createRoot(document.getElementById('root')!).render(
           <Header/>
 
           <div id={"content"}>
-            <AllRoutes/>
+              <Suspense>
+                  <AllRoutes/>
+              </Suspense>
           </div>
 
           <Footer/>
