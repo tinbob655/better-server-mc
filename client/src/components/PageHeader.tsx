@@ -9,7 +9,7 @@ export default function PageHeader({title, subtitle}: PageHeaderParams): React.R
 
     return (
         <React.Fragment>
-            <h1 style={{marginLeft: '5%'}}>
+            <h1 style={{marginLeft: '5%', textAlign: 'left'}}>
                 {title}
             </h1>
             <p className={"alignLeft"}>
