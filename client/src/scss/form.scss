@@ -110,7 +110,7 @@ form.horizontal {
   flex-wrap: wrap;
   gap: vars.$space-4;
 
-  .formGroup {
+  > * {
     min-width: 12.5rem;
     flex: 1;
     flex-shrink: 0;

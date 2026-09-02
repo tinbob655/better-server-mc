@@ -3,14 +3,10 @@ import PopupWrapper from "../PopupWrapper.tsx";
 import {useAuth} from "../../../context/auth/AuthContext.tsx";
 import FormGroup from "../../form/FormGroup.tsx";
 import FancyButton from "../../fancyButton/FancyButton.tsx";
+import PasswordInput from "../../form/passwordInput/PasswordInput.tsx";
 
 interface LoginPopupParams {
     closeFunction: () => void;
-}
-
-interface LoginFormData {
-    username: string;
-    password: string;
 }
 
 export default function LoginPopup({closeFunction}: LoginPopupParams): React.ReactElement {
@@ -21,10 +17,8 @@ export default function LoginPopup({closeFunction}: LoginPopupParams): React.Rea
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
-    const [formData, setFormData] = useState<LoginFormData>({
-        username: '',
-        password: '',
-    });
+    const [username, setUsername] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
     const [confirmedPassword, setConfirmedPassword] = useState<string>('');
 
     function toggleMode(): void {
@@ -38,7 +32,7 @@ export default function LoginPopup({closeFunction}: LoginPopupParams): React.Rea
 
         //log the user in
         if (mode === 'LOGIN') {
-            const res = await login(formData.username, formData.password);
+            const res = await login(username, password);
 
             //successful login
             if (res) closeFunction();
@@ -51,7 +45,7 @@ export default function LoginPopup({closeFunction}: LoginPopupParams): React.Rea
 
         //register the user with a new account
         else {
-            const res = await register(formData.username, formData.password);
+            const res = await register(username, password);
             if (res.success) closeFunction();
             else setError(res.error ?? "Failed to create account. Please try again later.");
         }
@@ -68,27 +62,15 @@ export default function LoginPopup({closeFunction}: LoginPopupParams): React.Rea
                     label={"Username"}
                     type={"text"}
                     name={"username"}
-                    formState={formData}
-                    setFormState={setFormData}
+                    value={username}
+                    setValue={setUsername}
                 />
 
                 {/*password*/}
-                <FormGroup
-                    label={"Password"}
-                    type={"text"}
-                    name={"password"}
-                    formState={formData}
-                    setFormState={setFormData}
-                />
+                <PasswordInput value={password} setValue={setPassword} />
 
                 {/*confirm password only when creating a new account*/}
-                {mode === 'SIGNUP' && <FormGroup
-                    name={"confirmPassword"}
-                    value={confirmedPassword}
-                    setValue={setConfirmedPassword}
-                    label={"Confirm password"}
-                />
-                    }
+                {mode === 'SIGNUP' && <PasswordInput value={confirmedPassword} setValue={setConfirmedPassword} confirm />}
             </form>
 
             <FancyButton
