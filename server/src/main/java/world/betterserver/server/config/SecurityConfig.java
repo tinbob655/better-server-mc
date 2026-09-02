@@ -45,7 +45,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/logout").permitAll()
 
                         //allow users to view the status of the server with no account
-                        .requestMatchers("/api/server/status").permitAll()
+                        .requestMatchers("/api/serverStatus").permitAll()
                         .anyRequest().authenticated()
                 )
 

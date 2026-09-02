@@ -1,0 +1,131 @@
+@use 'sass:map';
+@use '../../../scss/variables' as vars;
+
+$slot-size: 2.8rem;
+$dot-size: calc($slot-size / 4);
+
+@keyframes overlayPopIn {
+  from { opacity: 0; transform: scale(0.6); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes statusPing {
+  0%   { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+@keyframes statusPulseLoading {
+  0%, 100% { opacity: 0.35; }
+  50%      { opacity: 1; }
+}
+
+//wraps the whole server status overlay
+a.serverStatusOverlayWrapper {
+  position: fixed;
+  top: 5rem;
+  right: 2rem;
+  z-index: map.get(vars.$z-index, sticky);
+
+  display: flex;
+  align-items: center;
+
+  height: $slot-size;
+  overflow: hidden;
+
+  border-radius: vars.$radius-pill;
+  border: 1px solid vars.$color-border-strong;
+  background-color: rgba(vars.$color-bg-elevated, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: vars.$shadow-md;
+
+  text-decoration: none;
+  cursor: pointer;
+
+  animation: overlayPopIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); //springs in on first mount
+  transition: box-shadow vars.$transition-base, border-color vars.$transition-base, transform vars.$transition-fast;
+
+  //make sure the dot is always a circle
+  .serverStatusIconSlot {
+    flex-shrink: 0;
+    width: $slot-size;
+    height: $slot-size;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .serverStatusDot {
+    position: relative;
+    width: $dot-size;
+    height: $dot-size;
+    border-radius: 50%;
+  }
+
+  //initially hidden status information. Shows on hover
+  .serverStatusLabel {
+    max-width: 0;
+    padding-right: 0;
+    overflow: hidden;
+    opacity: 0;
+    white-space: nowrap;
+
+    font-family: vars.$font-body;
+    font-size: vars.$font-size-sm;
+    font-weight: vars.$font-weight-bold;
+    color: vars.$color-text;
+
+    transition: max-width vars.$transition-slow, padding-right vars.$transition-slow, opacity vars.$transition-base;
+  }
+
+  &:hover, &:focus-visible {
+    border-color: vars.$color-primary;
+    box-shadow: vars.$shadow-lg, vars.$glow-primary;
+
+    .serverStatusLabel {
+      max-width: 11rem;
+      padding-right: vars.$space-4;
+      opacity: 1;
+    }
+  }
+
+  &:active {
+    transform: translateY(-1px) scale(0.95);
+  }
+
+  //for when the server is online
+  &.online .serverStatusDot {
+    background-color: vars.$color-status-online;
+    box-shadow: 0 0 8px rgba(vars.$color-status-online, 0.8);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background-color: vars.$color-status-online;
+      animation: statusPing 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+  }
+
+  //for when the server is offline
+  &.offline .serverStatusDot {
+    background-color: vars.$color-status-offline;
+    box-shadow: 0 0 8px rgba(vars.$color-status-offline, 0.6);
+  }
+
+  //for when we are waiting for the first server status ping
+  &.loading .serverStatusDot {
+    background-color: vars.$color-status-maintenance;
+    animation: statusPulseLoading 1.4s ease-in-out infinite;
+  }
+
+  @media (max-width: vars.$breakpoint-md) {
+    right: 1rem;
+
+    &:hover .serverStatusLabel,
+    &:focus-visible .serverStatusLabel {
+      max-width: 9rem;
+    }
+  }
+}

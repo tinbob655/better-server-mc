@@ -1,0 +1,141 @@
+@use 'variables' as vars;
+
+$list-aligned-max-width: 66%; // matches $aligned-text-max-width in text.scss
+
+%listAlignLeft {
+  margin-left: vars.$global-edge-margin;
+  margin-right: auto;
+  max-width: $list-aligned-max-width;
+}
+
+%listAlignRight {
+  margin-right: vars.$global-edge-margin;
+  margin-left: auto;
+  max-width: $list-aligned-max-width;
+
+  //mirror the row so the marker sits on the outer (right) edge, matching how
+  //right-aligned text reads from that side inward
+  > li {
+    flex-direction: row-reverse;
+    text-align: right;
+  }
+
+  > li:hover {
+    transform: translateX(vars.$space-1 * -1);
+  }
+}
+
+@keyframes listItemFadeIn {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+ul, ol {
+  margin: vars.$space-4 0;
+  padding: 0;
+  list-style: none;
+}
+
+section.alignLeft > ul,
+section.alignLeft > ol,
+ul.alignLeft,
+ol.alignLeft {
+  @extend %listAlignLeft;
+}
+
+section.alignRight > ul,
+section.alignRight > ol,
+ul.alignRight,
+ol.alignRight {
+  @extend %listAlignRight;
+}
+
+li {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: vars.$space-3;
+  padding: vars.$space-2 0;
+
+  font-family: vars.$font-body;
+  font-size: vars.$font-size-md;
+  line-height: vars.$line-height-normal;
+  color: vars.$color-text;
+
+  transition: color vars.$transition-base, transform vars.$transition-base;
+  animation: listItemFadeIn 0.4s ease both;
+
+  &:hover {
+    color: vars.$color-link-hover;
+    transform: translateX(vars.$space-1);
+  }
+
+  //nested lists indent under whichever item they belong to
+  ul, ol {
+    width: 100%;
+    margin: vars.$space-1 0 vars.$space-1 vars.$space-5;
+  }
+
+  &::before {
+    flex-shrink: 0;
+    transition: transform vars.$transition-base, box-shadow vars.$transition-base;
+  }
+
+  &:hover::before {
+    transform: scale(1.25);
+  }
+}
+
+//cascade items in slightly staggered rather than all popping in at once
+@for $i from 1 through 10 {
+  li:nth-child(#{$i}) {
+    animation-delay: #{$i * 0.05}s;
+  }
+}
+
+//bullet marker for unordered lists is a small glowing dot
+ul > li::before {
+  content: '';
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-top: 0.6rem;
+  border-radius: 50%;
+  background-color: vars.$color-secondary;
+  box-shadow: vars.$glow-secondary;
+}
+
+//numbered marker for ordered lists is a small pill badge
+ol {
+  counter-reset: sickListCounter;
+}
+
+ol > li {
+  counter-increment: sickListCounter;
+
+  &::before {
+    content: counter(sickListCounter);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 1.5rem;
+    height: 1.5rem;
+    padding: 0 vars.$space-1;
+    box-sizing: border-box;
+
+    border-radius: vars.$radius-pill;
+    border: 1px solid vars.$color-border-strong;
+    background-color: vars.$color-primary-muted;
+
+    font-family: vars.$font-display;
+    font-size: vars.$font-size-xs;
+    font-weight: vars.$font-weight-bold;
+    color: vars.$color-primary;
+  }
+
+  &:hover::before {
+    border-color: vars.$color-primary;
+    box-shadow: vars.$glow-primary;
+  }
+}

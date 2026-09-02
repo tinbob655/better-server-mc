@@ -2,28 +2,33 @@ import { StrictMode, Suspense } from 'react'
 import { createRoot } from 'react-dom/client';
 import "./scss/index.scss";
 import {BrowserRouter} from "react-router";
+import {AuthProvider} from "./context/auth/AuthProvider.tsx";
+import {ServerStatusProvider} from "./context/serverStatus/ServerStatusProvider.tsx";
+import ServerStatusOverlay from "./pages/serverStatus/serverStatusOverlay/ServerStatusOverlay.tsx";
 
 import Header from "./components/header/Header.tsx";
 import AllRoutes from "./AllRoutes.tsx";
 import Footer from "./components/footer/Footer.tsx";
-import {AuthProvider} from "./context/auth/AuthProvider.tsx";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
       <AuthProvider>
-        <BrowserRouter>
+          <ServerStatusProvider>
+            <BrowserRouter>
 
-          <Header/>
+                <Header/>
+                <ServerStatusOverlay/>
 
-          <div id={"content"}>
-              <Suspense>
-                  <AllRoutes/>
-              </Suspense>
-          </div>
+                <div id={"content"}>
+                    <Suspense>
+                        <AllRoutes/>
+                    </Suspense>
+                </div>
 
-          <Footer/>
+                <Footer/>
 
-        </BrowserRouter>
+            </BrowserRouter>
+          </ServerStatusProvider>
       </AuthProvider>
   </StrictMode>,
 )

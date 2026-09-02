@@ -9,31 +9,29 @@ import world.betterserver.server.model.dto.response.ServerStatusMessage;
 @RestController
 public final class ServerStatusController implements ServerStatusControllerTemplate {
 
-    @Value("${mcstatus.api.base-url}")
-    String mcstatusBaseURL;
-
-    @Value("${mcstatus.server.address}")
-    String mcServerAddress;
-
+    private final String mcServerAddress;
     private final RestClient restClient;
 
-    public ServerStatusController() {
+    public ServerStatusController(
+            @Value("${mcstatus.api.base-url}") String mcstatusBaseURL,
+            @Value("${mcstatus.server.address}") String mcServerAddress
+    ) {
+        this.mcServerAddress = mcServerAddress;
         this.restClient = RestClient.builder()
-                .baseUrl(this.mcstatusBaseURL)
+                .baseUrl(mcstatusBaseURL)
                 .build();
     }
 
     @Override
     public ServerStatusMessage getServerStatus() {
-
         try {
-        return this.restClient.get()
-                .uri("/status/java/{address}", this.mcServerAddress)
-                .retrieve()
-                .body(ServerStatusMessage.class);
-        }
+            ServerStatusMessage message = this.restClient.get()
+                    .uri("/status/java/{address}", this.mcServerAddress)
+                    .retrieve()
+                    .body(ServerStatusMessage.class);
 
-        //if the server was offline
+            return message != null ? message : ServerStatusMessage.offline();
+        }
         catch (RestClientException e) {
             return ServerStatusMessage.offline();
         }
