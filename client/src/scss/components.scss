@@ -11,3 +11,8 @@ div.sectionDivider {
   margin: vars.$space-1 auto;
   display: block;
 }
+
+//wraps page content. Excludes header & footer
+#content {
+  margin-top: 4.5rem;
+}
