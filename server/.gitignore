@@ -32,6 +32,8 @@ build/
 ### VS Code ###
 .vscode/
 
+#db
+*.sqlite
+
 #general
 application-dev.properties
-*.db
