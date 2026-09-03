@@ -21,9 +21,9 @@ public interface AuthControllerTemplate {
     @GetMapping("/me")
     ResponseEntity<CurrentUserResponse> getCurrentUser(Authentication auth);
 
-    //only allow a dev or the account owner to change their own password
+    //only allow the account owner to edit their own password
     //'#username' reads the @PathVariable called 'username'
-    @PreAuthorize("#username == authentication.name or hasAuthority('DEV')")
+    @PreAuthorize("#username == authentication.name")
     @PutMapping("/users/{username}/password")
     ResponseEntity<?> changePassword(@PathVariable String username, @RequestBody ChangePasswordRequest request);
 }
