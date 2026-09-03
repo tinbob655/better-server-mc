@@ -8,9 +8,10 @@ interface PasswordInputParams {
     confirm?: boolean;
     value: string;
     setValue: React.Dispatch<React.SetStateAction<string>>;
+    label?: string;
 }
 
-export default function PasswordInput({confirm, value, setValue}: PasswordInputParams): React.ReactElement {
+export default function PasswordInput({confirm, value, setValue, label}: PasswordInputParams): React.ReactElement {
 
     const [passwordShown, setPasswordShown] = useState<boolean>(false);
 
@@ -20,7 +21,7 @@ export default function PasswordInput({confirm, value, setValue}: PasswordInputP
                 name={confirm ? "confirmPassword" : "password"}
                 value={value}
                 setValue={setValue}
-                label={confirm ? "Confirm password" : "Password"}
+                label={label ?? (confirm ? "Confirm password" : "Password")}
                 type={passwordShown ? "text" : "password"}
             />
 

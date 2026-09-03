@@ -5,12 +5,14 @@ import FancyButton from "../../components/fancyButton/FancyButton.tsx";
 import {useAuth} from "../../context/auth/AuthContext.tsx";
 
 const LoginPopup = lazy(() => import("../../components/popups/loginPopup/LoginPopup.tsx"));
+const ChangePasswordForm = lazy(() => import('./ChangePasswordForm.tsx'));
 
 export default function Account(): React.ReactElement {
 
     const {logout, isAuthenticated, user} = useAuth();
 
     const [showLoginPopup, setShowLoginPopup] = useState<boolean>(false);
+    const [showChangePasswordForm, setShowChangePasswordForm] = useState<boolean>(false);
 
     async function handleLogOutClick() {
         await logout();
@@ -22,15 +24,35 @@ export default function Account(): React.ReactElement {
             <PageHeader title={"Account"} subtitle={"Your Better Server account"} />
 
             {isAuthenticated ? (
+                <React.Fragment>
 
-                //log out
-                <GenericMarkupSection title={`Welcome back ${user?.username ?? 'UNKNOWN_USERNAME'}`}>
-                    <p>
-                        You are currently logged in to your Better Server account! If you wish to log out, please use
-                        the below button. Be aware that logging out will restrict the functionalities of this web app.
-                    </p>
-                    <FancyButton label={"Click here to log out"} onClick={handleLogOutClick} />
-                </GenericMarkupSection>
+                    {/*log out section*/}
+                    <GenericMarkupSection title={`Welcome back ${user?.username ?? 'UNKNOWN_USERNAME'}`}>
+                        <p>
+                            You are currently logged in to your Better Server account! If you wish to log out, please use
+                            the below button. Be aware that logging out will restrict the functionalities of this web app.
+                        </p>
+                        <FancyButton label={"Click here to log out"} onClick={handleLogOutClick} />
+                    </GenericMarkupSection>
+
+                    {/*change password section*/}
+                    <GenericMarkupSection title={"Change your password"}>
+                        <p>
+                            If you wish to change your password, you can do so using the below form. Please note that
+                            password changes may take a moment to come into effect.
+                        </p>
+                        <FancyButton
+                            label={"Update password"}
+                            onClick={() => setShowChangePasswordForm(prev => !prev)}
+                            alignment={"LEFT"}
+                        />
+                        <Suspense>
+                            <br/>
+                            {showChangePasswordForm && <ChangePasswordForm/>}
+                        </Suspense>
+                    </GenericMarkupSection>
+                </React.Fragment>
+
             ) : (
 
                 //sign up / log in

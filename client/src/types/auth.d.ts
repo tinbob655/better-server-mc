@@ -13,5 +13,6 @@ export interface AccountRequest {
 }
 
 export interface ChangePasswordRequest {
+    oldPassword: string;
     newPassword: string;
 }

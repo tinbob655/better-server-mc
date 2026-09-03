@@ -1,5 +1,6 @@
 package world.betterserver.server.controller.auth;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -13,10 +14,10 @@ import world.betterserver.server.model.dto.response.LoginResponse;
 public interface AuthControllerTemplate {
 
     @PostMapping("/register")
-    ResponseEntity<?> register(@RequestBody AccountRequest request);
+    ResponseEntity<?> register(@RequestBody @Valid AccountRequest request);
 
     @PostMapping("/login")
-    ResponseEntity<LoginResponse> login(@RequestBody AccountRequest request);
+    ResponseEntity<LoginResponse> login(@RequestBody @Valid AccountRequest request);
 
     @GetMapping("/me")
     ResponseEntity<CurrentUserResponse> getCurrentUser(Authentication auth);
@@ -25,5 +26,5 @@ public interface AuthControllerTemplate {
     //'#username' reads the @PathVariable called 'username'
     @PreAuthorize("#username == authentication.name")
     @PutMapping("/users/{username}/password")
-    ResponseEntity<?> changePassword(@PathVariable String username, @RequestBody ChangePasswordRequest request);
+    ResponseEntity<?> changePassword(@PathVariable String username, @RequestBody @Valid ChangePasswordRequest request);
 }

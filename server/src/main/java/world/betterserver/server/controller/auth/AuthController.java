@@ -70,8 +70,19 @@ public class AuthController implements AuthControllerTemplate {
         User user = this.userRepository.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException("No user found for name: " + username)
         );
-        user.setPasswordHash(this.encoder.encode(request.newPassword()));
-        this.userRepository.save(user);
-        return ResponseEntity.ok().build();
+
+        //verify old password is correct
+        if (this.encoder.matches(request.oldPassword(), user.getPasswordHash())) {
+
+            //update password
+            user.setPasswordHash(this.encoder.encode(request.newPassword()));
+            this.userRepository.save(user);
+            return ResponseEntity.ok().build();
+        }
+        else {
+
+            //incorrect old password
+            return ResponseEntity.badRequest().body("Old password was incorrect");
+        }
     }
 }

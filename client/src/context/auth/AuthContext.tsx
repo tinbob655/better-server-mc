@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 import type {Permission} from "../../types/permission.ts";
-import type {AccountRequest} from "../../types/auth";
+import type {AccountRequest, ChangePasswordRequest} from "../../types/auth";
 
 export interface AuthUser {
     username: string;
@@ -16,6 +16,7 @@ export interface AuthContextValue {
     login: (request: AccountRequest) => Promise<boolean>;
     logout: () => Promise<void>;
     hasPermission: (permission: Permission) => boolean;
+    changePassword: (request: ChangePasswordRequest) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextValue | undefined>(undefined);
