@@ -4,7 +4,7 @@ import type {AccountRequest} from "../../types/auth";
 
 export interface AuthUser {
     username: string;
-    permissions: Permission[];
+    maxPermission: Permission;
 }
 
 export interface AuthContextValue {

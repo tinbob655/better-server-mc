@@ -5,7 +5,7 @@ import { AuthContext, type AuthUser } from './AuthContext.tsx';
 import {parseAxiosError} from "../../functions/parseAxiosError.ts";
 import type {AccountRequest, CurrentUserResponse, LoginResponse} from "../../types/auth";
 import type {AxiosResponse} from "axios";
-import type {Permission} from "../../types/permission.ts";
+import {maxPermissionLevel, Permission} from "../../types/permission.ts";
 
 export function AuthProvider({ children }: { children: ReactNode }): React.ReactElement {
     const [user, setUser] = useState<AuthUser | null>(null);
@@ -20,7 +20,7 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
         axiosInstance.get("/auth/me")
             .then((response: AxiosResponse<CurrentUserResponse>) => setUser({
                 username: response.data.username,
-                permissions: response.data.permissions
+                maxPermission: maxPermissionLevel(response.data.permissions),
             }))
             .catch(() => {
 
@@ -49,7 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
             localStorage.setItem('authToken', response.data.token);
 
             const me: AxiosResponse<CurrentUserResponse> = await axiosInstance.get("/auth/me");
-            setUser({username: me.data.username, permissions: me.data.permissions});
+            setUser({username: me.data.username, maxPermission: maxPermissionLevel(me.data.permissions)});
 
             return true;
         }
@@ -67,7 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
     }
 
     function hasPermission(permission: Permission): boolean {
-        return user?.permissions.includes(permission) ?? false;
+        return (user?.maxPermission ?? Permission.DEFAULT) >= permission;
     }
 
     return (

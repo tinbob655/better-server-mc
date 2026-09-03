@@ -1,8 +1,6 @@
-import type {Permission} from "./permission.ts";
-
 export interface CurrentUserResponse {
     username: string;
-    permissions: Permission[];
+    permissions: string[];
 }
 
 export interface LoginResponse {
