@@ -1,28 +1,29 @@
 package world.betterserver.server.controller.auth;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import world.betterserver.server.model.dto.request.AccountRequest;
+import world.betterserver.server.model.dto.request.ChangePasswordRequest;
 import world.betterserver.server.model.dto.response.CurrentUserResponse;
+import world.betterserver.server.model.dto.response.LoginResponse;
 
 @RequestMapping("/api/auth")
-public sealed interface AuthControllerTemplate permits AuthController {
+public interface AuthControllerTemplate {
 
     @PostMapping("/register")
     ResponseEntity<?> register(@RequestBody AccountRequest request);
 
     @PostMapping("/login")
-    ResponseEntity<?> login(@RequestBody AccountRequest request, HttpServletRequest httpRequest);
-
-    @PostMapping("/logout")
-    ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response);
+    ResponseEntity<LoginResponse> login(@RequestBody AccountRequest request);
 
     @GetMapping("/me")
     ResponseEntity<CurrentUserResponse> getCurrentUser(Authentication auth);
+
+    //only allow a dev or the account owner to change their own password
+    //'#username' reads the @PathVariable called 'username'
+    @PreAuthorize("#username == authentication.name or hasAuthority('DEV')")
+    @PutMapping("/users/{username}/password")
+    ResponseEntity<?> changePassword(@PathVariable String username, @RequestBody ChangePasswordRequest request);
 }

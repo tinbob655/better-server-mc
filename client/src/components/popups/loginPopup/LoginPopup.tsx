@@ -32,7 +32,7 @@ export default function LoginPopup({closeFunction}: LoginPopupParams): React.Rea
 
         //log the user in
         if (mode === 'LOGIN') {
-            const res = await login(username, password);
+            const res = await login({username, password});
 
             //successful login
             if (res) closeFunction();
@@ -45,7 +45,7 @@ export default function LoginPopup({closeFunction}: LoginPopupParams): React.Rea
 
         //register the user with a new account
         else {
-            const res = await register(username, password);
+            const res = await register({username, password});
             if (res.success) closeFunction();
             else setError(res.error ?? "Failed to create account. Please try again later.");
         }

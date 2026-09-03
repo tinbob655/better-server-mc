@@ -1,8 +1,10 @@
-// client/src/context/AuthContext.ts
 import { createContext, useContext } from 'react';
+import type {Permission} from "../../types/permission.ts";
+import type {AccountRequest} from "../../types/auth";
 
 export interface AuthUser {
     username: string;
+    permissions: Permission[];
 }
 
 export interface AuthContextValue {
@@ -10,9 +12,10 @@ export interface AuthContextValue {
     isAuthenticated: boolean;
     isLoading: boolean;
 
-    register: (username: string, password: string) => Promise<{success: boolean, error?: string}>;
-    login: (username: string, password: string) => Promise<boolean>;
+    register: (request: AccountRequest) => Promise<{success: boolean, error?: string}>;
+    login: (request: AccountRequest) => Promise<boolean>;
     logout: () => Promise<void>;
+    hasPermission: (permission: Permission) => boolean;
 }
 
 export const AuthContext = createContext<AuthContextValue | undefined>(undefined);

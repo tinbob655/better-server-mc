@@ -3,23 +3,39 @@ import React, { useEffect, useState, type ReactNode } from 'react';
 import axiosInstance from "../../axiosInstance.ts";
 import { AuthContext, type AuthUser } from './AuthContext.tsx';
 import {parseAxiosError} from "../../functions/parseAxiosError.ts";
+import type {AccountRequest, CurrentUserResponse, LoginResponse} from "../../types/auth";
+import type {AxiosResponse} from "axios";
+import type {Permission} from "../../types/permission.ts";
 
 export function AuthProvider({ children }: { children: ReactNode }): React.ReactElement {
     const [user, setUser] = useState<AuthUser | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        axiosInstance.get('/auth/me')
-            .then(response => setUser({ username: response.data.username }))
-            .catch(() => setUser(null))
+        if (!localStorage.getItem('authToken')) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
+            setIsLoading(false);
+            return;
+        }
+        axiosInstance.get("/auth/me")
+            .then((response: AxiosResponse<CurrentUserResponse>) => setUser({
+                username: response.data.username,
+                permissions: response.data.permissions
+            }))
+            .catch(() => {
+
+                //the token must be invalid so remove it
+                localStorage.removeItem('authToken');
+                setUser(null);
+            })
             .finally(() => setIsLoading(false));
     }, []);
 
-    async function register(username: string, password: string): Promise<{success: boolean, error?: string}> {
+    async function register(request: AccountRequest): Promise<{success: boolean, error?: string}> {
         try {
-            await axiosInstance.post("/auth/register", {username, password});
+            await axiosInstance.post("/auth/register", request);
 
-            const loggedIn = await login(username, password);
+            const loggedIn = await login(request);
             return loggedIn ? {success: true} : {success: false, error: "Created account then failed to log into it"}
         }
         catch (err) {
@@ -27,24 +43,43 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
         }
     }
 
-    async function login(username: string, password: string): Promise<boolean> {
+    async function login(request: AccountRequest): Promise<boolean> {
         try {
-            await axiosInstance.post('/auth/login', { username, password });
-            setUser({ username });
+            const response: AxiosResponse<LoginResponse> = await axiosInstance.post("/auth/login", request);
+            localStorage.setItem('authToken', response.data.token);
+
+            const me: AxiosResponse<CurrentUserResponse> = await axiosInstance.get("/auth/me");
+            setUser({username: me.data.username, permissions: me.data.permissions});
+
             return true;
-        } catch {
+        }
+        catch {
             setUser(null);
             return false;
         }
     }
 
     async function logout(): Promise<void> {
-        await axiosInstance.post('/auth/logout');
+
+        //just need to delete our token, backend doesn't care
+        localStorage.removeItem('authToken');
         setUser(null);
     }
 
+    function hasPermission(permission: Permission): boolean {
+        return user?.permissions.includes(permission) ?? false;
+    }
+
     return (
-        <AuthContext.Provider value={{ user, isAuthenticated: !!user, isLoading, register, login, logout }}>
+        <AuthContext.Provider value={{
+            user,
+            isAuthenticated: !!user,
+            isLoading,
+            register,
+            login,
+            logout,
+            hasPermission,
+        }}>
             {children}
         </AuthContext.Provider>
     )
