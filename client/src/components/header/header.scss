@@ -119,6 +119,25 @@ header {
         transform-origin: left;
       }
     }
+
+    //make the admin page link stand out
+    &.admin {
+      color: vars.$color-accent;
+      text-shadow: 0 0 8px rgba(vars.$color-accent, 0.5);
+
+      &::after {
+        background-color: vars.$color-accent;
+        box-shadow: 0 0 12px rgba(vars.$color-accent, 0.6);
+      }
+
+      &:hover {
+        color: vars.$star;
+      }
+
+      &.active {
+        color: vars.$color-accent;
+      }
+    }
   }
 
   @media (max-width: vars.$breakpoint-md) {

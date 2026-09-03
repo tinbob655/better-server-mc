@@ -11,3 +11,7 @@ export interface AccountRequest {
     username: string;
     password: string;
 }
+
+export interface ChangePasswordRequest {
+    newPassword: string;
+}

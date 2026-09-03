@@ -1,8 +1,7 @@
 import React from 'react';
 import {NavLink} from "react-router";
 import './header.scss';
-
-const pages: string[] = ['account', 'map', 'news', 'polls', 'serverStatus', 'suggestions', 'wiki'];
+import {useAuth} from "../../context/auth/AuthContext.tsx";
 
 //turns a camelCase route path into a display label, e.g. "serverStatus" -> "Server Status"
 function formatPageName(path: string): string {
@@ -11,6 +10,20 @@ function formatPageName(path: string): string {
 }
 
 export default function Header(): React.ReactElement {
+
+    const {user} = useAuth();
+    const isDev = user?.maxPermission === 10;
+
+    const pages: string[] = [
+        'account',
+        'map',
+        'news',
+        'polls',
+        'serverStatus',
+        'suggestions',
+        'wiki',
+        ...(isDev ? ['admin'] : []),
+    ];
 
     return (
         <header>
@@ -24,7 +37,7 @@ export default function Header(): React.ReactElement {
                     <NavLink
                         key={path}
                         to={`/${path}`}
-                        className={({isActive}) => `navLink ${isActive ? "active" : ""}`}
+                        className={({isActive}) => `navLink ${isActive ? "active" : ""} ${path === 'admin' ? "admin" : ""}`}
                     >
                         {formatPageName(path)}
                     </NavLink>

@@ -10,6 +10,7 @@ const Polls = lazy(() => import('./pages/polls/Polls.tsx'));
 const ServerStatus = lazy(() => import('./pages/serverStatus/ServerStatus.tsx'));
 const Suggestions = lazy(() => import('./pages/suggestions/Suggestions.tsx'));
 const Wiki = lazy(() => import('./pages/wiki/Wiki.tsx'));
+const Admin = lazy(() => import('./pages/admin/Admin.tsx'));
 
 const pageInfo: [string, React.ComponentType][] = [
     ['', Home],
@@ -20,6 +21,7 @@ const pageInfo: [string, React.ComponentType][] = [
     ['serverStatus', ServerStatus],
     ['suggestions', Suggestions],
     ['wiki', Wiki],
+    ['admin', Admin],
 ];
 
 export default function AllRoutes(): React.ReactElement {
