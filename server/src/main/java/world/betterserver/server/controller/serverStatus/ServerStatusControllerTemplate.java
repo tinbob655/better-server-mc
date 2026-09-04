@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import world.betterserver.server.model.dto.response.serverStatus.ServerStatusMessage;
 
 @RequestMapping("api/serverStatus")
-public sealed interface ServerStatusControllerTemplate permits ServerStatusController {
+public interface ServerStatusControllerTemplate {
 
     @GetMapping
     ServerStatusMessage getServerStatus();

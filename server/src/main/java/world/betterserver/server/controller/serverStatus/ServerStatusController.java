@@ -7,7 +7,7 @@ import org.springframework.web.client.RestClientException;
 import world.betterserver.server.model.dto.response.serverStatus.ServerStatusMessage;
 
 @RestController
-public final class ServerStatusController implements ServerStatusControllerTemplate {
+public class ServerStatusController implements ServerStatusControllerTemplate {
 
     private final String mcServerAddress;
     private final RestClient restClient;
