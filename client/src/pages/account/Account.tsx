@@ -1,6 +1,6 @@
 import React, {useState, lazy, Suspense} from 'react';
 import PageHeader from "../../components/PageHeader.tsx";
-import GenericMarkupSection from "../../components/GenericMarkupSection.tsx";
+import GenericMarkupSection from "../../components/genericMarkupSection/GenericMarkupSection.tsx";
 import FancyButton from "../../components/fancyButton/FancyButton.tsx";
 import {useAuth} from "../../context/auth/AuthContext.tsx";
 

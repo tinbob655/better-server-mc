@@ -1,0 +1,114 @@
+@use '../../scss/variables' as vars;
+
+// how far the card drifts up as it animates into view
+$reveal-distance: 1.5rem;
+
+@keyframes genericSectionOrbit {
+  from {transform: rotate(0deg)}
+  to {transform: rotate(360deg)}
+}
+
+section.genericMarkupSection {
+  position: relative;
+  z-index: 0;
+
+  margin: vars.$space-7 auto;
+  padding: vars.$space-6 vars.$space-5;
+  max-width: 88%;
+  box-sizing: border-box;
+
+  background: linear-gradient(180deg, rgba(vars.$color-bg-elevated, 0.6) 0%, rgba(vars.$color-bg-elevated, 0.2) 100%);
+  border: 1px solid vars.$color-border;
+  border-radius: vars.$radius-lg;
+  box-shadow: vars.$shadow-sm;
+
+  //will be changed once the card is visible
+  opacity: 0;
+  transform: translateY($reveal-distance);
+  transition: opacity vars.$transition-slow, transform vars.$transition-slow,
+  border-color vars.$transition-base, box-shadow vars.$transition-base;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &:hover {
+    border-color: vars.$color-border-strong;
+    box-shadow: vars.$shadow-sm, vars.$glow-orbit;
+  }
+
+  //orbiting dot
+  &::before {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+
+    $dims: 6rem;
+    width: $dims;
+    height: $dims;
+    margin-top: calc($dims / 2);
+
+    background-image: radial-gradient(circle, rgba(vars.$color-accent, 0.9) 0% rgba(vars.$color-accent, 0) 70%);
+    background-size: calc($dims / 10) calc($dims / 10);
+    background-position: 50% 0;
+    background-repeat: no-repeat;
+    opacity: 0.55;
+    animation: genericSectionOrbit 22s linear infinite;
+  }
+
+  &.alignLeft::before {
+    right: vars.$space-5;
+  }
+
+  &.alignRight::before {
+    left: vars.$space-5;
+  }
+
+  //glowing spine
+  &::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    top: vars.$space-4;
+    bottom: vars.$space-4;
+    width: 2px;
+    opacity: 0.7;
+  }
+
+  &.alignLeft::after {
+    left: -0.6rem;
+    background: linear-gradient(180deg, transparent 0%, vars.$color-secondary 50%, transparent 100%);
+    box-shadow: vars.$glow-secondary;
+  }
+
+  &.alignRight::after {
+    right: -0.6rem;
+    background: linear-gradient(180deg, transparent 0%, vars.$color-secondary 50%, transparent 100%);
+    box-shadow: vars.$glow-primary;
+  }
+
+  //slightly animated divider
+  .sectionDividerAnimated {
+    transform-origin: center;
+    transform: scaleX(0);
+    opacity: 0;
+    transition: transform vars.$transition-slow, opacity vars.$transition-slow;
+    transition-delay: 0.15s;
+  }
+
+  &.visible .sectionDividerAnimated {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+
+  @media (max-width: vars.$breakpoint-md) {
+    padding: vars.$space-5 vars.$space-4;
+    max-width: 100%;
+
+    &::before {
+      display: none; //the decorative ring has no room to breathe on narrow screens
+    }
+  }
+}

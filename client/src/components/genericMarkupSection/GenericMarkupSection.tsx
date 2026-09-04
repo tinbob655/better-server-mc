@@ -1,4 +1,5 @@
 import React, {useRef, useEffect, type RefObject} from 'react';
+import './genericMarkupSection.scss';
 
 interface GenericMarkupSectionParams {
     title: string;
@@ -32,13 +33,13 @@ export default function GenericMarkupSection({title, children, left}: GenericMar
     }, []);
 
     return (
-        <section className={left ? "alignLeft" : "alignRight"}>
+        <section className={`genericMarkupSection ${left ? "alignLeft" : "alignRight"}`} ref={ref}>
             <h2>
                 {title}
             </h2>
             {children}
 
-            <div className={"sectionDivider"} style={{marginTop: '1rem', marginBottom: '1rem'}} />
+            <div className={"sectionDivider sectionDividerAnimated"} style={{marginTop: '1rem', marginBottom: '1rem'}} />
         </section>
     )
 }

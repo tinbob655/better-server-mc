@@ -1,6 +1,6 @@
 import React from 'react';
 import PageHeader from "../../components/PageHeader.tsx";
-import GenericMarkupSection from "../../components/GenericMarkupSection.tsx";
+import GenericMarkupSection from "../../components/genericMarkupSection/GenericMarkupSection.tsx";
 import {useServerStatus} from "../../context/serverStatus/ServerStatusContext.tsx";
 import type {ServerStatusInfo} from "../../types/serverStatus";
 

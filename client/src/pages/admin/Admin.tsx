@@ -1,7 +1,7 @@
 import React, {useState, Suspense, useEffect, lazy} from 'react';
 import {useAuth} from "../../context/auth/AuthContext.tsx";
 import PageHeader from "../../components/PageHeader.tsx";
-import GenericMarkupSection from "../../components/GenericMarkupSection.tsx";
+import GenericMarkupSection from "../../components/genericMarkupSection/GenericMarkupSection.tsx";
 import FancyButton from "../../components/fancyButton/FancyButton.tsx";
 import {useNavigate} from "react-router";
 import axiosInstance from "../../axiosInstance.ts";

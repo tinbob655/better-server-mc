@@ -1,6 +1,6 @@
 import React from 'react';
 import PageHeader from "../../components/PageHeader.tsx";
-import GenericMarkupSection from "../../components/GenericMarkupSection.tsx";
+import GenericMarkupSection from "../../components/genericMarkupSection/GenericMarkupSection.tsx";
 import FancyButton from "../../components/fancyButton/FancyButton.tsx";
 
 export default function Home():React.ReactElement {
