@@ -1,0 +1,18 @@
+@use '../../scss/variables' as vars;
+
+div.iconButtonWrapper {
+
+  cursor: pointer;
+
+  transition: transform vars.$transition-base;
+  transform-origin: center;
+  transform: scaleY(0);
+
+  &.visible {
+    transform: scaleY(1);
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}
