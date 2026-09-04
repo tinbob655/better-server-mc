@@ -10,6 +10,11 @@ div.sectionDivider {
   background-color: vars.$color-secondary;
   margin: vars.$space-1 auto;
   display: block;
+
+  &.light {
+    height: 2px;
+    background-color: vars.$color-secondary-hover;
+  }
 }
 
 //wraps page content. Excludes header & footer
