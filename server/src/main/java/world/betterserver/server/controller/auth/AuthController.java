@@ -21,6 +21,7 @@ import world.betterserver.server.model.entity.user.Permission;
 import world.betterserver.server.model.entity.user.User;
 import world.betterserver.server.model.entity.user.UserRepository;
 import world.betterserver.server.service.jwt.JwtService;
+import world.betterserver.server.service.nofitication.NotificationService;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -33,6 +34,7 @@ public class AuthController implements AuthControllerTemplate {
     private final PasswordEncoder encoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final NotificationService notifier;
 
     @Override
     public ResponseEntity<?> register(AccountRequest request) {
@@ -100,8 +102,18 @@ public class AuthController implements AuthControllerTemplate {
         User user = this.userRepository.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException("No user found for name: " + username)
         );
-        user.setPermission(request.newPermission());
+        Permission oldPermission = user.getPermission();
+        Permission newPermission = request.newPermission();
+        user.setPermission(newPermission);
+
+        //save & notify discord
         this.userRepository.save(user);
+        this.notifier.notifyDiscord("The permissions of user "
+                + username
+                + " were changed from "
+                + oldPermission
+                + " to "
+                + newPermission);
         return ResponseEntity.ok().build();
     }
 }
