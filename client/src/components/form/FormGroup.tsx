@@ -1,6 +1,5 @@
 import React, {useId} from 'react';
-
-type FormValue = string | number | boolean | FileList | null;
+import type {FormValue} from "../../types/form";
 
 type SharedInputProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'name' | 'value' | 'onChange' | 'id'>;
 
