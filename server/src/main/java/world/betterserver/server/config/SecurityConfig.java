@@ -53,7 +53,7 @@ public class SecurityConfig {
                         //allow users to authenticate
                         .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
 
-                        /*EXAMPLE for locking a router behind a permission level
+                        /*EXAMPLE for locking a router behind a newPermission level
                         .requestMatchers("/route/**").hasAuthority(Permission.DEV.name())
                          */
 

@@ -3,7 +3,13 @@ import React, { useEffect, useState, type ReactNode } from 'react';
 import axiosInstance from "../../axiosInstance.ts";
 import { AuthContext, type AuthUser } from './AuthContext.tsx';
 import {parseAxiosError} from "../../functions/parseAxiosError.ts";
-import type {AccountRequest, ChangePasswordRequest, CurrentUserResponse, LoginResponse} from "../../types/auth";
+import type {
+    AccountRequest,
+    ChangePasswordRequest,
+    ChangePermissionRequest,
+    CurrentUserResponse,
+    LoginResponse
+} from "../../types/auth";
 import type {AxiosResponse} from "axios";
 import {maxPermissionLevel, Permission} from "../../types/permission.ts";
 
@@ -76,6 +82,10 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
         await axiosInstance.put(`/auth/users/${user.username}/password`, request);
     }
 
+    async function changePermission(username: string, request: ChangePermissionRequest): Promise<void> {
+        await axiosInstance.put(`/auth/users/${username}/permission`, request);
+    }
+
     return (
         <AuthContext.Provider value={{
             user,
@@ -86,6 +96,7 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
             logout,
             hasPermission,
             changePassword,
+            changePermission,
         }}>
             {children}
         </AuthContext.Provider>

@@ -24,7 +24,7 @@ public class UserDetailsService implements org.springframework.security.core.use
         User user = this.userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("No user found for name: " + username));
 
-        //a user has all permissions lower than or equal to their saved permission (highest will always be saved)
+        //a user has all permissions lower than or equal to their saved newPermission (highest will always be saved)
         List<Permission> grantedPermissions = Arrays.stream(Permission.values())
                 .filter(p -> p.getLevel() <= user.getPermission().getLevel())
                 .toList();

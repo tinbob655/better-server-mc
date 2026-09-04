@@ -13,8 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RestController;
 import world.betterserver.server.model.dto.request.AccountRequest;
 import world.betterserver.server.model.dto.request.ChangePasswordRequest;
+import world.betterserver.server.model.dto.request.ChangePermissionRequest;
 import world.betterserver.server.model.dto.response.CurrentUserResponse;
 import world.betterserver.server.model.dto.response.LoginResponse;
+import world.betterserver.server.model.dto.response.UserSummary;
 import world.betterserver.server.model.entity.user.Permission;
 import world.betterserver.server.model.entity.user.User;
 import world.betterserver.server.model.entity.user.UserRepository;
@@ -84,5 +86,22 @@ public class AuthController implements AuthControllerTemplate {
             //incorrect old password
             return ResponseEntity.badRequest().body("Old password was incorrect");
         }
+    }
+
+    @Override
+    public Set<UserSummary> getAllUsers() {
+        return this.userRepository.findAll().stream()
+                .map(usr -> new UserSummary(usr.getUsername(), usr.getPermission()))
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public ResponseEntity<?> changePermissionLevel(String username, ChangePermissionRequest request) {
+        User user = this.userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException("No user found for name: " + username)
+        );
+        user.setPermission(request.newPermission());
+        this.userRepository.save(user);
+        return ResponseEntity.ok().build();
     }
 }

@@ -16,3 +16,12 @@ export interface ChangePasswordRequest {
     oldPassword: string;
     newPassword: string;
 }
+
+export interface ChangePermissionRequest {
+    newPermission: keyof typeof Permission;
+}
+
+export interface UserSummary {
+    username: string;
+    maxPermissionLevel: string;
+}

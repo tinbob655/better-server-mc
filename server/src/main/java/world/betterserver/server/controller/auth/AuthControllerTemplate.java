@@ -7,8 +7,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import world.betterserver.server.model.dto.request.AccountRequest;
 import world.betterserver.server.model.dto.request.ChangePasswordRequest;
+import world.betterserver.server.model.dto.request.ChangePermissionRequest;
 import world.betterserver.server.model.dto.response.CurrentUserResponse;
 import world.betterserver.server.model.dto.response.LoginResponse;
+import world.betterserver.server.model.dto.response.UserSummary;
+
+import java.util.Set;
 
 @RequestMapping("/api/auth")
 public interface AuthControllerTemplate {
@@ -27,4 +31,14 @@ public interface AuthControllerTemplate {
     @PreAuthorize("#username == authentication.name")
     @PutMapping("/users/{username}/password")
     ResponseEntity<?> changePassword(@PathVariable String username, @RequestBody @Valid ChangePasswordRequest request);
+
+    //allow devs to read all user's account info (no passwords)
+    @PreAuthorize("hasAuthority('DEV')")
+    @GetMapping("/allUsers")
+    Set<UserSummary> getAllUsers();
+
+    //allow devs to change account newPermission levels apart from their own
+    @PreAuthorize("#username != authentication.name and hasAuthority('DEV')")
+    @PutMapping("/users/{username}/permission")
+    ResponseEntity<?> changePermissionLevel(@PathVariable String username, @RequestBody @Valid ChangePermissionRequest request);
 }
