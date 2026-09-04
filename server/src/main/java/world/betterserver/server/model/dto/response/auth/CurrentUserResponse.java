@@ -1,4 +1,4 @@
-package world.betterserver.server.model.dto.response;
+package world.betterserver.server.model.dto.response.auth;
 
 import world.betterserver.server.model.entity.user.Permission;
 

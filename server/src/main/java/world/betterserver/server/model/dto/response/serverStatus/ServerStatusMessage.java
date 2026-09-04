@@ -1,4 +1,4 @@
-package world.betterserver.server.model.dto.response;
+package world.betterserver.server.model.dto.response.serverStatus;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

@@ -1,4 +1,4 @@
-package world.betterserver.server.model.dto.request;
+package world.betterserver.server.model.dto.request.auth;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

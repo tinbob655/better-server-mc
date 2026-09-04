@@ -5,12 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import world.betterserver.server.model.dto.request.AccountRequest;
-import world.betterserver.server.model.dto.request.ChangePasswordRequest;
-import world.betterserver.server.model.dto.request.ChangePermissionRequest;
-import world.betterserver.server.model.dto.response.CurrentUserResponse;
-import world.betterserver.server.model.dto.response.LoginResponse;
-import world.betterserver.server.model.dto.response.UserSummary;
+import world.betterserver.server.model.dto.request.auth.AccountRequest;
+import world.betterserver.server.model.dto.request.auth.ChangePasswordRequest;
+import world.betterserver.server.model.dto.request.auth.ChangePermissionRequest;
+import world.betterserver.server.model.dto.response.auth.CurrentUserResponse;
+import world.betterserver.server.model.dto.response.auth.LoginResponse;
+import world.betterserver.server.model.dto.response.auth.UserSummary;
 
 import java.util.Set;
 

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
-import world.betterserver.server.model.dto.response.ServerStatusMessage;
+import world.betterserver.server.model.dto.response.serverStatus.ServerStatusMessage;
 
 @RestController
 public final class ServerStatusController implements ServerStatusControllerTemplate {
