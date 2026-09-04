@@ -36,7 +36,7 @@ export default function Account(): React.ReactElement {
                     </GenericMarkupSection>
 
                     {/*change password section*/}
-                    <GenericMarkupSection title={"Change your password"}>
+                    <GenericMarkupSection title={"Change your password"} left>
                         <p>
                             If you wish to change your password, you can do so using the below form. Please note that
                             password changes may take a moment to come into effect.
