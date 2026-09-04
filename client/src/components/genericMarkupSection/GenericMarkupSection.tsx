@@ -33,7 +33,7 @@ export default function GenericMarkupSection({title, children, left}: GenericMar
     }, []);
 
     return (
-        <section className={`genericMarkupSection ${left ? "alignLeft" : "alignRight"}`} ref={ref}>
+        <section className={`genericMarkupSection card ${left ? "alignLeft" : "alignRight"}`} ref={ref}>
             <h2>
                 {title}
             </h2>

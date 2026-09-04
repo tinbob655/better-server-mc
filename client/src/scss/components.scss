@@ -16,3 +16,25 @@ div.sectionDivider {
 #content {
   margin-top: 4.5rem;
 }
+
+.card {
+  position: relative;
+  z-index: 0;
+
+  margin: vars.$space-7 auto;
+  padding: vars.$space-6 0;
+  max-width: 88%;
+  box-sizing: border-box;
+
+  background: linear-gradient(180deg, rgba(vars.$color-bg-elevated, 0.6) 0%, rgba(vars.$color-bg-elevated, 0.2) 100%);
+  border: 1px solid vars.$color-border;
+  border-radius: vars.$radius-lg;
+  box-shadow: vars.$shadow-sm;
+
+  transition: border-color vars.$transition-base, box-shadow vars.$transition-base;
+
+  &:hover {
+    border-color: vars.$color-border-strong;
+    box-shadow: vars.$shadow-sm, vars.$glow-orbit;
+  }
+}
