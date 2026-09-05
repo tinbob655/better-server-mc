@@ -1,0 +1,55 @@
+@use '../../../scss/variables' as vars;
+
+div.singleSuggestionWrapper {
+
+  //suggestion title
+  > h2 {
+    font-size: vars.$font-size-lg * 0.85;
+    margin-bottom: vars.$space-1;
+    padding-bottom: 0;
+  }
+
+  //poster info
+  > p.suggestionPosterInformation {
+    font-weight: lighter;
+    font-size: vars.$font-size-sm;
+    color: vars.$color-secondary-hover;
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  //suggestion description
+  > p.suggestionDescription {
+    max-width: 80%;
+  }
+
+  //admin response
+  > p.suggestionAdminResponse {
+    color: vars.$color-accent;
+  }
+
+  //suggestion status dot
+  > span {
+    position: absolute;
+    right: vars.$space-8;
+
+    $dims: 15px;
+    width: $dims;
+    height: $dims;
+    border-radius: 50%;
+
+    border: 2px solid vars.$color-border-strong;
+
+    &.UNSEEN, &.CLOSED {
+      background-color: vars.$color-warning;
+    }
+
+    &.REJECTED {
+      background-color: vars.$color-error;
+    }
+
+    &.ACCEPTED {
+      background-color: vars.$color-success;
+    }
+  }
+}

@@ -2,14 +2,20 @@ import React, {useEffect, useState} from 'react';
 import './iconButton.scss';
 
 interface IconButtonParams extends React.ComponentProps<"div"> {
-    icon: string;
-    showElementRef: React.RefObject<HTMLElement>;
+    imageLoader: () => Promise<{default: string}>;
+    showElementRef: React.RefObject<HTMLElement | null>;
     onClick: () => void;
 
     alt?: string;
 }
 
-export default function IconButton({icon, showElementRef, onClick, alt, ...props}: IconButtonParams): React.ReactElement {
+export default function IconButton({imageLoader, showElementRef, onClick, alt, ...props}: IconButtonParams): React.ReactElement {
+
+    //load the image
+    const [icon, setIcon] = useState<string>('');
+    useEffect(() => {
+        imageLoader().then(module => setIcon(module.default));
+    }, [imageLoader]);
     
     //listen to the user hovering over the show element
     const [visible, setVisible] = useState<boolean>(false);

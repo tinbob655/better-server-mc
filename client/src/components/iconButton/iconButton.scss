@@ -3,8 +3,9 @@
 div.iconButtonWrapper {
 
   cursor: pointer;
+  width: min-content;
 
-  transition: transform vars.$transition-base;
+  transition: transform vars.$transition-fast;
   transform-origin: center;
   transform: scaleY(0);
 
@@ -14,5 +15,10 @@ div.iconButtonWrapper {
     &:hover {
       transform: scale(1.1);
     }
+  }
+
+  > img {
+    padding: 0;
+    margin: 0;
   }
 }
