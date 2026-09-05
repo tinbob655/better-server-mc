@@ -28,7 +28,7 @@ export default function NewSuggestionForm({addSuggestion}: NewSuggestionFormPara
 
     return (
         <React.Fragment>
-            <form className={"horizontal"}>
+            <form style={{maxWidth: '88%', marginLeft: 'auto', marginRight: 'auto'}}>
 
                 <FormGroup
                     name={"title"}
