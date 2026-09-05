@@ -16,6 +16,8 @@ export default function Suggestions(): React.ReactElement {
         getAllSuggestions,
         addSuggestion,
         deleteSuggestion,
+        changeSuggestionAdminResponse,
+        changeSuggestionStatus,
     } = useSuggestion();
 
     const [showingAll, setShowingAll] = useState<boolean>(false);
@@ -44,13 +46,15 @@ export default function Suggestions(): React.ReactElement {
 
                 {fetchError && <p className={"errorText"}>Failed to get suggestions: {fetchError}</p>}
                 <Suspense>
-                    <div>
-                        {suggestions.map((suggestion: Suggestion, index: number): React.ReactElement =>
+                    <div style={{marginTop: '1rem'}}>
+                        {suggestions.map((suggestion: Suggestion): React.ReactElement =>
                             <SingleSuggestion
                                 suggestion={suggestion}
                                 key={suggestion.title}
-                                last={index === suggestions.length -1}
+
                                 deleteSuggestion={deleteSuggestion}
+                                changeSuggestionAdminResponse={changeSuggestionAdminResponse}
+                                changeSuggestionStatus={changeSuggestionStatus}
                             />
                         )}
                     </div>
