@@ -36,8 +36,12 @@ export default function IconButton({imageLoader, showElementRef, onClick, alt, .
     }, [showElementRef]);
 
     return (
-        <div className={`iconButtonWrapper ${visible ? "visible" : "hidden"}`} {...props} onClick={onClick}>
-            <img src={icon} alt={alt ?? "An icon button"} />
-        </div>
+        <React.Fragment>
+            {icon && (
+                <div className={`iconButtonWrapper ${visible ? "visible" : "hidden"}`} {...props} onClick={onClick}>
+                    <img src={icon} alt={alt ?? "An icon button"} />
+                </div>
+            )}
+        </React.Fragment>
     )
 }
