@@ -22,16 +22,18 @@ type FancyButtonParams = FancyButtonLinkParams | FancyButtonActionParams;
 
 export default function FancyButton({label, alignment, to, onClick, disabled}: FancyButtonParams): React.ReactElement {
 
+    const alignmentClassName: string = alignment ? alignment === 'LEFT' ? "alignLeft"  : "alignRight" : "";
+
     //button is a link
     if (to) return (
-        <Link to={to} className={`fancyButton ${alignment}`}>
+        <Link to={to} className={`fancyButton ${alignmentClassName}`}>
             <span className={"fancyButtonLabel"}>{label}</span>
         </Link>
     )
 
     //button calls a function
     else return (
-        <button type={"button"} className={`fancyButton ${alignment} ${disabled ? "disabled" : ''}`} onClick={onClick} disabled={disabled}>
+        <button type={"button"} className={`fancyButton ${alignmentClassName} ${disabled ? "disabled" : ''}`} onClick={onClick} disabled={disabled}>
             <span className={"fancyButtonLabel"}>{label}</span>
         </button>
     )
