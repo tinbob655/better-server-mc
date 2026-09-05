@@ -27,6 +27,7 @@ public interface SuggestionControllerTemplate {
     ResponseEntity<?> addSuggestion(@RequestBody @Valid NewSuggestionRequest request, Principal principal);
 
     @PatchMapping("/status")
+    @PreAuthorize("hasAuthority('DEV')")
     ResponseEntity<?> changeStatus(@RequestBody @Valid ChangeStatusRequest request);
 
     @PreAuthorize("hasAuthority('DEV')")
