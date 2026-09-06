@@ -94,7 +94,7 @@ export default function SingleSuggestion({
     }
 
     return (
-        <div className={"singleSuggestionWrapper"} ref={wrapperRef}>
+        <div className={"singleSuggestionWrapper widget"} ref={wrapperRef}>
             {deleteAllowed && <Suspense>
                 <IconButton
                     imageLoader={() => import("../../../assets/images/buttons/delete.svg")}
@@ -142,7 +142,7 @@ export default function SingleSuggestion({
                 {suggestion.title}
             </h2>
             {statusChangeError && <p className={"errorText"}>{statusChangeError}</p>}
-            <p className={"suggestionPosterInformation alignRight"}>
+            <p className={"smaller alignRight"}>
                 Posted by <b>{suggestion.posterUsername}</b> on {formatDate(suggestion.createdAt)}.
             </p>
             <p className={"suggestionDescription alignRight"}>

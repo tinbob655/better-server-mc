@@ -32,6 +32,15 @@ p, span, a {
   color: vars.$color-text;
 }
 
+p.smaller {
+  font-weight: lighter;
+  font-size: vars.$font-size-sm;
+  color: vars.$color-secondary-hover;
+  padding-top: 0;
+  margin-top: 0;
+  margin-bottom: vars.$space-3;
+}
+
 $aligned-text-max-width: 66%;
 %textAlignLeft {
   margin-left: vars.$global-edge-margin;

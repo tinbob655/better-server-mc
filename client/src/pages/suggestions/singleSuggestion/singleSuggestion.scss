@@ -1,23 +1,6 @@
 @use '../../../scss/variables' as vars;
 
 div.singleSuggestionWrapper {
-  position: relative;
-  z-index: 0;
-
-  padding: vars.$space-5;
-  margin: 0 0 vars.$space-5;
-
-  background: linear-gradient(180deg, rgba(vars.$color-bg-elevated, 0.6) 0%, rgba(vars.$color-bg-elevated, 0.2) 100%);
-  border: 1px solid vars.$color-border;
-  border-radius: vars.$radius-lg;
-  box-shadow: vars.$shadow-sm;
-
-  transition: border-color vars.$transition-base, box-shadow vars.$transition-base;
-
-  &:hover {
-    border-color: vars.$color-border-strong;
-    box-shadow: vars.$shadow-sm, vars.$glow-orbit;
-  }
 
   &:last-child {
     margin-bottom: 0;
@@ -29,21 +12,6 @@ div.singleSuggestionWrapper {
     top: vars.$space-4;
     left: vars.$space-4;
     z-index: 1;
-  }
-
-  > h2 {
-    font-size: vars.$font-size-lg * 0.85;
-    margin-top: 0;
-    margin-bottom: vars.$space-1;
-  }
-
-  > p.suggestionPosterInformation {
-    font-weight: lighter;
-    font-size: vars.$font-size-sm;
-    color: vars.$color-secondary-hover;
-    padding-top: 0;
-    margin-top: 0;
-    margin-bottom: vars.$space-3;
   }
 
   > p.suggestionDescription {

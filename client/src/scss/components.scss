@@ -43,3 +43,37 @@ div.sectionDivider {
     box-shadow: vars.$shadow-sm, vars.$glow-orbit;
   }
 }
+
+//usually goes inside a bigger card, for lists of items
+div.widget {
+  position: relative;
+  z-index: 0;
+
+  padding: vars.$space-5;
+  margin: 0 0 vars.$space-5;
+
+  background: linear-gradient(180deg, rgba(vars.$color-bg-elevated, 0.6) 0%, rgba(vars.$color-bg-elevated, 0.2) 100%);
+  border: 1px solid vars.$color-border;
+  border-radius: vars.$radius-lg;
+  box-shadow: vars.$shadow-sm;
+
+  transition: border-color vars.$transition-base, box-shadow vars.$transition-base;
+
+  &:hover {
+    border-color: vars.$color-border-strong;
+    box-shadow: vars.$shadow-sm, vars.$glow-orbit;
+  }
+
+  //headers need to be slightly smaller and have no gaps
+  > h2 {
+    margin-top: 0;
+    margin-bottom: vars.$space-1;
+    padding-top: 0;
+    font-size: vars.$font-size-lg * 0.85;
+  }
+
+  > p.smaller {
+    margin-top: 0;
+    padding-top: 0;
+  }
+}
