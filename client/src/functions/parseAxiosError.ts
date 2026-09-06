@@ -16,6 +16,11 @@ export function parseAxiosError(error: unknown): string {
     if (error.response) {
         const {data, status} = error.response;
 
+        //handler for unauthenticated
+        if (status === 403) {
+            return "You do not have permission to access this content. Please log into your Better Server account.";
+        }
+
         //ResponseEntity.body("some string") is delivered here as a plain string
         if (typeof data === 'string' && data.trim().length > 0) {
             return data;
