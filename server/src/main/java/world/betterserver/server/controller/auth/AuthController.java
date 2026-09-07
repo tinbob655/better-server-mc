@@ -21,7 +21,7 @@ import world.betterserver.server.model.entity.user.Permission;
 import world.betterserver.server.model.entity.user.User;
 import world.betterserver.server.model.entity.user.UserRepository;
 import world.betterserver.server.service.jwt.JwtService;
-import world.betterserver.server.service.nofitication.NotificationService;
+import world.betterserver.server.service.nofitication.NotificationServiceImpl;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,7 +34,7 @@ public class AuthController implements AuthControllerTemplate {
     private final PasswordEncoder encoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    private final NotificationService notifier;
+    private final NotificationServiceImpl notifier;
 
     @Override
     public ResponseEntity<?> register(AccountRequest request) {

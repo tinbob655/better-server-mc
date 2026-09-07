@@ -1,13 +1,6 @@
 package world.betterserver.server.service.nofitication;
 
-import org.springframework.stereotype.Service;
+public interface NotificationService {
 
-@Service
-public class NotificationService implements NotificationServiceTemplate {
-
-
-    @Override
-    public void notifyDiscord(String message) {
-
-    }
+    void notifyDiscord(String message);
 }

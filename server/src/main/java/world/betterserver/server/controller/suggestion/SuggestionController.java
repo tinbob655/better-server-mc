@@ -16,7 +16,7 @@ import world.betterserver.server.model.entity.suggestion.SuggestionRepository;
 import world.betterserver.server.model.entity.suggestion.SuggestionStatus;
 import world.betterserver.server.model.entity.user.User;
 import world.betterserver.server.model.entity.user.UserRepository;
-import world.betterserver.server.service.nofitication.NotificationService;
+import world.betterserver.server.service.nofitication.NotificationServiceImpl;
 
 
 import java.security.Principal;
@@ -29,7 +29,7 @@ public class SuggestionController implements SuggestionControllerTemplate {
 
     private final SuggestionRepository suggestionRepository;
     private final UserRepository userRepository;
-    private final NotificationService notifier;
+    private final NotificationServiceImpl notifier;
 
     @Override
     public List<SuggestionResponse> getOpenSuggestions() {
