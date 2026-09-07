@@ -1,4 +1,3 @@
-// client/src/context/AuthProvider.tsx
 import React, { useEffect, useState, type ReactNode } from 'react';
 import axiosInstance from "../../axiosInstance.ts";
 import { AuthContext, type AuthUser } from './AuthContext.tsx';
@@ -8,7 +7,7 @@ import type {
     ChangePasswordRequest,
     ChangePermissionRequest,
     CurrentUserResponse,
-    LoginResponse
+    LoginResponse, NewAccountRequest
 } from "../../types/auth";
 import type {AxiosResponse} from "axios";
 import {maxPermissionLevel, Permission} from "../../types/permission.ts";
@@ -37,11 +36,19 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
             .finally(() => setIsLoading(false));
     }, []);
 
-    async function register(request: AccountRequest): Promise<{success: boolean, error?: string}> {
+    async function register({username, password, profilePicture}: NewAccountRequest): Promise<{success: boolean, error?: string}> {
         try {
-            await axiosInstance.post("/auth/register", request);
+            const formData = new FormData();
 
-            const loggedIn = await login(request);
+            formData.append('request', new Blob([JSON.stringify({
+                username, password
+            })], {type: 'application/json'}));
+
+            formData.append('file', profilePicture);
+
+            await axiosInstance.post("/auth/register", formData);
+
+            const loggedIn = await login({username, password});
             return loggedIn ? {success: true} : {success: false, error: "Created account then failed to log into it"}
         }
         catch (err) {
@@ -86,6 +93,19 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
         await axiosInstance.put(`/auth/users/${username}/permission`, request);
     }
 
+    async function updateProfilePicture(file: File): Promise<void> {
+        if (!user?.username) throw new Error("No username available");
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        await axiosInstance.put(`/auth/users/${user.username}/profilePicture`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            },
+        });
+    }
+
     return (
         <AuthContext.Provider value={{
             user,
@@ -97,6 +117,7 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
             hasPermission,
             changePassword,
             changePermission,
+            updateProfilePicture,
         }}>
             {children}
         </AuthContext.Provider>

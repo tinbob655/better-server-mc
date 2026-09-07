@@ -1,10 +1,12 @@
 package world.betterserver.server.controller.auth;
 
 import jakarta.validation.Valid;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import world.betterserver.server.model.dto.request.auth.AccountRequest;
 import world.betterserver.server.model.dto.request.auth.ChangePasswordRequest;
 import world.betterserver.server.model.dto.request.auth.ChangePermissionRequest;
@@ -17,8 +19,11 @@ import java.util.Set;
 @RequestMapping("/api/auth")
 public interface AuthControllerTemplate {
 
-    @PostMapping("/register")
-    ResponseEntity<?> register(@RequestBody @Valid AccountRequest request);
+    @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ResponseEntity<?> register(
+            @RequestPart("request") @Valid AccountRequest request,
+            @RequestPart("file") MultipartFile profilePicture
+    );
 
     @PostMapping("/login")
     ResponseEntity<LoginResponse> login(@RequestBody @Valid AccountRequest request);
@@ -31,6 +36,14 @@ public interface AuthControllerTemplate {
     @PreAuthorize("#username == authentication.name")
     @PutMapping("/users/{username}/password")
     ResponseEntity<?> changePassword(@PathVariable String username, @RequestBody @Valid ChangePasswordRequest request);
+
+    //only allow account owners to update their own profile picture
+    @PreAuthorize("#username == authentication.name")
+    @PutMapping(value = "/users/{username}/profilePicture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ResponseEntity<?> updateProfilePicture(@PathVariable String username, @RequestParam("file") MultipartFile file);
+
+    @GetMapping("/users/{username}/profilePicture")
+    ResponseEntity<?> getProfilePicture(@PathVariable String username);
 
     //allow devs to read all user's account info (no passwords)
     @PreAuthorize("hasAuthority('DEV')")

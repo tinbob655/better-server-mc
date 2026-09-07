@@ -2,6 +2,7 @@ package world.betterserver.server.controller.auth;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +12,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import world.betterserver.server.model.dto.request.auth.AccountRequest;
 import world.betterserver.server.model.dto.request.auth.ChangePasswordRequest;
 import world.betterserver.server.model.dto.request.auth.ChangePermissionRequest;
@@ -22,7 +24,10 @@ import world.betterserver.server.model.entity.user.User;
 import world.betterserver.server.model.entity.user.UserRepository;
 import world.betterserver.server.service.jwt.JwtService;
 import world.betterserver.server.service.nofitication.NotificationServiceImpl;
+import world.betterserver.server.service.profilePicture.ProfilePictureService;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,17 +40,25 @@ public class AuthController implements AuthControllerTemplate {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final NotificationServiceImpl notifier;
+    private final ProfilePictureService profilePictureService;
 
     @Override
-    public ResponseEntity<?> register(AccountRequest request) {
+    public ResponseEntity<?> register(AccountRequest request, MultipartFile profilePicture) {
         if (this.userRepository.existsByUsername(request.username())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already taken");
         }
 
-        User user = new User(request.username(), this.encoder.encode(request.password()));
-        this.userRepository.save(user);
-
-        return ResponseEntity.ok().build();
+        try {
+            String filename = this.profilePictureService.store(request.username(), profilePicture);
+            String passwordHash = this.encoder.encode(request.password());
+            User user = new User(request.username(), passwordHash, filename);
+            this.userRepository.save(user);
+            return ResponseEntity.ok().build();
+        }
+        catch (IOException e) {
+            System.err.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save profile picture");
+        }
     }
 
     @Override
@@ -87,6 +100,45 @@ public class AuthController implements AuthControllerTemplate {
 
             //incorrect old password
             return ResponseEntity.badRequest().body("Old password was incorrect");
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> updateProfilePicture(String username, MultipartFile file) {
+        User user = this.userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException("No user found for name: " + username)
+        );
+        try {
+            this.profilePictureService.delete(user.getProfilePictureFileName());
+            user.setProfilePictureFileName(this.profilePictureService.store(username, file));
+            this.userRepository.save(user);
+            return ResponseEntity.ok().build();
+        }
+        catch (IllegalArgumentException e) {
+            System.err.println(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+        catch (IOException e) {
+            System.err.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save profile picture");
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> getProfilePicture(String username) {
+        User user = this.userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException("No user found for name: " + username)
+        );
+        if (user.getProfilePictureFileName() == null) return ResponseEntity.notFound().build();
+
+        try {
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CACHE_CONTROL, "public, max-age=3600")
+                    .body(this.profilePictureService.load(user.getProfilePictureFileName()));
+        }
+        catch (MalformedURLException e) {
+            System.err.println(e.getMessage());
+            return ResponseEntity.notFound().build();
         }
     }
 

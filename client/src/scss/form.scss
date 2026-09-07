@@ -73,6 +73,33 @@ input[type="file"] {
   background: none;
   padding: vars.$space-1 0;
   color: vars.$color-text-muted;
+
+  &::file-selector-button,
+  &::-webkit-file-upload-button {
+    margin-right: vars.$space-3;
+    padding: vars.$space-2 vars.$space-5;
+
+    border: 1px solid vars.$color-border-strong;
+    border-radius: vars.$radius-pill;
+    background-color: transparent;
+
+    font-family: vars.$font-body;
+    font-size: vars.$font-size-sm;
+    font-weight: vars.$font-weight-medium;
+    color: vars.$color-text;
+    cursor: pointer;
+
+    transition: border-color vars.$transition-base, box-shadow vars.$transition-base, transform vars.$transition-fast;
+
+    &:hover {
+      border-color: vars.$color-primary;
+      box-shadow: 0 0 12px rgba(vars.$color-primary, 0.25);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
 }
 
 div.formGroup {
@@ -109,10 +136,10 @@ form.horizontal {
   display: flex;
   flex-wrap: wrap;
   gap: vars.$space-4;
+  align-items: flex-start;
 
   > * {
-    flex: 1;
-    flex-shrink: 0;
+    flex: 1 1 180px;
     margin-bottom: 0;
   }
 

@@ -53,12 +53,17 @@ public class SecurityConfig {
                         //allow users to authenticate
                         .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()
 
-                        /*EXAMPLE for locking a router behind a newPermission level
+                        /*EXAMPLE for locking a route behind a newPermission level
                         .requestMatchers("/route/**").hasAuthority(Permission.DEV.name())
                          */
 
                         //allow users to view the status of the server with no account
                         .requestMatchers("/api/serverStatus").permitAll()
+
+                        //allow users to get other users' profile pictures
+                        .requestMatchers("/api/auth/users/*/profilePicture").permitAll()
+
+                        //require auth for everything else
                         .anyRequest().authenticated()
                 )
 

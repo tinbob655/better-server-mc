@@ -7,6 +7,12 @@ export interface LoginResponse {
     token: string;
 }
 
+export interface NewAccountRequest {
+    username: string;
+    password: string;
+    profilePicture: File;
+}
+
 export interface AccountRequest {
     username: string;
     password: string;

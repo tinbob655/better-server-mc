@@ -1,0 +1,11 @@
+@use '../../scss/variables' as vars;
+
+.profilePicture {
+  display: inline-block;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid vars.$color-border-strong;
+  box-shadow: vars.$glow-orbit;
+}

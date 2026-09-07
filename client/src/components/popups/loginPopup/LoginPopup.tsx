@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState, lazy, Suspense} from 'react';
 import PopupWrapper from "../PopupWrapper.tsx";
 import {useAuth} from "../../../context/auth/AuthContext.tsx";
 import FormGroup from "../../form/FormGroup.tsx";
 import FancyButton from "../../fancyButton/FancyButton.tsx";
 import PasswordInput from "../../form/passwordInput/PasswordInput.tsx";
+
+const FileInput = lazy(() => import("../../form/fileInput/FileInput.tsx"));
 
 interface LoginPopupParams {
     closeFunction: () => void;
@@ -20,6 +22,7 @@ export default function LoginPopup({closeFunction}: LoginPopupParams): React.Rea
     const [username, setUsername] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [confirmedPassword, setConfirmedPassword] = useState<string>('');
+    const [profilePicture, setProfilePicture] = useState<File | null>(null);
 
     function toggleMode(): void {
         setMode(prev => prev === 'LOGIN' ? 'SIGNUP' : 'LOGIN');
@@ -45,9 +48,14 @@ export default function LoginPopup({closeFunction}: LoginPopupParams): React.Rea
 
         //register the user with a new account
         else {
-            const res = await register({username, password});
-            if (res.success) closeFunction();
-            else setError(res.error ?? "Failed to create account. Please try again later.");
+            if (!profilePicture) {
+                setError("Profile picture is required");
+            }
+            else {
+                const res = await register({username, password, profilePicture});
+                if (res.success) closeFunction();
+                else setError(res.error ?? "Failed to create account. Please try again later.");
+            }
         }
 
         setIsLoading(false);
@@ -69,8 +77,20 @@ export default function LoginPopup({closeFunction}: LoginPopupParams): React.Rea
                 {/*password*/}
                 <PasswordInput value={password} setValue={setPassword} />
 
-                {/*confirm password only when creating a new account*/}
-                {mode === 'SIGNUP' && <PasswordInput value={confirmedPassword} setValue={setConfirmedPassword} confirm />}
+                {/*confirm password & profile picture only when signing up*/}
+                {mode === 'SIGNUP' && (
+                    <Suspense>
+                        <PasswordInput value={confirmedPassword} setValue={setConfirmedPassword} confirm />
+                        <FileInput
+                            label={"Profile picture"}
+                            allowedTypes={["image/png", "image/jpeg", "image/webp"]}
+                            value={profilePicture}
+                            setValue={setProfilePicture}
+                            enforceCircle
+                        />
+                        <br/>
+                    </Suspense>
+                )}
             </form>
 
             <FancyButton

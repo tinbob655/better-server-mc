@@ -18,14 +18,18 @@ public class User {
     @Column(nullable = false)
     private String passwordHash;
 
+    @Column
+    private String profilePictureFileName;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Permission permission = Permission.DEFAULT;
 
     protected User() {}
 
-    public User(String username, String passwordHash) {
+    public User(String username, String passwordHash, String profilePictureFileName) {
         this.username = username;
         this.passwordHash = passwordHash;
+        this.profilePictureFileName = profilePictureFileName;
     }
 }
