@@ -2,6 +2,7 @@ import React, {lazy, Suspense, useRef} from 'react';
 import type {DeleteNewsRequest, News} from "../../types/news";
 import formatDate from "../../functions/formatDate.ts";
 import {useAuth} from "../../context/auth/AuthContext.tsx";
+import ProfilePicture from "../../components/profilePicture/ProfilePicture.tsx";
 
 const IconButton = lazy(() => import("../../components/iconButton/IconButton.tsx"));
 
@@ -29,9 +30,12 @@ export default function SingleNews({news, deleteNews}: SingleNewsParams): React.
                     />
             </Suspense>}
 
-            <h2 className={"alignRight"} style={{marginBottom: '0.3rem', paddingBottom: 0, marginTop: 0, paddingTop: 0}}>
-                {news.title}
-            </h2>
+            <div style={{display: 'flex', width: 'fit-content', marginRight: '7.5%', marginLeft: 'auto'}}>
+                <h2 className={"alignRight"} style={{marginBottom: '0.3rem', paddingBottom: 0, marginTop: 0, paddingTop: 0}}>
+                    {news.title}
+                </h2>
+                <ProfilePicture username={news.createdBy} size={45} />
+            </div>
             <p className={"alignRight smaller"}>
                 Posted by {news.createdBy} on {formatDate(news.createdAt)}
             </p>

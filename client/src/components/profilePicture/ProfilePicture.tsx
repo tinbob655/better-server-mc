@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './profilePicture.scss';
 
 interface ProfilePictureParams {
-    username: string;
+    username: string | null | undefined;
     size?: number; //in px
     refreshKey?: number; //incremented to remove browser caching
 }
@@ -17,7 +17,7 @@ export default function ProfilePicture({username, size, refreshKey}: ProfilePict
     useEffect(() => setFailed(false), [username, refreshKey]);
 
     const baseUrl = `${import.meta.env.VITE_API_BASE_URL}/auth/users/${username}/profilePicture`;
-    const src = failed ? DEFAULT_AVATAR : `${baseUrl}${refreshKey ? `?v=${refreshKey}` : ''}`;
+    const src = (!username || failed) ? DEFAULT_AVATAR : `${baseUrl}${refreshKey ? `?v=${refreshKey}` : ''}`;
 
     return (
         <img

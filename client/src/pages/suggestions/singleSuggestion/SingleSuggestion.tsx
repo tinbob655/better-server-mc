@@ -13,6 +13,7 @@ import formatDate from "../../../functions/formatDate.ts";
 import TextareaGroup from "../../../components/form/TextareaGroup.tsx";
 import FancyButton from "../../../components/fancyButton/FancyButton.tsx";
 import {parseAxiosError} from "../../../functions/parseAxiosError.ts";
+import ProfilePicture from "../../../components/profilePicture/ProfilePicture.tsx";
 
 interface SingleSuggestionParams {
     suggestion: Suggestion;
@@ -140,6 +141,9 @@ export default function SingleSuggestion({
                     )}
                 </span>
                 {suggestion.title}
+                <div style={{display: 'inline', marginLeft: '1rem'}}>
+                    <ProfilePicture username={suggestion.posterUsername} size={40} />
+                </div>
             </h2>
             {statusChangeError && <p className={"errorText"}>{statusChangeError}</p>}
             <p className={"smaller alignRight"}>

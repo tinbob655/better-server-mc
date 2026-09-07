@@ -32,7 +32,7 @@ export default function Account(): React.ReactElement {
                     {/*log out section*/}
                     <GenericMarkupSection title={`Welcome back ${user?.username ?? 'UNKNOWN_USERNAME'}`}>
                         <div style={{float: 'right', top: 0}}>
-                            <ProfilePicture username={user!.username} size={75} />
+                            <ProfilePicture username={user?.username} size={75} />
                         </div>
                         <p>
                             You are currently logged in to your Better Server account! If you wish to log out, please use

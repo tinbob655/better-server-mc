@@ -9,3 +9,37 @@
   border: 1px solid vars.$color-border-strong;
   box-shadow: vars.$glow-orbit;
 }
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: vars.$space-5;
+  flex-shrink: 0;
+}
+
+.accountLink {
+  flex-shrink: 0;
+
+  //opt out of underline animation
+  color: inherit;
+  text-decoration: none;
+  &::after {
+    content: none; // removes %linkHover's underline bar entirely
+  }
+
+  //custom animation
+  .profilePicture {
+    transition: transform vars.$transition-base, box-shadow vars.$transition-base, border-color vars.$transition-base;
+  }
+
+  &:hover .profilePicture,
+  &:focus-visible .profilePicture {
+    transform: scale(1.12);
+    border-color: vars.$color-primary;
+    box-shadow: vars.$glow-primary;
+  }
+
+  &:active .profilePicture {
+    transform: scale(1.0);
+  }
+}

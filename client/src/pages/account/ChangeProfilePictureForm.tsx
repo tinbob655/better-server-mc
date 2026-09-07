@@ -26,7 +26,7 @@ export default function ChangeProfilePictureForm(): React.ReactElement {
 
     return (
         <React.Fragment>
-            <ProfilePicture username={user!.username} size={96} refreshKey={refreshKey} />
+            <ProfilePicture username={user?.username} size={96} refreshKey={refreshKey} />
             <FileInput
                 label={"Choose a new profile picture"}
                 allowedTypes={["image/png", "image/jpeg", "image/webp"]}
