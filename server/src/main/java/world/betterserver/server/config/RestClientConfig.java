@@ -17,4 +17,11 @@ public class RestClientConfig {
                 .baseUrl(mcstatusBaseURL)
                 .build();
     }
+
+    @Bean("mojangRestClient")
+    public RestClient mojangRestClient() {
+        return RestClient.builder()
+                .baseUrl("https://sessionserver.mojang.com")
+                .build();
+    }
 }
