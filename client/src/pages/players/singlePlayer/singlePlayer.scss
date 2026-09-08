@@ -1,33 +1,199 @@
 @use '../../../scss/variables' as vars;
 
 div.singlePlayerWrapper {
-
-  transition: transform vars.$transition-base, filter vars.$transition-base inherit;
-
-  &:not(.expanded) {
-    padding-top: vars.$space-1;
-    padding-bottom: vars.$space-2;
-    filter: grayscale(0.8);
-  }
+  padding: vars.$space-3 vars.$space-5; // compact resting row, shorter than a full widget card
+  transition: padding vars.$transition-base, border-color vars.$transition-base, box-shadow vars.$transition-base;
 
   &.expanded {
-    filter: none;
-    transform: scale(1.025);
+    padding: vars.$space-5; // grows back to full widget padding once stats are shown
+    border-color: vars.$color-primary;
+    box-shadow: vars.$shadow-sm, vars.$glow-primary;
+
+    .expandChevron {
+      transform: rotate(90deg);
+      color: vars.$color-primary;
+    }
   }
 
   > button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: vars.$space-3;
+    width: 100%;
+
+    padding: 0;
     background-color: transparent;
     border: none;
-    width: max-content;
-    margin-left: auto;
-    margin-right: vars.$space-3;
-    display: block;
+    cursor: pointer;
+    text-align: left;
 
     > h2 {
-      margin-top: 0;
-      margin-bottom: vars.$space-1;
-      padding-top: 0;
+      margin: 0;
+      padding: 0;
       font-size: vars.$font-size-lg * 0.85;
     }
   }
+}
+
+.singlePlayerIdentity {
+  display: flex;
+  align-items: center;
+  gap: vars.$space-3;
+  min-width: 0; // needed so the ellipsis rule below can actually kick in
+
+  h2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.singlePlayerAvatar {
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: vars.$radius-sm;
+  image-rendering: pixelated; // keeps the blocky skin texture crisp instead of blurring it
+  border: 1px solid vars.$color-border-strong;
+  box-shadow: vars.$glow-orbit;
+}
+
+.expandChevron {
+  flex-shrink: 0;
+  display: inline-block;
+  color: vars.$color-text-muted;
+  transition: transform vars.$transition-base, color vars.$transition-base;
+}
+
+.expandChevron.rotated {
+  transform: rotate(90deg);
+  color: vars.$color-primary;
+}
+
+//collapses to zero height with no JS height measurement, using the
+//grid-template-rows animation trick (0fr <-> 1fr)
+.singlePlayerStatsCollapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows vars.$transition-slow ease;
+
+  &.expanded {
+    grid-template-rows: 1fr;
+  }
+}
+
+.singlePlayerStatsInner {
+  overflow: hidden;
+  margin-top: vars.$space-4;
+}
+
+.singlePlayerStatFilter {
+  margin-bottom: vars.$space-3;
+}
+
+.singlePlayerStatGroup {
+  margin-top: vars.$space-4;
+
+  &:first-of-type {
+    margin-top: vars.$space-3;
+  }
+}
+
+.singlePlayerStatCategoryButton {
+  display: flex;
+  align-items: center;
+  gap: vars.$space-2;
+  width: 100%;
+
+  padding: vars.$space-1 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  &:hover .singlePlayerStatCategory {
+    color: vars.$color-secondary-hover;
+  }
+}
+
+.categoryChevron {
+  font-size: vars.$font-size-xs;
+}
+
+.singlePlayerStatCategory {
+  margin: 0;
+  flex: 1;
+  text-align: left;
+
+  font-family: vars.$font-display;
+  font-size: vars.$font-size-sm;
+  font-weight: vars.$font-weight-bold;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: vars.$color-secondary;
+}
+
+.singlePlayerStatCount {
+  flex-shrink: 0;
+  padding: 0.1rem vars.$space-2;
+
+  font-family: vars.$font-mono;
+  font-size: vars.$font-size-xs;
+  color: vars.$color-text-muted;
+  background-color: rgba(vars.$color-text-muted, 0.12);
+  border-radius: vars.$radius-pill;
+}
+
+//same 0fr/1fr trick as the outer card collapse, one level deeper
+.singlePlayerCategoryCollapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows vars.$transition-base ease;
+
+  &.expanded {
+    grid-template-rows: 1fr;
+  }
+}
+
+.singlePlayerCategoryInner {
+  overflow: hidden;
+  padding-top: vars.$space-2; // breathing room once expanded, collapses away to nothing when closed
+}
+
+.singlePlayerStatGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: vars.$space-3;
+}
+
+.singlePlayerStatCard {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$space-1;
+
+  padding: vars.$space-2 vars.$space-3;
+  background-color: rgba(vars.$color-primary, 0.08);
+  border: 1px solid vars.$color-border;
+  border-radius: vars.$radius-md;
+
+  transition: border-color vars.$transition-fast, transform vars.$transition-fast;
+
+  &:hover {
+    border-color: vars.$color-primary;
+    transform: translateY(-2px);
+  }
+}
+
+.singlePlayerStatLabel {
+  font-size: vars.$font-size-xs;
+  color: vars.$color-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.singlePlayerStatValue {
+  font-family: vars.$font-mono;
+  font-size: vars.$font-size-md;
+  font-weight: vars.$font-weight-bold;
+  color: vars.$color-primary;
 }
