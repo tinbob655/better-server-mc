@@ -9,9 +9,7 @@ import world.betterserver.server.model.entity.mcPlayerStat.McPlayerStat;
 import world.betterserver.server.service.mcStats.McStatsService;
 import world.betterserver.server.service.mcUUID.UUIDTranslatorService;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -22,27 +20,30 @@ public class McStatController implements McStatControllerTemplate {
     private final UUIDTranslatorService translator;
 
     @Override
-    public Set<McPlayer> getAllPlayers() {
+    public List<McPlayer> getAllPlayers() {
         return this.statsService.getAllPlayersWithStats().stream()
                 .map(this.translator::findPlayer)
-                .collect(Collectors.toSet());
+                .sorted(Comparator.comparing(McPlayer::username))
+                .toList();
     }
 
     @Override
-    public Set<StatSummary> getStatsFor(UUID UUID) {
+    public List<StatSummary> getStatsFor(UUID UUID) {
         return this.statsService.getAllStatsFor(UUID).stream()
                 .map(this::summarise)
-                .collect(Collectors.toSet());
+                .sorted(Comparator.comparing(StatSummary::statKey))
+                .toList();
     }
 
     @Override
-    public Map<UUID, Set<StatSummary>> getAllStats() {
+    public Map<UUID, List<StatSummary>> getAllStats() {
         return this.statsService.getAllStats().entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         entry -> entry.getValue().stream()
                                 .map(this::summarise)
-                                .collect(Collectors.toSet())
+                                .sorted(Comparator.comparing(StatSummary::statKey))
+                                .toList()
                         )
                 );
     }

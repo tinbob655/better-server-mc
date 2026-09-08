@@ -6,19 +6,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import world.betterserver.server.model.dto.response.mcPlayer.McPlayer;
 import world.betterserver.server.model.dto.response.mcPlayer.StatSummary;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 @RequestMapping("/api/mcPlayer")
 public interface McStatControllerTemplate {
 
     @GetMapping("/allPlayers")
-    Set<McPlayer> getAllPlayers();
+    List<McPlayer> getAllPlayers();
 
     @GetMapping("/statsFor/{UUID}")
-    Set<StatSummary> getStatsFor(@PathVariable UUID UUID);
+    List<StatSummary> getStatsFor(@PathVariable UUID UUID);
 
     @GetMapping("/everything")
-    Map<UUID, Set<StatSummary>> getAllStats();
+    Map<UUID, List<StatSummary>> getAllStats();
 }
