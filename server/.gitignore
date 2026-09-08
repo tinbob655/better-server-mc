@@ -33,7 +33,8 @@ build/
 .vscode/
 
 #db
-*.sqlite
+*.sqlite*
+
 
 #general
 application-dev.properties
