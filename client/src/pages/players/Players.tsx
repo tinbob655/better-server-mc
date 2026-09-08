@@ -2,11 +2,11 @@ import React from 'react';
 import PageHeader from "../../components/PageHeader.tsx";
 import GenericMarkupSection from "../../components/genericMarkupSection/GenericMarkupSection.tsx";
 import usePlayers from "../../hooks/usePlayers.ts";
-import SinglePlayer from "./SinglePlayer.tsx";
+import SinglePlayer from "./singlePlayer/SinglePlayer.tsx";
 
 export default function Players(): React.ReactElement {
 
-    const {players, fetchError, getStatsFor} = usePlayers();
+    const {players, loading, fetchError, getStatsFor} = usePlayers();
 
     return (
         <React.Fragment>
@@ -18,12 +18,13 @@ export default function Players(): React.ReactElement {
                     Please see the below list of every player who has ever connected to the Better Server! You can click
                     on a player to view more about them & their stats.
                 </p>
+                {loading && <p className={"warningText"}>Loading player information...</p>}
                 {fetchError && <p className={"errorText"}>{fetchError}</p>}
                 {players.map(p =>
                     <SinglePlayer
-                        key={p.UUID}
+                        key={p.uuid}
                         player={p}
-                        getStats={() => getStatsFor(p.UUID)}
+                        getStats={() => getStatsFor(p.uuid)}
                     />
                 )}
             </GenericMarkupSection>

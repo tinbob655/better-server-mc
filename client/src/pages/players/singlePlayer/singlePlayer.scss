@@ -1,0 +1,33 @@
+@use '../../../scss/variables' as vars;
+
+div.singlePlayerWrapper {
+
+  transition: transform vars.$transition-base, filter vars.$transition-base inherit;
+
+  &:not(.expanded) {
+    padding-top: vars.$space-1;
+    padding-bottom: vars.$space-2;
+    filter: grayscale(0.8);
+  }
+
+  &.expanded {
+    filter: none;
+    transform: scale(1.025);
+  }
+
+  > button {
+    background-color: transparent;
+    border: none;
+    width: max-content;
+    margin-left: auto;
+    margin-right: vars.$space-3;
+    display: block;
+
+    > h2 {
+      margin-top: 0;
+      margin-bottom: vars.$space-1;
+      padding-top: 0;
+      font-size: vars.$font-size-lg * 0.85;
+    }
+  }
+}

@@ -6,6 +6,7 @@ import {parseAxiosError} from "../functions/parseAxiosError.ts";
 
 interface UsePlayersExports {
     players: McPlayer[];
+    loading: boolean;
     fetchError: string | null;
 
     getStatsFor: (uuid: UUID) => Promise<McPlayerStat[]>;
@@ -14,13 +15,15 @@ interface UsePlayersExports {
 export default function usePlayers(): UsePlayersExports {
 
     const [players, setPlayers] = useState<McPlayer[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
     const [fetchError, setFetchError] = useState<string | null>(null);
 
     //initial fetch
     useEffect(() => {
         axiosInstance.get("/mcPlayer/allPlayers")
             .then((res: AxiosResponse<McPlayer[]>) => setPlayers(res.data))
-            .catch(err => setFetchError(parseAxiosError(err)));
+            .catch(err => setFetchError(parseAxiosError(err)))
+            .finally(() => setLoading(false));
     }, []);
 
     async function getStatsFor(uuid: UUID): Promise<McPlayerStat[]> {
@@ -28,5 +31,5 @@ export default function usePlayers(): UsePlayersExports {
         return res.data;
     }
 
-    return {players, fetchError, getStatsFor}
+    return {players, loading, fetchError, getStatsFor}
 }
