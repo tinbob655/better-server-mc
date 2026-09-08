@@ -1,4 +1,4 @@
-package world.betterserver.server.service.mcStatsImporter;
+package world.betterserver.server.service.mcStats.importer;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +17,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -33,7 +34,7 @@ public class AsyncStatImporter {
 
         //the filename (minus extension) is the player's UUID
         String fileName = file.getFileName().toString();
-        String playerUuid = fileName.substring(0, fileName.length() - ".json".length());
+        UUID playerUuid = UUID.fromString(fileName.substring(0, fileName.length() - ".json".length()));
 
         try {
             Instant fileModifiedAt = Files.getLastModifiedTime(file).toInstant();

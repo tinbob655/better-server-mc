@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Entity
 @Table(name = "player_stat", uniqueConstraints = @UniqueConstraint(columnNames = {"playerUuid", "statKey"}))
@@ -15,7 +16,7 @@ public class McPlayerStat {
     private Long id;
 
     @Column(nullable = false)
-    private String playerUuid;
+    private UUID playerUuid;
 
     @Column(nullable = false)
     private String statKey;

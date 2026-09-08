@@ -1,4 +1,4 @@
-package world.betterserver.server.service.mcStatsImporter;
+package world.betterserver.server.service.mcStats.importer;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
