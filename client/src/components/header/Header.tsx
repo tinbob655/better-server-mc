@@ -21,6 +21,7 @@ export default function Header(): React.ReactElement {
         'polls',
         'serverStatus',
         'suggestions',
+        'players',
         'wiki',
         ...(isDev ? ['admin'] : []),
     ];

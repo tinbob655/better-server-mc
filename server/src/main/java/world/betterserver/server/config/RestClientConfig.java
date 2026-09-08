@@ -21,7 +21,14 @@ public class RestClientConfig {
     @Bean("mojangRestClient")
     public RestClient mojangRestClient() {
         return RestClient.builder()
-                .baseUrl("https://sessionserver.mojang.com")
+                .baseUrl("https://api.mojang.com")
+                .build();
+    }
+
+    @Bean("geyserRestClient")
+    public RestClient geyserRestClient() {
+        return RestClient.builder()
+                .baseUrl("https://api.geysermc.org")
                 .build();
     }
 }

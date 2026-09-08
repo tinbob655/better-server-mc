@@ -3,11 +3,11 @@ package world.betterserver.server.controller.mcStat;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NonNull;
 import org.springframework.web.bind.annotation.RestController;
-import world.betterserver.server.model.dto.response.mcPlayer.MojangAPIPlayer;
+import world.betterserver.server.model.dto.response.mcPlayer.McPlayer;
 import world.betterserver.server.model.dto.response.mcPlayer.StatSummary;
 import world.betterserver.server.model.entity.mcPlayerStat.McPlayerStat;
 import world.betterserver.server.service.mcStats.McStatsService;
-import world.betterserver.server.service.mojangAPI.UUIDTranslatorService;
+import world.betterserver.server.service.mcUUID.UUIDTranslatorService;
 
 import java.util.Map;
 import java.util.Set;
@@ -22,7 +22,7 @@ public class McStatController implements McStatControllerTemplate {
     private final UUIDTranslatorService translator;
 
     @Override
-    public Set<MojangAPIPlayer> getAllPlayers() {
+    public Set<McPlayer> getAllPlayers() {
         return this.statsService.getAllPlayersWithStats().stream()
                 .map(this.translator::findPlayer)
                 .collect(Collectors.toSet());
