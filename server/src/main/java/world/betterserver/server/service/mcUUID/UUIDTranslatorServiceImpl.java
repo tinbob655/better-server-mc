@@ -1,6 +1,7 @@
 package world.betterserver.server.service.mcUUID;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientResponseException;
@@ -24,6 +25,7 @@ public class UUIDTranslatorServiceImpl implements UUIDTranslatorService {
     }
 
     @Override
+    @Cacheable("playersByUuid")
     public McPlayer findPlayer(UUID uuid) {
         if (this.isBedrockPlayer(uuid)) {
 
@@ -56,6 +58,7 @@ public class UUIDTranslatorServiceImpl implements UUIDTranslatorService {
     }
 
     @Override
+    @Cacheable("playersByUsername")
     public McPlayer findPlayer(String username) {
 
         //the geyser API is able to determine if a player is on bedrock or java and respond with the same DTO
