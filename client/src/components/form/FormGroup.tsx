@@ -23,7 +23,7 @@ interface FormGroupObjectParams<T> extends FormGroupBaseParams {
 interface FormGroupValueParams<V extends FormValue = FormValue> extends FormGroupBaseParams {
     name?: string;
     value: V;
-    setValue: React.Dispatch<React.SetStateAction<V>>;
+    setValue: (value: V) => void;
     formState?: never;
     setFormState?: never;
 }
