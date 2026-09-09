@@ -5,6 +5,7 @@ export type Color = `#${string}`;
 export interface PollSummary {
     title: string;
     createdAt: string;
+    expiresAt: string;
 }
 
 export interface DetailedPoll extends PollSummary {
@@ -21,6 +22,7 @@ export interface PollOption {
 export interface NewPollRequest {
     title: string;
     anonymous: boolean;
+    expiresAt: string;
     defaultOptions: NewPollOptionRequest[];
 }
 

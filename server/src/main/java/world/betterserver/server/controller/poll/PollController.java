@@ -51,6 +51,7 @@ public class PollController implements PollControllerTemplate {
         newPoll.setTitle(request.title());
         newPoll.setAnonymous(request.anonymous());
         newPoll.setCreatedAt(Instant.now());
+        newPoll.setExpiresAt(request.expiresAt());
 
         //work out default poll options and add them
         request.defaultOptions()
