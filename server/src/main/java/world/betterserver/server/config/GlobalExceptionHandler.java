@@ -3,10 +3,13 @@ package world.betterserver.server.config;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authorization.AuthorizationDeniedException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.NoSuchElementException;
 
 @RestControllerAdvice
 public final class GlobalExceptionHandler {
@@ -27,6 +30,18 @@ public final class GlobalExceptionHandler {
     public ResponseEntity<String> handleAccessDenied(AuthorizationDeniedException e) {
         System.err.println(e.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("You do not have permission to perform this action.");
+    }
+
+    //catch requesting data which does not exist
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<String> handleNoElement(NoSuchElementException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
+    //catch no username
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<String> handleNoUsernameFound(UsernameNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
     //catch all
