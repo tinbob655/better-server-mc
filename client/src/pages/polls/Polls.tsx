@@ -7,7 +7,7 @@ import {useAuth} from "../../context/auth/AuthContext.tsx";
 import {Permission} from "../../types/permission.ts";
 
 const SinglePoll = lazy(() => import("./singlePoll/SinglePoll.tsx"));
-const NewPollForm = lazy(() => import("./NewPollForm.tsx"));
+const NewPollForm = lazy(() => import("./newPollForm/NewPollForm.tsx"));
 
 export default function Polls():React.ReactElement {
 

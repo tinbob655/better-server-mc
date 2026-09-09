@@ -46,10 +46,18 @@ export default function usePoll(): UsePollExports {
 
     async function addPoll(request: NewPollRequest): Promise<void> {
          await axiosInstance.post("/poll/addPoll", request);
+
+         setPollSummaries(prev => ([...prev, {
+             title: request.title,
+             createdAt: new Date().toISOString(),
+             expiresAt: request.expiresAt
+         }]))
     }
 
     async function deletePoll(pollTitle: string): Promise<void> {
          await axiosInstance.delete(`/poll/deletePoll/${pollTitle}`);
+
+         setPollSummaries(prev => prev.filter(p => p.title != pollTitle));
     }
 
     async function deletePollOption(pollTitle: string, optionName: string): Promise<void> {
