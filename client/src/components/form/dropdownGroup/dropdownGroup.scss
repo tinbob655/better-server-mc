@@ -1,0 +1,37 @@
+@use '../../../scss/variables' as vars;
+
+.dropdownGroupWrapper {
+  position: relative;
+
+  select {
+
+    //strip the browser's native arrow so we can draw our own themed one
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding-right: vars.$space-7; //leaves room for the chevron
+    cursor: pointer;
+  }
+
+  //custom chevron, drawn as a rotated corner of a box rather than an image
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: vars.$space-3;
+    width: 0.5em;
+    height: 0.5em;
+    margin-top: -0.3em; //centers it vertically against the select's line-height
+    border-right: 2px solid vars.$color-text-muted;
+    border-bottom: 2px solid vars.$color-text-muted;
+    transform: rotate(135deg);
+    pointer-events: none; //clicks pass through to the select underneath
+    transition: border-color vars.$transition-fast, transform vars.$transition-fast;
+  }
+
+  //matches the glow-on-focus treatment your other inputs already have
+  &:focus-within::after {
+    border-color: vars.$color-primary;
+    transform: rotate(45deg);
+  }
+}

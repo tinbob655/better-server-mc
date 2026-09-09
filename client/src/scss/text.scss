@@ -24,7 +24,7 @@ h1, h2, p {
   transform-origin: center;
 }
 
-p, span, a {
+p, span, a, option {
   font-family: vars.$font-body;
   font-size: vars.$font-size-md;
   font-weight: vars.$font-weight-regular;
