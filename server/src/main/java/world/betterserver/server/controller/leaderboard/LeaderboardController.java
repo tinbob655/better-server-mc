@@ -22,7 +22,7 @@ public class LeaderboardController implements LeaderboardControllerTemplate {
 
     @Override
     public List<LeaderboardEntry> getLeaderboardForStat(String statKey) {
-        return this.statsService.getAllStatsNamed(statKey).stream()
+        return this.statsService.getAllStatsNamed(List.of(statKey.split(","))).stream()
                 .map(this::generateLeaderboardFromStat)
                 .toList();
     }

@@ -1,9 +1,16 @@
 //custom stats that are stored as tick counts rather than plain numbers
 const TICK_BASED_STATS = new Set(['play_time', 'total_world_time', 'time_since_death', 'time_since_rest', 'sneak_time']);
 
+//manually rename some stats
+const STAT_NAME_OVERRIDES: Record<string, string> = {
+    walk_one_cm: 'Distance walked',
+    aviate_one_cm: 'Distance flown',
+}
+
 //'minecraft:custom:minecraft:play_time' -> {category: 'custom', name: 'play_time'}
 export function parseStatKey(statKey: string): { category: string; name: string } {
-    const parts = statKey.split(':');
+    const [firstKey] = statKey.split(',');
+    const parts = firstKey.split(':');
     return {
         category: parts[1] ?? parts[0],
         name: parts[parts.length - 1],
@@ -12,6 +19,9 @@ export function parseStatKey(statKey: string): { category: string; name: string 
 
 //'play_time' -> 'Play time'
 export function toReadableLabel(rawName: string): string {
+    const override: string | undefined = STAT_NAME_OVERRIDES[rawName];
+    if (override) return override;
+
     const spaced = rawName.replace(/_/g, ' ');
     return spaced.charAt(0).toUpperCase() + spaced.slice(1);
 }

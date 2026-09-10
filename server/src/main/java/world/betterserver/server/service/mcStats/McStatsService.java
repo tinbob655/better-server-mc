@@ -12,4 +12,5 @@ public interface McStatsService {
     Set<UUID> getAllPlayersWithStats();
     Map<UUID, Set<McPlayerStat>> getAllStats();
     List<McPlayerStat> getAllStatsNamed(String statKey);
+    List<McPlayerStat> getAllStatsNamed(List<String> statKeys);
 }

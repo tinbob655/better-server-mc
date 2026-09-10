@@ -20,7 +20,7 @@ const LEADERBOARD_STAT_KEYS: string[] = [
     'minecraft:custom:minecraft:damage_dealt',
     'minecraft:custom:minecraft:fish_caught',
     'minecraft:custom:minecraft:animals_bred',
-    'minecraft:mined:minecraft:diamond_ore',
+    'minecraft:mined:minecraft:diamond_ore,minecraft:mined:minecraft:deepslate_diamond_ore', //deepslate & normal ore
 ];
 
 export default function useLeaderboard(): UseLeaderboardExports {
