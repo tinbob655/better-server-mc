@@ -10,7 +10,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "poll_option")
+@Table(
+        name = "poll_option",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"poll_id", "name"}),
+                @UniqueConstraint(columnNames = {"poll_id", "color"})
+        }
+)
 @Data
 public class PollOption {
 
@@ -18,10 +24,10 @@ public class PollOption {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String color;
 
     @Column(nullable = false)
