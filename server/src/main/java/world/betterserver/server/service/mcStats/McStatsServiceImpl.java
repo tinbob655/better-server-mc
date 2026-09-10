@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import world.betterserver.server.model.entity.mcPlayerStat.McPlayerStat;
 import world.betterserver.server.model.entity.mcPlayerStat.McPlayerStatRepository;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -34,5 +35,10 @@ public class McStatsServiceImpl implements McStatsService {
                         McPlayerStat::getPlayerUuid,
                         Collectors.toSet()
                 ));
+    }
+
+    @Override
+    public List<McPlayerStat> getAllStatsNamed(String statKey) {
+        return this.statRepository.findAllByStatKeyOrderByStatValueDesc(statKey);
     }
 }
