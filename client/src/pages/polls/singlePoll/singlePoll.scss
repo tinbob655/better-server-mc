@@ -1,0 +1,201 @@
+@use '../../../scss/variables' as vars;
+
+div.singlePollWrapper {
+  position: relative;
+
+  &.expired {
+    opacity: 0.55;
+  }
+
+  > button.pollTitleButton {
+    display: block;
+    width: 100%;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .iconButtonWrapper {
+    position: absolute;
+    top: vars.$space-4;
+    left: vars.$space-4;
+    z-index: 1;
+  }
+}
+
+.pollOptionsList {
+  margin-top: vars.$space-4;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$space-3;
+}
+
+.pollOption {
+  position: relative;
+}
+
+.pollOptionVoteArea {
+  position: relative;
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  isolation: isolate;
+
+  padding: vars.$space-3 vars.$space-7 vars.$space-3 vars.$space-4; //extra right padding leaves room for the delete button
+  border-radius: vars.$radius-md;
+  border: 1px solid vars.$color-border;
+  background-color: vars.$color-bg-elevated;
+  cursor: pointer;
+  text-align: left;
+
+  transition: border-color vars.$transition-fast, transform vars.$transition-fast;
+
+  //vote-share fill, driven by the --pct custom property set inline per-option
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    width: var(--pct, 0%);
+    background-color: var(--option-color, vars.$color-primary);
+    opacity: 0.22;
+    transition: width vars.$transition-slow ease;
+  }
+
+  &:hover:not(:disabled) {
+    border-color: var(--option-color, vars.$color-primary);
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+.pollOption.voted .pollOptionVoteArea {
+  border-color: var(--option-color, vars.$color-primary);
+  box-shadow: 0 0 0 1px var(--option-color, vars.$color-primary);
+
+  &::before {
+    opacity: 0.32;
+  }
+}
+
+.pollOptionTopRow {
+  display: flex;
+  align-items: center;
+  gap: vars.$space-3;
+}
+
+.pollOptionName {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: vars.$space-2;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-family: vars.$font-body;
+  font-weight: vars.$font-weight-medium;
+  color: vars.$color-text;
+
+  //small colour swatch dot matching the option's chosen colour
+  &::before {
+    content: '';
+    flex-shrink: 0;
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+    background-color: var(--option-color, vars.$color-primary);
+    box-shadow: 0 0 6px var(--option-color, transparent);
+  }
+}
+
+.pollOptionCount {
+  flex-shrink: 0;
+  font-family: vars.$font-mono;
+  font-size: vars.$font-size-sm;
+  color: vars.$color-text-muted;
+}
+
+.pollOptionVotedTag {
+  display: block;
+  margin-top: vars.$space-1;
+  font-size: vars.$font-size-xs;
+  font-weight: vars.$font-weight-bold;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--option-color, vars.$color-primary);
+}
+
+.pollOptionVoters {
+  display: flex;
+  align-items: center;
+  margin-top: vars.$space-2;
+
+  img.profilePicture {
+    margin-left: -0.5rem;
+    border: 2px solid vars.$color-bg-elevated;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.pollOptionVotersMore {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -0.5rem;
+  width: 1.375rem;
+  height: 1.375rem;
+  flex-shrink: 0;
+
+  border-radius: 50%;
+  border: 2px solid vars.$color-bg-elevated;
+  background-color: rgba(vars.$color-text-muted, 0.25);
+
+  font-size: 0.6rem;
+  font-weight: vars.$font-weight-bold;
+  color: vars.$color-text;
+}
+
+.pollOptionDeleteButton {
+  position: absolute;
+  top: vars.$space-2;
+  right: vars.$space-2;
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+
+  font-size: vars.$font-size-xs;
+  line-height: 1;
+  color: vars.$color-text-muted;
+  background-color: vars.$color-bg-elevated;
+  border: 1px solid vars.$color-border;
+  border-radius: vars.$radius-pill;
+  cursor: pointer;
+
+  transition: color vars.$transition-fast, border-color vars.$transition-fast, transform vars.$transition-fast;
+
+  &:hover {
+    color: vars.$color-error;
+    border-color: vars.$color-error;
+    transform: scale(1.1);
+  }
+}
+
+.pollLoginPrompt {
+  margin-top: vars.$space-3;
+}
