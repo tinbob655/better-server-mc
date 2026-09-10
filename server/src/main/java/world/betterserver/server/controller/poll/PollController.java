@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.RestController;
 import world.betterserver.server.model.dto.request.poll.NewPollOptionRequest;
 import world.betterserver.server.model.dto.request.poll.NewPollRequest;
+import world.betterserver.server.model.dto.response.auth.UserSummary;
 import world.betterserver.server.model.dto.response.poll.DetailedPoll;
 import world.betterserver.server.model.dto.response.poll.PollSummary;
 import world.betterserver.server.model.entity.poll.Poll;
@@ -21,6 +22,7 @@ import java.security.Principal;
 import java.time.Instant;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,8 +43,28 @@ public class PollController implements PollControllerTemplate {
     }
 
     @Override
+    @Transactional
     public DetailedPoll getDetailedPoll(String title) {
-        return null;
+        Poll poll = this.pollRepository.findByTitle(title).orElseThrow(
+                () -> new NoSuchElementException("Could not find a poll with title: " + title)
+        );
+        List<DetailedPoll.PollOption> options = poll.getOptions().stream()
+                .map(option -> new DetailedPoll.PollOption(
+                        option.getName(),
+                        option.getColor(),
+                        option.getVoters().stream()
+                                .map(voter -> new UserSummary(
+                                        voter.getUsername(),
+                                        voter.getPermission()
+                                )).collect(Collectors.toSet())
+                )).toList();
+        return new DetailedPoll(
+                poll.getTitle(),
+                poll.getCreatedAt(),
+                poll.getExpiresAt(),
+                poll.isAnonymous(),
+                options
+        );
     }
 
     @Override
