@@ -32,7 +32,7 @@ export default function usePoll(): UsePollExports {
     }, []);
 
     function getAllPolls(): void {
-        axiosInstance.get("/poll/summaries/future")
+        axiosInstance.get("/poll/summaries/past")
             .then((res: AxiosResponse<PollSummary[]>) => setPollSummaries(prev =>
                 ([...prev, ...res.data])
             ))
