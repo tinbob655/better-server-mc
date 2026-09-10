@@ -10,6 +10,7 @@ const Polls = lazy(() => import('./pages/polls/Polls.tsx'));
 const ServerStatus = lazy(() => import('./pages/serverStatus/ServerStatus.tsx'));
 const Suggestions = lazy(() => import('./pages/suggestions/Suggestions.tsx'));
 const Players = lazy(() => import('./pages/players/Players.tsx'));
+const Leaderboards = lazy(() => import("./pages/leaderboards/Leaderboards.tsx"));
 const Admin = lazy(() => import('./pages/admin/Admin.tsx'));
 
 const pageInfo: [string, React.ComponentType][] = [
@@ -21,6 +22,7 @@ const pageInfo: [string, React.ComponentType][] = [
     ['serverStatus', ServerStatus],
     ['suggestions', Suggestions],
     ['players', Players],
+    ['leaderboards', Leaderboards],
     ['admin', Admin],
 ];
 
