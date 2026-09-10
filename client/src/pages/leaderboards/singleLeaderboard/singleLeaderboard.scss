@@ -1,0 +1,153 @@
+@use '../../../scss/variables' as vars;
+
+div.leaderboardWrapper {
+  transition: border-color vars.$transition-base, box-shadow vars.$transition-base;
+
+  &.expanded {
+    border-color: vars.$color-primary;
+    box-shadow: vars.$shadow-sm, vars.$glow-primary;
+  }
+
+  &.expanded .expandChevron {
+    transform: rotate(90deg);
+    color: vars.$color-primary;
+  }
+
+  > .leaderboardHeaderButton {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: vars.$space-3;
+    width: 100%;
+
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+  }
+}
+
+.leaderboardHeaderInfo {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$space-1;
+  min-width: 0;
+
+  h2 {
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    font-size: vars.$font-size-lg * 0.85;
+  }
+}
+
+.leaderboardLeaderTag {
+  font-family: vars.$font-body;
+  font-size: vars.$font-size-xs;
+  font-weight: vars.$font-weight-medium;
+  letter-spacing: 0.5px;
+  color: vars.$color-accent;
+}
+
+.expandChevron {
+  flex-shrink: 0;
+  display: inline-block;
+  color: vars.$color-text-muted;
+  transition: transform vars.$transition-base, color vars.$transition-base;
+}
+
+.leaderboardCollapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows vars.$transition-slow ease;
+
+  &.expanded {
+    grid-template-rows: 1fr;
+  }
+}
+
+.leaderboardInner {
+  overflow: hidden;
+  margin-top: vars.$space-4;
+}
+
+.leaderboardRankings {
+  display: flex;
+  flex-direction: column;
+  gap: vars.$space-2;
+}
+
+.leaderboardEntry {
+  display: flex;
+  align-items: center;
+  gap: vars.$space-3;
+
+  padding: vars.$space-2 vars.$space-3;
+  border-radius: vars.$radius-md;
+  border: 1px solid vars.$color-border;
+  background-color: rgba(vars.$color-primary, 0.05);
+
+  transition: border-color vars.$transition-fast, transform vars.$transition-fast;
+
+  &:hover {
+    border-color: vars.$color-border-strong;
+    transform: translateX(vars.$space-1);
+  }
+
+  //a podium for first, second and third
+  &.first {
+    border-color: rgba(vars.$color-accent, 0.6);
+    background-color: rgba(vars.$color-accent, 0.1);
+    box-shadow: 0 0 12px rgba(vars.$color-accent, 0.25);
+  }
+  &.second {
+    border-color: rgba(vars.$orbit, 0.5);
+    background-color: rgba(vars.$orbit, 0.08);
+  }
+  &.third {
+    border-color: rgba(vars.$regolith-shadow, 0.6);
+    background-color: rgba(vars.$regolith-shadow, 0.1);
+  }
+}
+
+.leaderboardRank {
+  flex-shrink: 0;
+  width: 1.75rem;
+  text-align: center;
+  font-size: vars.$font-size-sm;
+}
+
+.leaderboardAvatar {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border-radius: vars.$radius-sm;
+  image-rendering: pixelated;
+  border: 1px solid vars.$color-border-strong;
+}
+
+.leaderboardPlayerName {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-weight: vars.$font-weight-medium;
+  color: vars.$color-text;
+}
+
+.leaderboardStatValue {
+  flex-shrink: 0;
+  font-family: vars.$font-mono;
+  font-size: vars.$font-size-sm;
+  font-weight: vars.$font-weight-bold;
+  color: vars.$color-primary;
+}
+
+.leaderboardShowMoreWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: vars.$space-3;
+}

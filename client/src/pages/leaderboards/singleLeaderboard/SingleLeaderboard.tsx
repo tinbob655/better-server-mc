@@ -1,42 +1,128 @@
 import React, {useState, useEffect} from 'react';
 import type {LeaderboardEntry} from "../../../types/leaderboard";
-import {parseStatKey, toReadableLabel} from "../../../functions/stats.ts";
+import {formatStatValue, parseStatKey, toReadableLabel} from "../../../functions/stats.ts";
 import {parseAxiosError} from "../../../functions/parseAxiosError.ts";
+import './singleLeaderboard.scss';
+import FancyButton from "../../../components/fancyButton/FancyButton.tsx";
 
 interface SingleLeaderboardParams {
     statKey: string;
     getDetailed: () => Promise<LeaderboardEntry[]>;
 }
 
+const MAX_VISIBLE_ENTRIES: number = 10;
+
+/*most leaderboard stats read fine as "<Name>", but "mined"/"crafted"/etc need a suffix to make sense as a title, e.g.
+ "Diamond ore" -> "Diamond Ore Mined"*/
+const CATEGORY_TITLE_SUFFIXES: Record<string, string> = {
+    mined: 'Mined',
+    crafted: 'Crafted',
+    used: 'Used',
+    broken: 'Broken',
+    killed: 'Kills',
+    killed_by: 'Deaths To',
+};
+
+//shows a medal for the podium places, falls back to a plain rank number
+function getRankLabel(index: number): string {
+    switch (index) {
+        case 0: return '🥇';
+        case 1: return '🥈';
+        case 2: return '🥉';
+        default: return String(index + 1);
+    }
+}
+
 export default function SingleLeaderboard({statKey, getDetailed}: SingleLeaderboardParams): React.ReactElement {
 
     const [expanded, setExpanded] = useState<boolean>(false);
     const [detailedData, setDetailedData] = useState<LeaderboardEntry[] | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
     const [expansionError, setExpansionError] = useState<string | null>(null);
+    const [visibleCount, setVisibleCount] = useState<number>(MAX_VISIBLE_ENTRIES);
 
-    const loadingExpansion: boolean = expanded && detailedData === null;
-
+    //fetch the leaderboard the first time this card is expanded, then cache it
     useEffect(() => {
-        if (!expanded || detailedData !== null) return;
-        
+        if (!expanded || detailedData !== null || loading) return;
+
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setLoading(true);
+        setExpansionError(null);
+
         getDetailed()
-            .then((res: LeaderboardEntry[]) => {
-                setExpanded(true);
-                setDetailedData(res);
-            })
-            .catch(err => setExpansionError(parseAxiosError(err)));
-    }, [expanded, detailedData, getDetailed]);
+            .then(setDetailedData)
+            .catch(err => setExpansionError(parseAxiosError(err)))
+            .finally(() => setLoading(false));
+    }, [expanded, detailedData, loading, getDetailed]);
 
-    const readableKey: string = toReadableLabel(parseStatKey(statKey).name);
+    const {category, name: rawStatName} = parseStatKey(statKey);
+    const suffix: string = CATEGORY_TITLE_SUFFIXES[category];
+    const title: string = suffix ? `${toReadableLabel(rawStatName)} ${suffix}` : toReadableLabel(rawStatName);
 
+    const leader: LeaderboardEntry | undefined = detailedData?.[0];
 
     return (
-        <div className={`leaderboardWrapper widget ${expanded ? "expanded" : ""}`}>
-            <button onChange={() => setExpanded(prev => !prev)}>
-                <h2>
-                    {readableKey}
-                </h2>
+        <div className={`widget leaderboardWrapper ${expanded ? "expanded" : ""}`}>
+
+            {/*small summary when not expanded*/}
+            <button
+                type={"button"}
+                className={"leaderboardHeaderButton"}
+                onClick={() => setExpanded(prev => !prev)}
+                aria-expanded={expanded}
+            >
+                <span className={"leaderboardHeaderInfo"}>
+                    <h2>{title}</h2>
+                    {leader && <span className={"leaderboardLeaderTag"}>👑 {leader.playerName} leads</span>}
+                </span>
+                <span className={"expandChevron"}>▸</span>
             </button>
+
+            {/*show the leaderboard when expanded*/}
+            <div className={`leaderboardCollapse ${expanded ? "expanded" : ""}`}>
+                <div className={"leaderboardInner"}>
+
+                    {loading && <p className={"warningText smaller"}>Loading leaderboard...</p>}
+                    {expansionError && <p className={"errorText smaller"}>{expansionError}</p>}
+
+                    {!loading && !expansionError && detailedData?.length === 0 && (
+                        <p className={"smaller"}>No one has recorded this stat yet.</p>
+                    )}
+
+                    {!loading && !expansionError && detailedData && detailedData.length > 0 && (
+                        <React.Fragment>
+                            <div className={"leaderboardRankings"}>
+                                {detailedData.slice(0, visibleCount).map((entry, index) => (
+                                    <div
+                                        key={entry.uuid}
+                                        className={`leaderboardEntry ${index === 0 ? "first" : ""} ${index === 1 ? "second" : ""} ${index === 2 ? "third" : ""}`}
+                                    >
+                                        <span className={"leaderboardRank"}>{getRankLabel(index)}</span>
+                                        <img
+                                            src={`https://mc-heads.net/avatar/${entry.uuid}/32`}
+                                            alt={""}
+                                            className={"leaderboardAvatar"}
+                                            onError={e => { e.currentTarget.style.visibility = 'hidden'; }}
+                                        />
+                                        <span className={"leaderboardPlayerName"}>{entry.playerName}</span>
+                                        <span className={"leaderboardStatValue"}>
+                                            {formatStatValue(rawStatName, entry.statSummary.statValue)}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+                            {detailedData.length > visibleCount && (
+                                <div className={"leaderboardShowMoreWrapper"}>
+                                    <FancyButton
+                                        label={`Show ${Math.min(MAX_VISIBLE_ENTRIES, detailedData.length - visibleCount)} more`}
+                                        onClick={() => setVisibleCount(prev => prev + MAX_VISIBLE_ENTRIES)}
+                                    />
+                                </div>
+                            )}
+                        </React.Fragment>
+                    )}
+                </div>
+            </div>
         </div>
     )
 }

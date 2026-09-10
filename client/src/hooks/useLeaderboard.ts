@@ -9,7 +9,19 @@ interface UseLeaderboardExports {
     getManyLeaderboards: (request: MultipleLeaderboardRequest) => Promise<LeaderboardEntry[][]>
 }
 
-const LEADERBOARD_STAT_KEYS: string[] = [];
+//these are the stats that will be used in leaderboards
+const LEADERBOARD_STAT_KEYS: string[] = [
+    'minecraft:custom:minecraft:play_time',
+    'minecraft:custom:minecraft:walk_one_cm',
+    'minecraft:custom:minecraft:aviate_one_cm',
+    'minecraft:custom:minecraft:mob_kills',
+    'minecraft:custom:minecraft:deaths',
+    'minecraft:custom:minecraft:jump',
+    'minecraft:custom:minecraft:damage_dealt',
+    'minecraft:custom:minecraft:fish_caught',
+    'minecraft:custom:minecraft:animals_bred',
+    'minecraft:mined:minecraft:diamond_ore',
+];
 
 export default function useLeaderboard(): UseLeaderboardExports {
 
