@@ -10,6 +10,7 @@ export interface PollSummary {
 
 export interface DetailedPoll extends PollSummary {
     anonymous: boolean;
+    allowMultipleResponses: boolean;
     options: PollOption[];
 }
 
@@ -22,6 +23,7 @@ export interface PollOption {
 export interface NewPollRequest {
     title: string;
     anonymous: boolean;
+    allowMultipleResponses: boolean;
     expiresAt: string;
     defaultOptions: NewPollOptionRequest[];
 }

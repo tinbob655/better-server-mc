@@ -15,6 +15,9 @@ public record NewPollRequest(
         @NotNull(message = "Whether to be anonymous must be specified")
         boolean anonymous,
 
+        @NotNull(message = "Whether to allow multiple responses must be specified")
+        boolean allowMultipleResponses,
+
         @NotNull(message = "Expiry date is required")
         Instant expiresAt,
 

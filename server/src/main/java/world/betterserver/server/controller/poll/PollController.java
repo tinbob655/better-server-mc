@@ -13,7 +13,6 @@ import world.betterserver.server.model.dto.response.poll.DetailedPoll;
 import world.betterserver.server.model.dto.response.poll.PollSummary;
 import world.betterserver.server.model.entity.poll.Poll;
 import world.betterserver.server.model.entity.poll.PollOption;
-import world.betterserver.server.model.entity.poll.PollOptionRepository;
 import world.betterserver.server.model.entity.poll.PollRepository;
 import world.betterserver.server.model.entity.user.User;
 import world.betterserver.server.model.entity.user.UserRepository;
@@ -29,7 +28,6 @@ import java.util.stream.Collectors;
 public class PollController implements PollControllerTemplate {
 
     private final PollRepository pollRepository;
-    private final PollOptionRepository pollOptionRepository;
     private final UserRepository userRepository;
 
     @Override
@@ -63,6 +61,7 @@ public class PollController implements PollControllerTemplate {
                 poll.getCreatedAt(),
                 poll.getExpiresAt(),
                 poll.isAnonymous(),
+                poll.isAllowMultipleResponses(),
                 options
         );
     }
@@ -74,6 +73,7 @@ public class PollController implements PollControllerTemplate {
         newPoll.setAnonymous(request.anonymous());
         newPoll.setCreatedAt(Instant.now());
         newPoll.setExpiresAt(request.expiresAt());
+        newPoll.setAllowMultipleResponses(request.allowMultipleResponses());
 
         //work out default poll options and add them
         request.defaultOptions()
@@ -114,24 +114,31 @@ public class PollController implements PollControllerTemplate {
     @Override
     @Transactional
     public ResponseEntity<?> voteForOptionInPoll(String pollTitle, String optionName, Principal principal) {
-        PollOption optionToToggle = this.pollOptionRepository.findByPollTitleAndName(pollTitle, optionName).orElseThrow(
-                () -> new NoSuchElementException("Could find option '" + optionName + "' in poll '" + pollTitle + "'")
+
+        //validate that the requested option is in the poll
+        Poll poll = this.pollRepository.findByTitle(pollTitle).orElseThrow(
+                () -> new NoSuchElementException("Could not find a poll with name: " + pollTitle)
         );
+        PollOption option = poll.getOptions().stream()
+                .filter(op -> op.getName().equals(optionName))
+                .findAny()
+                .orElseThrow(
+                        () -> new NoSuchElementException("Poll '" + pollTitle + "' does not contain option '" + optionName + "'.")
+                );
+
+        //validate the user
         String username = principal.getName();
-        User voter = this.userRepository.findByUsername(username).orElseThrow(
-                () -> new UsernameNotFoundException("Could not find user with name: " + username)
+        User user = this.userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException("Could not find a user with name: " + username)
         );
 
-        if (optionToToggle.getVoters().contains(voter)) {
-            optionToToggle.removeVoter(voter);
-        }
-        else {
-            optionToToggle.addVoter(voter);
-        }
+        this.handleVoting(poll, option, user);
+        this.pollRepository.save(poll);
         return ResponseEntity.ok().build();
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> deletePoll(String title) {
         long deleteCount = this.pollRepository.deleteByTitle(title);
         if (deleteCount > 0) {
@@ -140,5 +147,25 @@ public class PollController implements PollControllerTemplate {
         else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Could not find poll with title: " + title);
         }
+    }
+
+    private void handleVoting(Poll poll, PollOption chosenOption, User user) {
+
+        //user already voted for this option so remove the vote
+        if (chosenOption.getVoters().contains(user)) {
+            chosenOption.removeVoter(user);
+            return;
+        }
+
+        //in a single-response poll, remove what the user had already voted for
+        if (!poll.isAllowMultipleResponses()) {
+            poll.getOptions().stream()
+                    .filter(op -> op.getVoters().contains(user))
+                    .findAny()
+                    .ifPresent(previous -> previous.removeVoter(user));
+        }
+
+        //single or multiple response polls always need the user to vote for the user option
+        chosenOption.addVoter(user);
     }
 }

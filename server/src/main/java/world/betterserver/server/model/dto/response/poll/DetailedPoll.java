@@ -12,6 +12,7 @@ public record DetailedPoll(
         Instant createdAt,
         Instant expiresAt,
         boolean anonymous,
+        boolean allowMultipleResponses,
         List<PollOption> options
 ) {
 

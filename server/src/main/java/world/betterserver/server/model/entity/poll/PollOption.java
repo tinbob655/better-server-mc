@@ -2,6 +2,8 @@ package world.betterserver.server.model.entity.poll;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import world.betterserver.server.model.entity.user.User;
 
 import java.util.HashSet;
@@ -27,6 +29,8 @@ public class PollOption {
 
     @ManyToOne
     @JoinColumn(name = "poll_id", nullable = false)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Poll poll;
 
     @ManyToMany

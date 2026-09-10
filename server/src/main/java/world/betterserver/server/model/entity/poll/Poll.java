@@ -29,6 +29,9 @@ public class Poll {
     @Column(nullable = false)
     private boolean anonymous;
 
+    @Column(nullable = false)
+    private boolean allowMultipleResponses;
+
     @OneToMany(
             mappedBy = "poll",
             cascade = CascadeType.ALL,

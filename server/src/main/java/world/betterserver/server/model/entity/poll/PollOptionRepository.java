@@ -1,9 +1,0 @@
-package world.betterserver.server.model.entity.poll;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.Optional;
-
-public interface PollOptionRepository extends JpaRepository<PollOption, Long> {
-    Optional<PollOption> findByPollTitleAndName(String pollTitle, String name);
-}

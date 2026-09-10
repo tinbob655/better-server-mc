@@ -22,6 +22,7 @@ export default function NewPollForm({addPoll}: NewPollFormParams): React.ReactEl
 
     const [title, setTitle] = useState<string>('');
     const [anonymous, setAnonymous] = useState<'Yes' | 'No'>('Yes');
+    const [allowMultipleResponses, setAllowMultipleResponses] = useState<'Yes' | 'No'>('No');
     const [expiry, setExpiry] = useState<string>('');
 
     //the first row is created with id 0 up-front, so new rows start counting from 1
@@ -63,6 +64,7 @@ export default function NewPollForm({addPoll}: NewPollFormParams): React.ReactEl
         const request: NewPollRequest = {
             title,
             anonymous: anonymous === 'Yes',
+            allowMultipleResponses: allowMultipleResponses === 'Yes',
 
             //gets rid of the id field
             defaultOptions: optionDrafts.map(({name, color}): NewPollOptionRequest => ({name, color})),
@@ -90,10 +92,18 @@ export default function NewPollForm({addPoll}: NewPollFormParams): React.ReactEl
 
                 {/*if the poll should be anonymous*/}
                 <DropdownGroup
-                    label={"Anonymous poll"}
+                    label={"Anonymous poll?"}
                     options={['Yes', 'No']}
                     option={anonymous}
                     setOption={setAnonymous as never}
+                />
+
+                {/*if the poll should allow multiple responses*/}
+                <DropdownGroup
+                    label={"Allow multiple responses?"}
+                    options={['Yes', 'No']}
+                    option={allowMultipleResponses}
+                    setOption={setAllowMultipleResponses as never}
                 />
 
                 {/*poll's expiry time*/}
