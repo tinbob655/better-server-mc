@@ -66,7 +66,7 @@ export default function Polls():React.ReactElement {
                             pollSummary={p}
                             getDetailedPoll={() => getDetailedPoll(p.title)}
                             voteFor={voteFor}
-                            deletePoll={deletePoll}
+                            deletePoll={() => deletePoll(p.title)}
                             deletePollOption={deletePollOption}
                         />
                     </Suspense>
