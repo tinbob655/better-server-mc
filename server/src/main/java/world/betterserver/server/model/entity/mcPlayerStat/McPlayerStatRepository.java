@@ -13,4 +13,12 @@ public interface McPlayerStatRepository extends JpaRepository<McPlayerStat, Long
 
     @Query("SELECT DISTINCT p.playerUuid FROM McPlayerStat p")
     Set<UUID> findAllPlayerUuids();
+
+    @Query("""
+        SELECT p.playerUuid
+        FROM McPlayerStat p
+        WHERE p.statKey = :statKey
+        ORDER BY p.statValue DESC
+""")
+    List<UUID> findUuidByStatKeyOrderByStatValueDesc(String statKey);
 }

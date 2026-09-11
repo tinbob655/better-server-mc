@@ -1,9 +1,12 @@
-import type {LeaderboardEntry, MultipleLeaderboardRequest} from "../types/leaderboard";
+import {useState, useEffect} from 'react';
+import type {LeaderboardEntry, LeaderboardSummary, MultipleLeaderboardRequest} from "../types/leaderboard";
 import axiosInstance from "../axiosInstance.ts";
 import type {AxiosResponse} from "axios";
+import {parseAxiosError} from "../functions/parseAxiosError.ts";
 
 interface UseLeaderboardExports {
-    availableLeaderboardNames: string[];
+    leaderboards: LeaderboardSummary | null;
+    fetchError: string | null;
 
     getSingleLeaderboard: (statKey: string) => Promise<LeaderboardEntry[]>
     getManyLeaderboards: (request: MultipleLeaderboardRequest) => Promise<LeaderboardEntry[][]>
@@ -13,7 +16,7 @@ interface UseLeaderboardExports {
 const LEADERBOARD_STAT_KEYS: string[] = [
     'minecraft:custom:minecraft:play_time',
     'minecraft:custom:minecraft:walk_one_cm',
-    'minecraft:custom:minecraft:aviate_one_cm',
+    'minecraft:custom:minecraft:fly_one_cm',
     'minecraft:custom:minecraft:mob_kills',
     'minecraft:custom:minecraft:deaths',
     'minecraft:custom:minecraft:jump',
@@ -24,6 +27,21 @@ const LEADERBOARD_STAT_KEYS: string[] = [
 ];
 
 export default function useLeaderboard(): UseLeaderboardExports {
+
+    const [leaderboards, setLeaderboards] = useState<LeaderboardSummary | null>(null);
+    const [fetchError, setFetchError] = useState<string | null>(null);
+
+    useEffect(() => {
+        axiosInstance.get("/leaderboard/getLeadersFor", {
+            params: {
+                statKeys: LEADERBOARD_STAT_KEYS
+            }
+        })
+            .then((res: AxiosResponse<LeaderboardSummary>) => {
+                setLeaderboards(res.data)
+            })
+            .catch(err => setFetchError(parseAxiosError(err)));
+    }, []);
 
     async function getSingleLeaderboard(statKey: string): Promise<LeaderboardEntry[]> {
         const res: AxiosResponse<LeaderboardEntry[]> = await axiosInstance.get(`/leaderboard/single/${statKey}`);
@@ -38,7 +56,8 @@ export default function useLeaderboard(): UseLeaderboardExports {
     }
 
     return {
-        availableLeaderboardNames: LEADERBOARD_STAT_KEYS,
+        leaderboards,
+        fetchError,
         getSingleLeaderboard,
         getManyLeaderboards
     }

@@ -82,6 +82,8 @@ div.leaderboardWrapper {
   display: flex;
   align-items: center;
   gap: vars.$space-3;
+  $maxWidth: 97.75%;
+  max-width: $maxWidth;
 
   padding: vars.$space-2 vars.$space-3;
   border-radius: vars.$radius-md;
@@ -92,7 +94,7 @@ div.leaderboardWrapper {
 
   &:hover {
     border-color: vars.$color-border-strong;
-    transform: translateX(vars.$space-1);
+    transform: translateX(98% - $maxWidth);
   }
 
   //a podium for first, second and third

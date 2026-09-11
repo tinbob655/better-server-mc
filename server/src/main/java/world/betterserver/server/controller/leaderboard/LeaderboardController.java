@@ -8,10 +8,14 @@ import world.betterserver.server.model.dto.response.leaderboard.LeaderboardEntry
 import world.betterserver.server.model.dto.response.mcPlayer.McPlayer;
 import world.betterserver.server.model.dto.response.mcPlayer.StatSummary;
 import world.betterserver.server.model.entity.mcPlayerStat.McPlayerStat;
+import world.betterserver.server.model.entity.mcPlayerStat.McPlayerStatRepository;
 import world.betterserver.server.service.mcStats.McStatsService;
 import world.betterserver.server.service.mcUUID.UUIDTranslatorService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,6 +23,7 @@ public class LeaderboardController implements LeaderboardControllerTemplate {
 
     private final UUIDTranslatorService translator;
     private final McStatsService statsService;
+    private final McPlayerStatRepository statRepository;
 
     @Override
     public List<LeaderboardEntry> getLeaderboardForStat(String statKey) {
@@ -38,6 +43,13 @@ public class LeaderboardController implements LeaderboardControllerTemplate {
                 .toList();
     }
 
+    @Override
+    public Map<String, String> getLeadersFor(List<String> statKeys) {
+        Map<String, String> res = new HashMap<>();
+        statKeys.forEach(k -> this.findStatLeader(k, res));
+        return res;
+    }
+
     private @NonNull LeaderboardEntry generateLeaderboardFromStat(McPlayerStat stat) {
         McPlayer player = this.translator.findPlayer(stat.getPlayerUuid());
         StatSummary summary = new StatSummary(
@@ -51,5 +63,14 @@ public class LeaderboardController implements LeaderboardControllerTemplate {
                 player.uuid(),
                 summary
         );
+    }
+
+    private void findStatLeader(String statKey, Map<String, String> map) {
+        String[] requests = statKey.split(",");
+        for (String k : requests) {
+            UUID uuid = this.statRepository.findUuidByStatKeyOrderByStatValueDesc(k).getFirst();
+            String username = this.translator.findPlayer(uuid).username();
+            map.put(k, username);
+        }
     }
 }

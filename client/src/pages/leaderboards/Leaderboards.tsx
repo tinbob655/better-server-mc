@@ -7,7 +7,7 @@ const SingleLeaderboard = lazy(() => import("./singleLeaderboard/SingleLeaderboa
 
 export default function Leaderboards(): React.ReactElement {
 
-    const {availableLeaderboardNames, getSingleLeaderboard} = useLeaderboard();
+    const {leaderboards, fetchError, getSingleLeaderboard} = useLeaderboard();
 
     return (
         <React.Fragment>
@@ -19,12 +19,15 @@ export default function Leaderboards(): React.ReactElement {
                     expand it and see the current standings!
                 </p>
 
-                {availableLeaderboardNames.map(name =>
+                {!fetchError && !leaderboards && <p className={"warningText"}>Loading leaderboards</p>}
+                {fetchError && <p className={"errorText"}>{fetchError}</p>}
+                {leaderboards && Object.entries(leaderboards).map(([key, value]) =>
                     <Suspense>
                         <SingleLeaderboard
-                            key={name}
-                            statKey={name}
-                            getDetailed={() => getSingleLeaderboard(name)}
+                        key={key}
+                        statKey={key}
+                        leader={value}
+                        getDetailed={() => getSingleLeaderboard(key)}
                         />
                     </Suspense>
                 )}

@@ -7,6 +7,8 @@ import FancyButton from "../../../components/fancyButton/FancyButton.tsx";
 
 interface SingleLeaderboardParams {
     statKey: string;
+    leader: string;
+
     getDetailed: () => Promise<LeaderboardEntry[]>;
 }
 
@@ -33,7 +35,7 @@ function getRankLabel(index: number): string {
     }
 }
 
-export default function SingleLeaderboard({statKey, getDetailed}: SingleLeaderboardParams): React.ReactElement {
+export default function SingleLeaderboard({statKey, leader, getDetailed}: SingleLeaderboardParams): React.ReactElement {
 
     const [expanded, setExpanded] = useState<boolean>(false);
     const [detailedData, setDetailedData] = useState<LeaderboardEntry[] | null>(null);
@@ -59,8 +61,6 @@ export default function SingleLeaderboard({statKey, getDetailed}: SingleLeaderbo
     const suffix: string = CATEGORY_TITLE_SUFFIXES[category];
     const title: string = suffix ? `${toReadableLabel(rawStatName)} ${suffix}` : toReadableLabel(rawStatName);
 
-    const leader: LeaderboardEntry | undefined = detailedData?.[0];
-
     return (
         <div className={`widget leaderboardWrapper ${expanded ? "expanded" : ""}`}>
 
@@ -73,7 +73,7 @@ export default function SingleLeaderboard({statKey, getDetailed}: SingleLeaderbo
             >
                 <span className={"leaderboardHeaderInfo"}>
                     <h2>{title}</h2>
-                    {leader && <span className={"leaderboardLeaderTag"}>👑 {leader.playerName} leads</span>}
+                    {leader && <span className={"leaderboardLeaderTag"}>👑 {leader} leads</span>}
                 </span>
                 <span className={"expandChevron"}>▸</span>
             </button>
@@ -82,11 +82,11 @@ export default function SingleLeaderboard({statKey, getDetailed}: SingleLeaderbo
             <div className={`leaderboardCollapse ${expanded ? "expanded" : ""}`}>
                 <div className={"leaderboardInner"}>
 
-                    {loading && <p className={"warningText smaller"}>Loading leaderboard...</p>}
-                    {expansionError && <p className={"errorText smaller"}>{expansionError}</p>}
+                    {loading && <p className={"warningText smaller alignLeft"}>Loading leaderboard...</p>}
+                    {expansionError && <p className={"errorText smaller alignLeft"}>{expansionError}</p>}
 
                     {!loading && !expansionError && detailedData?.length === 0 && (
-                        <p className={"smaller"}>No one has recorded this stat yet.</p>
+                        <p className={"smaller alignLeft"}>No one has recorded this stat yet.</p>
                     )}
 
                     {!loading && !expansionError && detailedData && detailedData.length > 0 && (
