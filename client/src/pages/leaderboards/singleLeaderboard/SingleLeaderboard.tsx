@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import type {LeaderboardEntry} from "../../../types/leaderboard";
-import {formatStatValue, parseStatKey, toReadableLabel} from "../../../functions/stats.ts";
+import {formatStatValue, parseStatKey, toReadableLabel, TOTAL_ORE_STAT_KEY} from "../../../functions/stats.ts";
 import {parseAxiosError} from "../../../functions/parseAxiosError.ts";
 import './singleLeaderboard.scss';
 import FancyButton from "../../../components/fancyButton/FancyButton.tsx";
@@ -24,6 +24,10 @@ const CATEGORY_TITLE_SUFFIXES: Record<string, string> = {
     killed: 'Kills',
     killed_by: 'Deaths To',
 };
+
+const LEADERBOARD_TITLE_OVERRIDES: Record<string, string> = {
+    [TOTAL_ORE_STAT_KEY]: 'Total ore mined',
+}
 
 //shows a medal for the podium places, falls back to a plain rank number
 function getRankLabel(index: number): string {
@@ -59,7 +63,7 @@ export default function SingleLeaderboard({statKey, leader, getDetailed}: Single
 
     const {category, name: rawStatName} = parseStatKey(statKey);
     const suffix: string = CATEGORY_TITLE_SUFFIXES[category];
-    const title: string = suffix ? `${toReadableLabel(rawStatName)} ${suffix}` : toReadableLabel(rawStatName);
+    const title: string = LEADERBOARD_TITLE_OVERRIDES[statKey] ?? `${toReadableLabel(rawStatName)} ${suffix ? suffix : ''}`
 
     return (
         <div className={`widget leaderboardWrapper ${expanded ? "expanded" : ""}`}>

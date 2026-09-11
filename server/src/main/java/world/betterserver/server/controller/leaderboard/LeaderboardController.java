@@ -8,7 +8,6 @@ import world.betterserver.server.model.dto.response.leaderboard.LeaderboardEntry
 import world.betterserver.server.model.dto.response.mcPlayer.McPlayer;
 import world.betterserver.server.model.dto.response.mcPlayer.StatSummary;
 import world.betterserver.server.model.entity.mcPlayerStat.McPlayerStat;
-import world.betterserver.server.model.entity.mcPlayerStat.McPlayerStatRepository;
 import world.betterserver.server.service.mcStats.McStatsService;
 import world.betterserver.server.service.mcUUID.UUIDTranslatorService;
 
@@ -23,7 +22,6 @@ public class LeaderboardController implements LeaderboardControllerTemplate {
 
     private final UUIDTranslatorService translator;
     private final McStatsService statsService;
-    private final McPlayerStatRepository statRepository;
 
     @Override
     public List<LeaderboardEntry> getLeaderboardForStat(String statKey) {
@@ -66,11 +64,9 @@ public class LeaderboardController implements LeaderboardControllerTemplate {
     }
 
     private void findStatLeader(String statKey, Map<String, String> map) {
-        String[] requests = statKey.split(",");
-        for (String k : requests) {
-            UUID uuid = this.statRepository.findUuidByStatKeyOrderByStatValueDesc(k).getFirst();
-            String username = this.translator.findPlayer(uuid).username();
-            map.put(k, username);
-        }
+        List<String> requests = List.of(statKey.split(","));
+        UUID leaderUuid = this.statsService.getAllStatsNamed(requests).getFirst().getPlayerUuid();
+        String username = this.translator.findPlayer(leaderUuid).username();
+        map.put(statKey, username);
     }
 }

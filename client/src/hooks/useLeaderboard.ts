@@ -3,6 +3,7 @@ import type {LeaderboardEntry, LeaderboardSummary, MultipleLeaderboardRequest} f
 import axiosInstance from "../axiosInstance.ts";
 import type {AxiosResponse} from "axios";
 import {parseAxiosError} from "../functions/parseAxiosError.ts";
+import {TOTAL_ORE_STAT_KEY} from "../functions/stats.ts";
 
 interface UseLeaderboardExports {
     leaderboards: LeaderboardSummary | null;
@@ -23,7 +24,7 @@ const LEADERBOARD_STAT_KEYS: string[] = [
     'minecraft:custom:minecraft:damage_dealt',
     'minecraft:custom:minecraft:fish_caught',
     'minecraft:custom:minecraft:animals_bred',
-    'minecraft:mined:minecraft:diamond_ore,minecraft:mined:minecraft:deepslate_diamond_ore', //deepslate & normal ore
+    TOTAL_ORE_STAT_KEY, //all ores mined
 ];
 
 export default function useLeaderboard(): UseLeaderboardExports {

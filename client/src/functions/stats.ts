@@ -4,8 +4,34 @@ const TICK_BASED_STATS = new Set(['play_time', 'total_world_time', 'time_since_d
 //manually rename some stats
 const STAT_NAME_OVERRIDES: Record<string, string> = {
     walk_one_cm: 'Distance walked',
-    aviate_one_cm: 'Distance flown',
+    fly_one_cm: 'Distance flown',
 }
+
+//list of all stats related to mining ore
+export const TOTAL_ORE_STAT_KEYS: string[] = [
+    'minecraft:mined:minecraft:coal_ore',
+    'minecraft:mined:minecraft:deepslate_coal_ore',
+    'minecraft:mined:minecraft:iron_ore',
+    'minecraft:mined:minecraft:deepslate_iron_ore',
+    'minecraft:mined:minecraft:copper_ore',
+    'minecraft:mined:minecraft:deepslate_copper_ore',
+    'minecraft:mined:minecraft:gold_ore',
+    'minecraft:mined:minecraft:deepslate_gold_ore',
+    'minecraft:mined:minecraft:redstone_ore',
+    'minecraft:mined:minecraft:deepslate_redstone_ore',
+    'minecraft:mined:minecraft:lapis_ore',
+    'minecraft:mined:minecraft:deepslate_lapis_ore',
+    'minecraft:mined:minecraft:diamond_ore',
+    'minecraft:mined:minecraft:deepslate_diamond_ore',
+    'minecraft:mined:minecraft:emerald_ore',
+    'minecraft:mined:minecraft:deepslate_emerald_ore',
+
+    //nether ores
+    'minecraft:mined:minecraft:nether_quartz_ore',
+    'minecraft:mined:minecraft:nether_gold_ore',
+    'minecraft:mined:minecraft:ancient_debris',
+];
+export const TOTAL_ORE_STAT_KEY: string = TOTAL_ORE_STAT_KEYS.join(',');
 
 //'minecraft:custom:minecraft:play_time' -> {category: 'custom', name: 'play_time'}
 export function parseStatKey(statKey: string): { category: string; name: string } {
