@@ -1,6 +1,13 @@
 import React, {useState, useEffect} from 'react';
 import type {LeaderboardEntry} from "../../../types/leaderboard";
-import {formatStatValue, parseStatKey, toReadableLabel, TOTAL_ORE_STAT_KEY} from "../../../functions/stats.ts";
+import {
+    formatStatValue,
+    parseStatKey,
+    toReadableLabel,
+    TOTAL_ORE_STAT_KEY,
+    BLOCKS_BROKEN_STAT_KEY,
+    THINGS_USED_STAT_KEY,
+} from "../../../functions/stats.ts";
 import {parseAxiosError} from "../../../functions/parseAxiosError.ts";
 import './singleLeaderboard.scss';
 import FancyButton from "../../../components/fancyButton/FancyButton.tsx";
@@ -27,6 +34,8 @@ const CATEGORY_TITLE_SUFFIXES: Record<string, string> = {
 
 const LEADERBOARD_TITLE_OVERRIDES: Record<string, string> = {
     [TOTAL_ORE_STAT_KEY]: 'Total ore mined',
+    [BLOCKS_BROKEN_STAT_KEY]: "Total blocks broken",
+    [THINGS_USED_STAT_KEY]: "Blocked placed & items used",
 }
 
 //shows a medal for the podium places, falls back to a plain rank number

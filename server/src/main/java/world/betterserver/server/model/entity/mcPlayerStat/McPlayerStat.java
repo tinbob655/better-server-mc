@@ -7,7 +7,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "player_stat", uniqueConstraints = @UniqueConstraint(columnNames = {"playerUuid", "statKey"}))
+@Table(name = "player_stat", uniqueConstraints = @UniqueConstraint(columnNames = {"getPlayerUuid", "statKey"}))
 @Data
 public class McPlayerStat {
 

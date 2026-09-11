@@ -52,6 +52,22 @@ public class McStatsServiceImpl implements McStatsService {
                 .toList();
     }
 
+    @Override
+    public List<McPlayerStat> getAllStatsByCategory(String category) {
+        String prefix = "minecraft:" + category + ':';
+
+        return this.statRepository.findTotalsByCategoryPrefix(prefix).stream()
+                .map(row -> {
+                    McPlayerStat merged = new McPlayerStat();
+                    merged.setPlayerUuid(row.getPlayerUuid());
+                    merged.setStatKey("category:" + category);
+                    merged.setStatValue(row.getTotal() != null ? row.getTotal() : 0L);
+                    merged.setUpdatedAt(row.getUpdatedAt());
+                    return merged;
+                })
+                .toList();
+    }
+
 
     private McPlayerStat mergeVariantStats(List<McPlayerStat> statsForPlayer) {
         McPlayerStat merged = new McPlayerStat();

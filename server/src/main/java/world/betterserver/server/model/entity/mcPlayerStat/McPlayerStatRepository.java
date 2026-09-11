@@ -3,6 +3,7 @@ package world.betterserver.server.model.entity.mcPlayerStat;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.Instant;
 import java.util.*;
 
 public interface McPlayerStatRepository extends JpaRepository<McPlayerStat, Long> {
@@ -15,10 +16,17 @@ public interface McPlayerStatRepository extends JpaRepository<McPlayerStat, Long
     Set<UUID> findAllPlayerUuids();
 
     @Query("""
-        SELECT p.playerUuid
+        SELECT p.playerUuid AS playerUuid, COALESCE(SUM(p.statValue), 0) AS TOTAL, MAX(p.updatedAt) AS updatedAt
         FROM McPlayerStat p
-        WHERE p.statKey = :statKey
-        ORDER BY p.statValue DESC
+        WHERE p.statKey LIKE CONCAT(:categoryPrefix, '%')
+        GROUP BY p.playerUuid
+        ORDER BY SUM(p.statValue) DESC
 """)
-    List<UUID> findUuidByStatKeyOrderByStatValueDesc(String statKey);
+    List<CategoryTotal> findTotalsByCategoryPrefix(String categoryPrefix);
+
+    interface CategoryTotal {
+        UUID getPlayerUuid();
+        Long getTotal();
+        Instant getUpdatedAt();
+    }
 }

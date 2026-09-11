@@ -3,7 +3,7 @@ import type {LeaderboardEntry, LeaderboardSummary, MultipleLeaderboardRequest} f
 import axiosInstance from "../axiosInstance.ts";
 import type {AxiosResponse} from "axios";
 import {parseAxiosError} from "../functions/parseAxiosError.ts";
-import {TOTAL_ORE_STAT_KEY} from "../functions/stats.ts";
+import {TOTAL_ORE_STAT_KEY, BLOCKS_BROKEN_STAT_KEY, THINGS_USED_STAT_KEY} from "../functions/stats.ts";
 
 interface UseLeaderboardExports {
     leaderboards: LeaderboardSummary | null;
@@ -16,15 +16,17 @@ interface UseLeaderboardExports {
 //these are the stats that will be used in leaderboards
 const LEADERBOARD_STAT_KEYS: string[] = [
     'minecraft:custom:minecraft:play_time',
+    BLOCKS_BROKEN_STAT_KEY,
     'minecraft:custom:minecraft:walk_one_cm',
+    'minecraft:custom:minecraft:deaths',
+    THINGS_USED_STAT_KEY,
     'minecraft:custom:minecraft:fly_one_cm',
     'minecraft:custom:minecraft:mob_kills',
-    'minecraft:custom:minecraft:deaths',
     'minecraft:custom:minecraft:jump',
+    TOTAL_ORE_STAT_KEY, //all ores mined
     'minecraft:custom:minecraft:damage_dealt',
     'minecraft:custom:minecraft:fish_caught',
     'minecraft:custom:minecraft:animals_bred',
-    TOTAL_ORE_STAT_KEY, //all ores mined
 ];
 
 export default function useLeaderboard(): UseLeaderboardExports {

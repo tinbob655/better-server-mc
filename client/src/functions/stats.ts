@@ -1,6 +1,12 @@
 //custom stats that are stored as tick counts rather than plain numbers
 const TICK_BASED_STATS = new Set(['play_time', 'total_world_time', 'time_since_death', 'time_since_rest', 'sneak_time']);
 
+//tells the backend to summ an entire stat category or not
+const CATEGORY_STAT_PREFIX: string = 'category:';
+
+export const BLOCKS_BROKEN_STAT_KEY = `${CATEGORY_STAT_PREFIX}mined`;
+export const THINGS_USED_STAT_KEY = `${CATEGORY_STAT_PREFIX}used`;
+
 //manually rename some stats
 const STAT_NAME_OVERRIDES: Record<string, string> = {
     walk_one_cm: 'Distance walked',

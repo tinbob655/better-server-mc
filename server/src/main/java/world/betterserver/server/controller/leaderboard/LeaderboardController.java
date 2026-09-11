@@ -11,7 +11,8 @@ import world.betterserver.server.model.entity.mcPlayerStat.McPlayerStat;
 import world.betterserver.server.service.mcStats.McStatsService;
 import world.betterserver.server.service.mcUUID.UUIDTranslatorService;
 
-import java.util.HashMap;
+
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -23,9 +24,11 @@ public class LeaderboardController implements LeaderboardControllerTemplate {
     private final UUIDTranslatorService translator;
     private final McStatsService statsService;
 
+    private static final String CATEGORY_PREFIX = "category:";
+
     @Override
     public List<LeaderboardEntry> getLeaderboardForStat(String statKey) {
-        return this.statsService.getAllStatsNamed(List.of(statKey.split(","))).stream()
+        return this.resolveStats(statKey).stream()
                 .map(this::generateLeaderboardFromStat)
                 .toList();
     }
@@ -33,17 +36,13 @@ public class LeaderboardController implements LeaderboardControllerTemplate {
     @Override
     public List<List<LeaderboardEntry>> getLeaderboardsForStats(MultipleLeaderboardRequest request) {
         return request.statKeys().stream()
-                .map(this.statsService::getAllStatsNamed)
-                .map(stats -> stats.stream()
-                        .map(this::generateLeaderboardFromStat)
-                        .toList()
-                )
+                .map(this::getLeaderboardForStat)
                 .toList();
     }
 
     @Override
     public Map<String, String> getLeadersFor(List<String> statKeys) {
-        Map<String, String> res = new HashMap<>();
+        Map<String, String> res = new LinkedHashMap<>();
         statKeys.forEach(k -> this.findStatLeader(k, res));
         return res;
     }
@@ -64,9 +63,17 @@ public class LeaderboardController implements LeaderboardControllerTemplate {
     }
 
     private void findStatLeader(String statKey, Map<String, String> map) {
-        List<String> requests = List.of(statKey.split(","));
-        UUID leaderUuid = this.statsService.getAllStatsNamed(requests).getFirst().getPlayerUuid();
+        List<McPlayerStat> stats = this.resolveStats(statKey);
+        if (stats.isEmpty()) return;    //noone has done this stat yet
+
+        UUID leaderUuid = stats.getFirst().getPlayerUuid();
         String username = this.translator.findPlayer(leaderUuid).username();
         map.put(statKey, username);
+    }
+
+    private List<McPlayerStat> resolveStats(String statKey) {
+        return statKey.startsWith(CATEGORY_PREFIX)
+                ? this.statsService.getAllStatsByCategory(statKey.substring(CATEGORY_PREFIX.length()))
+                : this.statsService.getAllStatsNamed(List.of(statKey.split(",")));
     }
 }
