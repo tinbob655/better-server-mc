@@ -2,8 +2,10 @@ package world.betterserver.server.controller.auth;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -42,6 +44,18 @@ public class AuthController implements AuthControllerTemplate {
     private final NotificationServiceImpl notifier;
     private final ProfilePictureService profilePictureService;
 
+    @Value("${jwt.expiration-ms}")
+    private long expirationMs;
+
+    @Value("${jwt.cookie.secure:true}")
+    private boolean cookieSecure;
+
+    @Override
+    public ResponseEntity<?> checkAuth() {
+        //an unauthorised user won't make it this far
+        return ResponseEntity.ok().build();
+    }
+
     @Override
     public ResponseEntity<?> register(AccountRequest request, MultipartFile profilePicture) {
         if (this.userRepository.existsByUsername(request.username())) {
@@ -67,7 +81,19 @@ public class AuthController implements AuthControllerTemplate {
             Authentication auth = this.authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.username(), request.password())
             );
-            return ResponseEntity.ok(new LoginResponse(this.jwtService.generateToken(auth.getName())));
+            String token = this.jwtService.generateToken(auth.getName());
+
+            ResponseCookie cookie = ResponseCookie.from("authToken", token)
+                    .httpOnly(true)
+                    .secure(this.cookieSecure)
+                    .sameSite("Lax")
+                    .path("/")
+                    .maxAge(this.expirationMs / 1000)
+                    .build();
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                    .body(new LoginResponse(token));
         }
         catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
@@ -80,6 +106,18 @@ public class AuthController implements AuthControllerTemplate {
                 .map(a -> Permission.valueOf(a.getAuthority()))
                 .collect(Collectors.toSet());
         return ResponseEntity.ok(new CurrentUserResponse(auth.getName(), permissions));
+    }
+
+    @Override
+    public ResponseEntity<?> logout() {
+        ResponseCookie cookie = ResponseCookie.from("authToken", "")
+                .httpOnly(true)
+                .secure(this.cookieSecure)
+                .sameSite("Lax")
+                .path("/")
+                .maxAge(0)  //browser will delete the cookie
+                .build();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
     }
 
     @Override

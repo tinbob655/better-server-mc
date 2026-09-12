@@ -2,6 +2,7 @@ package world.betterserver.server.config;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
@@ -16,6 +17,8 @@ import world.betterserver.server.service.jwt.JwtService;
 import world.betterserver.server.service.userDetails.UserDetailsService;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -31,13 +34,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             @NonNull FilterChain filterChain
             ) throws ServletException, IOException {
 
-        String header = request.getHeader("Authorization");
-        if (header == null || !header.startsWith("Bearer ")) {
+        Optional<String> tokenMaybe = this.extractTokenFromCookie(request);
+        if (tokenMaybe.isEmpty()) {
             filterChain.doFilter(request, response);
             return;
         }
-
-        String token = header.substring(7); //skips past "Bearer "
+        String token = tokenMaybe.get();
 
         try {
             String username = this.jwtService.extractUsername(token);
@@ -59,5 +61,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             System.err.println("Authentication attempted with invalid token, refusing.");
         }
         filterChain.doFilter(request, response);
+    }
+
+    private Optional<String> extractTokenFromCookie(HttpServletRequest request) {
+        if (request.getCookies() == null) return Optional.empty();
+        return Arrays.stream(request.getCookies())
+                .filter(c -> c.getName().equals("authToken"))
+                .map(Cookie::getValue)
+                .findFirst();
     }
 }

@@ -19,6 +19,9 @@ import java.util.Set;
 @RequestMapping("/api/auth")
 public interface AuthControllerTemplate {
 
+    @GetMapping("/check")
+    ResponseEntity<?> checkAuth();
+
     @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ResponseEntity<?> register(
             @RequestPart("request") @Valid AccountRequest request,
@@ -30,6 +33,9 @@ public interface AuthControllerTemplate {
 
     @GetMapping("/me")
     ResponseEntity<CurrentUserResponse> getCurrentUser(Authentication auth);
+
+    @PostMapping("/logout")
+    ResponseEntity<?> logout();
 
     //only allow the account owner to edit their own password
     //'#username' reads the @PathVariable called 'username'

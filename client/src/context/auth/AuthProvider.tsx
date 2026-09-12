@@ -7,7 +7,7 @@ import type {
     ChangePasswordRequest,
     ChangePermissionRequest,
     CurrentUserResponse,
-    LoginResponse, NewAccountRequest
+    NewAccountRequest
 } from "../../types/auth";
 import type {AxiosResponse} from "axios";
 import {maxPermissionLevel, Permission} from "../../types/permission.ts";
@@ -17,22 +17,9 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
     const [isLoading, setIsLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        if (!localStorage.getItem('authToken')) {
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setIsLoading(false);
-            return;
-        }
         axiosInstance.get("/auth/me")
-            .then((response: AxiosResponse<CurrentUserResponse>) => setUser({
-                username: response.data.username,
-                maxPermission: maxPermissionLevel(response.data.permissions),
-            }))
-            .catch(() => {
-
-                //the token must be invalid so remove it
-                localStorage.removeItem('authToken');
-                setUser(null);
-            })
+            .then((res:AxiosResponse<CurrentUserResponse>) => setUser({username: res.data.username, maxPermission: maxPermissionLevel(res.data.permissions)}))
+            .catch(() => setUser(null))
             .finally(() => setIsLoading(false));
     }, []);
 
@@ -58,12 +45,9 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
 
     async function login(request: AccountRequest): Promise<boolean> {
         try {
-            const response: AxiosResponse<LoginResponse> = await axiosInstance.post("/auth/login", request);
-            localStorage.setItem('authToken', response.data.token);
-
+            await axiosInstance.post("/auth/login", request);
             const me: AxiosResponse<CurrentUserResponse> = await axiosInstance.get("/auth/me");
             setUser({username: me.data.username, maxPermission: maxPermissionLevel(me.data.permissions)});
-
             return true;
         }
         catch {
@@ -73,9 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
     }
 
     async function logout(): Promise<void> {
-
-        //just need to delete our token, backend doesn't care
-        localStorage.removeItem('authToken');
+        await axiosInstance.post("/auth/logout");
         setUser(null);
     }
 
