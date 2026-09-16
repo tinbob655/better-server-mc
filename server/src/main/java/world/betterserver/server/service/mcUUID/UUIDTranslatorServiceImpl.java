@@ -77,9 +77,6 @@ public class UUIDTranslatorServiceImpl implements UUIDTranslatorService {
     }
 
     private long extractBedrockXUID(UUID uuid) {
-        String hex = uuid.toString()
-                .replace("-", "")
-                .substring(24);
-        return Long.parseUnsignedLong(hex, 16);
+        return uuid.getLeastSignificantBits();
     }
 }
