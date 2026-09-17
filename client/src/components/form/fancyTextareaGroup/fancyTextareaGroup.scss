@@ -1,0 +1,119 @@
+@use '../../../scss/variables' as vars;
+
+.fancyTextareaGroup {
+
+  .ql-toolbar.ql-snow {
+    background-color: vars.$color-bg-elevated;
+    border: 1px solid vars.$color-border-strong;
+    border-bottom: none;
+    border-top-left-radius: vars.$radius-sm;
+    border-top-right-radius: vars.$radius-sm;
+
+    //the icons quill uses are SVGs
+    .ql-stroke {
+      stroke: vars.$color-text-muted;
+      transition: stroke vars.$transition-fast;
+    }
+
+    .ql-fill {
+      fill: vars.$color-text-muted;
+      transition: fill vars.$transition-fast;
+    }
+
+    .ql-picker-label {
+      color: vars.$color-text-muted;
+    }
+
+    button:hover .ql-stroke, button.ql-active .ql-stroke, .ql-picker-label:hover .ql-stroke {
+      stroke: vars.$color-primary;
+    }
+
+    button:hover .ql-fill, button.ql-active .ql-fill, .ql-picker-label:hover .ql-fill {
+      fill: vars.$color-primary;
+    }
+
+    .ql-picker-options {
+      background-color: vars.$color-bg-elevated;
+      border: 1px solid vars.$color-border-strong;
+      border-radius: vars.$radius-sm;
+    }
+  }
+
+  .ql-container.ql-snow {
+    border: 1px solid vars.$color-border-strong;
+    border-bottom-left-radius: vars.$radius-sm;
+    border-bottom-right-radius: vars.$radius-sm;
+    background-color: vars.$color-bg-elevated;
+
+    font-family: vars.$font-body;
+    font-size: vars.$font-size-base;
+
+    transition: border-color vars.$transition-base, box-shadow vars.$transition-base;
+  }
+
+  .ql-editor {
+    color: vars.$color-text;
+    min-height: var(--fancyTextareaMinHeight, 8rem);
+
+    &.ql-blank::before {
+      color: vars.$color-text-faint;
+      font-style: normal; //Quill wants to make this italic, undo it
+    }
+
+    > * {
+      text-align: left;
+    }
+
+    a { color: vars.$color-link; }
+
+    blockquote {
+      border-left: 3px solid vars.$color-secondary;
+      color: vars.$color-text-muted;
+      padding-left: vars.$space-3;
+    }
+
+    //undo list styles and let quill take over
+    li {
+      display: list-item;
+      align-items: normal;
+      gap: normal;
+      padding: revert;
+      animation: none;
+
+      &::before {
+        content: none;
+      }
+
+      &:hover::before {
+        transform: none;
+      }
+    }
+  }
+
+  &:focus-within .ql-container.ql-snow,
+  &:focus-within .ql-toolbar.ql-snow {
+    border-color: vars.$color-primary;
+  }
+
+  &:focus-within .ql-container.ql-snow {
+    box-shadow: vars.$glow-primary;
+  }
+
+  .ql-tooltip.ql-snow {
+    background-color: vars.$color-bg-elevated;
+    border: 1px solid vars.$color-border-strong;
+    border-radius: vars.$radius-sm;
+    box-shadow: vars.$shadow-md;
+    color: vars.$color-text;
+
+    input[type="text"] {
+      background-color: vars.$color-bg;
+      border: 1px solid vars.$color-border;
+      color: vars.$color-text;
+    }
+
+    a.ql-action, a.ql-remove {
+      color: vars.$color-primary;
+    }
+  }
+}
