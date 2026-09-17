@@ -23,6 +23,7 @@ export default function Header(): React.ReactElement {
         'suggestions',
         'players',
         'leaderboards',
+        'wiki',
         ...(isDev ? ['admin'] : []),
     ];
 
