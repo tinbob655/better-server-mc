@@ -1,0 +1,110 @@
+@use '../../../scss/variables' as vars;
+
+div.wikiPostWrapper {
+  position: relative;
+
+  //delete button
+  .iconButtonWrapper {
+    position: absolute;
+    top: vars.$space-4;
+    left: vars.$space-4;
+    z-index: 1;
+  }
+
+  .expandButton {
+    width: 100%;
+    display: block;
+    margin-right: 0;
+    margin-left: auto;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: right;
+
+    h2 {
+      font-size: vars.$font-size-lg * 0.85; // card header, not a page header
+      transition: color vars.$transition-fast;
+    }
+
+    &:hover h2,
+    &:focus-visible h2 {
+      color: vars.$color-primary;
+    }
+  }
+
+
+  .wikiPostVotes {
+    display: flex;
+    justify-content: flex-end;
+    gap: vars.$space-2;
+    margin-top: vars.$space-2;
+    margin-right: vars.$global-edge-margin;
+    margin-left: 0;
+  }
+
+  .voteButton {
+    display: flex;
+    align-items: center;
+    gap: vars.$space-1;
+
+    padding: vars.$space-1 vars.$space-3;
+    border-radius: vars.$radius-pill;
+    border: 1px solid vars.$color-border-strong;
+    background-color: vars.$color-primary-muted;
+
+    font-family: vars.$font-mono;
+    font-size: vars.$font-size-xs;
+    font-weight: vars.$font-weight-bold;
+    color: vars.$color-text-muted;
+    cursor: pointer;
+
+    transition: border-color vars.$transition-fast, color vars.$transition-fast, transform vars.$transition-fast;
+
+    &.highlighted {
+      background-color: vars.$color-primary;
+
+      &.downvote {
+        background-color: vars.$color-error;
+      }
+    }
+
+    &:hover {
+      border-color: vars.$color-primary;
+      transform: translateY(-1px);
+    }
+
+    &.downvote:hover {
+      color: vars.$color-error;
+      border-color: vars.$color-error;
+    }
+  }
+
+
+  //have to apply alignment to all elements in the wiki post
+  .alignRight {
+    margin-right: vars.$global-edge-margin;
+    margin-left: auto;
+    max-width: 88%;
+    text-align: right;
+
+    p {
+      text-align: right;
+      white-space: pre-wrap;
+      word-wrap: anywhere;
+    }
+
+    li {
+      flex-direction: row-reverse;
+      text-align: right;
+    }
+
+    blockquote {
+      margin: vars.$space-4 0;
+      padding: vars.$space-2 vars.$space-4 vars.$space-2 0;
+      border-right: 3px solid vars.$color-accent;
+      color: vars.$color-text-muted;
+      font-style: italic;
+    }
+  }
+}

@@ -20,6 +20,10 @@ export default function SingleWikiPost({post, loadDetailedPost, voteOnWikiPost, 
     const {user} = useAuth();
     const isDev: boolean = user?.maxPermission === 10;
 
+    //has the user already voted on this post
+    const alreadyUpvoted: boolean = user?.username != null && post.upvotes.includes(user.username);
+    const alreadyDownvoted: boolean = user?.username != null && post.downvotes.includes(user.username);
+
     const [expanded, setExpanded] = useState<boolean>(false);
     const [detailedPost, setDetailedPost] = useState<WikiPost | null>(null);
     const [loadingExpansion, setLoadingExpansion] = useState<boolean>(false);
@@ -51,7 +55,7 @@ export default function SingleWikiPost({post, loadDetailedPost, voteOnWikiPost, 
     }
 
     return (
-        <div className={"wikiPostWrapper"} ref={wrapperRef}>
+        <div className={"wikiPostWrapper widget"} ref={wrapperRef}>
             <div className={"wikiPostHeader"}>
                 <button
                     className={"expandButton"}
@@ -62,7 +66,7 @@ export default function SingleWikiPost({post, loadDetailedPost, voteOnWikiPost, 
                         {post.title}
                     </h2>
                     <p className={"alignRight smaller"}>
-                        Posted by {post.createdBy} at {formatDate(post.createdAt)}.
+                        Posted by {post.createdBy} on {formatDate(post.createdAt)}.
                     </p>
                 </button>
 
@@ -70,7 +74,7 @@ export default function SingleWikiPost({post, loadDetailedPost, voteOnWikiPost, 
                 <div className={"wikiPostVotes"}>
                     <button
                         type={"button"}
-                        className={"voteButton upvote"}
+                        className={`voteButton upvote ${alreadyUpvoted ? "highlighted" : ""}`}
                         onClick={() => handleVote(1)}
                         aria-label={"Upvote this post"}
                     >
@@ -80,7 +84,7 @@ export default function SingleWikiPost({post, loadDetailedPost, voteOnWikiPost, 
 
                     <button
                         type={"button"}
-                        className={"voteButton downvote"}
+                        className={`voteButton downvote ${alreadyDownvoted ? "highlighted" : ""}`}
                         onClick={() => handleVote(-1)}
                         aria-label={"Downvote this post"}
                     >
