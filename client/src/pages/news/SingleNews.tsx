@@ -3,6 +3,7 @@ import type {DeleteNewsRequest, News} from "../../types/news";
 import formatDate from "../../functions/formatDate.ts";
 import {useAuth} from "../../context/auth/AuthContext.tsx";
 import ProfilePicture from "../../components/profilePicture/ProfilePicture.tsx";
+import SafeHtml from "../../components/SafeHtml.tsx";
 
 const IconButton = lazy(() => import("../../components/iconButton/IconButton.tsx"));
 
@@ -39,9 +40,7 @@ export default function SingleNews({news, deleteNews}: SingleNewsParams): React.
             <p className={"alignRight smaller"}>
                 Posted by {news.createdBy} on {formatDate(news.createdAt)}
             </p>
-            <p className={"alignRight"}>
-                {news.body}
-            </p>
+            <SafeHtml html={news.body} className={"alignRight"} />
         </div>
     )
 }

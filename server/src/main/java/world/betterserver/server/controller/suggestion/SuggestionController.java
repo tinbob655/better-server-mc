@@ -16,6 +16,7 @@ import world.betterserver.server.model.entity.suggestion.SuggestionRepository;
 import world.betterserver.server.model.entity.suggestion.SuggestionStatus;
 import world.betterserver.server.model.entity.user.User;
 import world.betterserver.server.model.entity.user.UserRepository;
+import world.betterserver.server.service.htmlSanitiser.HtmlSanitiserService;
 import world.betterserver.server.service.nofitication.NotificationServiceImpl;
 
 
@@ -30,6 +31,7 @@ public class SuggestionController implements SuggestionControllerTemplate {
     private final SuggestionRepository suggestionRepository;
     private final UserRepository userRepository;
     private final NotificationServiceImpl notifier;
+    private final HtmlSanitiserService sanitiser;
 
     @Override
     public List<SuggestionResponse> getOpenSuggestions() {
@@ -55,7 +57,7 @@ public class SuggestionController implements SuggestionControllerTemplate {
         //make the suggestion
         Suggestion newSuggestion = new Suggestion();
         newSuggestion.setTitle(request.title());
-        newSuggestion.setDescription(request.description());
+        newSuggestion.setDescription(this.sanitiser.sanitise(request.description()));
         newSuggestion.setStatus(SuggestionStatus.UNSEEN);
 
         String username = principal.getName();
@@ -87,7 +89,7 @@ public class SuggestionController implements SuggestionControllerTemplate {
         Suggestion suggestion = this.suggestionRepository.findByTitle(request.suggestionTitle()).orElseThrow(
                 () -> new NoSuchElementException("Could not find a suggestion with title: " + request.suggestionTitle())
         );
-        suggestion.setAdminResponse(request.adminResponse());
+        suggestion.setAdminResponse(this.sanitiser.sanitise(request.adminResponse()));
         this.suggestionRepository.save(suggestion);
         return ResponseEntity.ok().build();
     }

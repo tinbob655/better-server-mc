@@ -14,7 +14,7 @@ div.singleSuggestionWrapper {
     z-index: 1;
   }
 
-  > p.suggestionDescription {
+  > .suggestionDescription {
     max-width: 80%;
     margin-bottom: vars.$space-3;
   }

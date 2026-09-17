@@ -13,6 +13,7 @@ import world.betterserver.server.model.entity.news.News;
 import world.betterserver.server.model.entity.news.NewsRepository;
 import world.betterserver.server.model.entity.user.User;
 import world.betterserver.server.model.entity.user.UserRepository;
+import world.betterserver.server.service.htmlSanitiser.HtmlSanitiserService;
 
 import java.security.Principal;
 import java.time.Instant;
@@ -24,6 +25,7 @@ public class NewsController implements NewsControllerTemplate {
 
     private final NewsRepository newsRepository;
     private final UserRepository userRepository;
+    private final HtmlSanitiserService sanitiser;
 
     @Override
     public List<NewsResponse> getAllNews() {
@@ -47,7 +49,7 @@ public class NewsController implements NewsControllerTemplate {
         );
         News newNews = new News();
         newNews.setTitle(request.title());
-        newNews.setBody(request.body());
+        newNews.setBody(this.sanitiser.sanitise(request.body()));
         newNews.setCreatedAt(Instant.now());
         newNews.setCreatedBy(creator);
 

@@ -14,6 +14,7 @@ import TextareaGroup from "../../../components/form/TextareaGroup.tsx";
 import FancyButton from "../../../components/fancyButton/FancyButton.tsx";
 import {parseAxiosError} from "../../../functions/parseAxiosError.ts";
 import ProfilePicture from "../../../components/profilePicture/ProfilePicture.tsx";
+import SafeHtml from "../../../components/SafeHtml.tsx";
 
 interface SingleSuggestionParams {
     suggestion: Suggestion;
@@ -149,9 +150,7 @@ export default function SingleSuggestion({
             <p className={"smaller alignRight"}>
                 Posted by <b>{suggestion.posterUsername}</b> on {formatDate(suggestion.createdAt)}.
             </p>
-            <p className={"suggestionDescription alignRight"}>
-                {suggestion.description}
-            </p>
+            <SafeHtml html={suggestion.description} className={"suggestionDescription alignRight"} />
 
             {/*hide the read-only response while the edit form is open because only want one copy on the screen*/}
             {!isRespondingTo && (
@@ -159,7 +158,7 @@ export default function SingleSuggestion({
                     {suggestion.adminResponse ? (
                         <React.Fragment>
                             <b>The Admins have responded to this suggestion:</b>
-                            "{suggestion.adminResponse}"
+                            <SafeHtml html={suggestion.adminResponse} />
                         </React.Fragment>
                     ) : (
                         <b>The Admins haven't responded to this suggestion yet.</b>
