@@ -5,6 +5,8 @@ import lombok.Data;
 import world.betterserver.server.model.entity.user.User;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "wiki")
@@ -22,15 +24,43 @@ public class Wiki {
     private String body;
 
     @Column(nullable = false)
-    private int upvotes;
-
-    @Column(nullable = false)
-    private int downvotes;
-
-    @Column(nullable = false)
     private Instant createdAt;
 
     @ManyToOne
     @JoinColumn(name = "users_id", nullable = false)
     private User createdBy;
+
+    @ManyToMany
+    @JoinTable(
+            name = "wiki_upvoters",
+            joinColumns = @JoinColumn(name = "wiki_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> upvoters = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "wiki_downvoters",
+            joinColumns = @JoinColumn(name = "wiki_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private Set<User> downvoters = new HashSet<>();
+
+    public void upvote(User user) {
+        downvoters.remove(user);
+        upvoters.add(user);
+    }
+
+    public void downvote(User user) {
+        upvoters.remove(user);
+        downvoters.add(user);
+    }
+
+    public void removeUpvote(User user) {
+        upvoters.remove(user);
+    }
+
+    public void removeDownvote(User user) {
+        downvoters.remove(user);
+    }
 }

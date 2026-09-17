@@ -7,8 +7,8 @@ export interface WikiSummary {
     createdBy: string;
     createdAt: string;
 
-    upvotes: number;
-    downvotes: number;
+    upvotes: string[];
+    downvotes: string[];
 }
 
 export interface DetailedWikiPostRequest {
@@ -18,6 +18,11 @@ export interface DetailedWikiPostRequest {
 export interface NewWikiPostRequest {
     title: string;
     body: string;
+}
+
+export interface WikiVotingRequest {
+    title: string;
+    sign: 1 | -1;
 }
 
 export interface DeleteWikiPostRequest {

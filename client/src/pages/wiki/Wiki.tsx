@@ -9,7 +9,14 @@ const NewWikiPostForm = lazy(() => import("./NewWikiPostForm.tsx"));
 
 export default function Wiki(): React.ReactElement {
 
-    const {summaries, fetchError, getDetailedPost, addWikiPost, deleteWikiPost} = useWiki();
+    const {
+        summaries,
+        fetchError,
+        getDetailedPost,
+        addWikiPost,
+        voteOnWikiPost,
+        deleteWikiPost
+    } = useWiki();
 
     const [postingNew, setPostingNew] = useState<boolean>(false);
 
@@ -30,6 +37,7 @@ export default function Wiki(): React.ReactElement {
                             key={summary.title}
                             post={summary}
                             loadDetailedPost={() => getDetailedPost({title: summary.title})}
+                            voteOnWikiPost={voteOnWikiPost}
                             deletePost={() => deleteWikiPost({title: summary.title})}
                         />
                     </Suspense>

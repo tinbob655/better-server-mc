@@ -4,7 +4,7 @@ import type {
     DetailedWikiPostRequest,
     NewWikiPostRequest,
     WikiPost,
-    WikiSummary
+    WikiSummary, WikiVotingRequest
 } from "../types/wiki";
 import axiosInstance from "../axiosInstance.ts";
 import type {AxiosResponse} from "axios";
@@ -17,6 +17,7 @@ interface UseWikiExports {
 
     getDetailedPost: (request: DetailedWikiPostRequest) => Promise<WikiPost>;
     addWikiPost: (request: NewWikiPostRequest) => Promise<void>;
+    voteOnWikiPost: (request: WikiVotingRequest) => Promise<void>;
     deleteWikiPost: (request: DeleteWikiPostRequest) => Promise<void>;
 }
 
@@ -46,15 +47,38 @@ export default function useWiki(): UseWikiExports {
             title: request.title,
             createdBy: user?.username || 'UNKNOWN USER',
             createdAt: new Date().toISOString(),
-            upvotes: 0,
-            downvotes: 0,
+            upvotes: [],
+            downvotes: [],
         }, ...prev]));
+    }
+
+    async function voteOnWikiPost(request: WikiVotingRequest): Promise<void> {
+        await axiosInstance.patch(
+            `/wiki/${request.sign === 1 ? "upvote" : "downvote"}/${request.title}`
+        );
+
+        setSummaries(prev => prev.map(p => {
+            if (p.title !== request.title) return p;
+
+            const username: string = user!.username;
+
+            return {
+                ...p,
+                upvotes: request.sign === 1
+                    ? [...p.upvotes.filter(up => up !== username), username]
+                    : p.upvotes.filter(up => up !== username),
+
+                downvotes: request.sign === -1
+                    ? [...p.downvotes.filter(down => down !== username), username]
+                    : p.downvotes.filter(down => down !== username)
+            };
+        }));
     }
 
     async function deleteWikiPost(request: DeleteWikiPostRequest): Promise<void> {
         await axiosInstance.delete(`/wiki/${request.title}`)
 
-        setSummaries(prev => prev.filter(p => p.title !== request.title))
+        setSummaries(prev => prev.filter(p => p.title !== request.title));
     }
 
     return {
@@ -62,6 +86,7 @@ export default function useWiki(): UseWikiExports {
         fetchError,
         getDetailedPost,
         addWikiPost,
+        voteOnWikiPost,
         deleteWikiPost
     }
 }

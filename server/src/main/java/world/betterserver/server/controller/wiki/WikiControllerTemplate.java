@@ -23,6 +23,12 @@ public interface WikiControllerTemplate {
     @PostMapping
     ResponseEntity<?> addWikiPost(@RequestBody @Valid NewWikiPostRequest request, Principal principal);
 
+    @PatchMapping("/upvote/{title}")
+    ResponseEntity<?> upvoteWikiPost(@PathVariable String title, Principal principal);
+
+    @PatchMapping("/downvote/{title}")
+    ResponseEntity<?> downvoteWikiPost(@PathVariable String title, Principal principal);
+
     @DeleteMapping("/{title}")
     ResponseEntity<?> deleteWikiPost(@PathVariable String title, Authentication authentication);
 }

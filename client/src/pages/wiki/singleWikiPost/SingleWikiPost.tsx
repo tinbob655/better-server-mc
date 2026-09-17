@@ -1,5 +1,5 @@
 import React, {useState, Suspense, lazy, useRef} from 'react';
-import type {WikiPost, WikiSummary} from "../../../types/wiki";
+import type {WikiPost, WikiSummary, WikiVotingRequest} from "../../../types/wiki";
 import {useAuth} from "../../../context/auth/AuthContext.tsx";
 import './singleWikiPost.scss';
 import formatDate from "../../../functions/formatDate.ts";
@@ -11,10 +11,11 @@ const IconButton = lazy(() => import("../../../components/iconButton/IconButton.
 interface SingleWikiPostParams {
     post: WikiSummary;
     loadDetailedPost: () => Promise<WikiPost>;
+    voteOnWikiPost: (request: WikiVotingRequest) => Promise<void>;
     deletePost: () => void;
 }
 
-export default function SingleWikiPost({post, loadDetailedPost, deletePost}: SingleWikiPostParams): React.ReactElement {
+export default function SingleWikiPost({post, loadDetailedPost, voteOnWikiPost, deletePost}: SingleWikiPostParams): React.ReactElement {
 
     const {user} = useAuth();
     const isDev: boolean = user?.maxPermission === 10;
@@ -27,37 +28,67 @@ export default function SingleWikiPost({post, loadDetailedPost, deletePost}: Sin
     const wrapperRef = useRef<HTMLDivElement>(null);
 
     async function handleExpand(): Promise<void> {
-        try {
-            setExpanded(prev => !prev);
+        const willBeExpanded: boolean = !expanded;
+        setExpanded(willBeExpanded);
 
-            if (expanded && !detailedPost) {
-                setLoadingExpansion(true);
-                const bigPost = await loadDetailedPost();
-                setDetailedPost(bigPost);
-                setLoadingExpansion(false);
-                setExpansionError(null);
-            }
+        if (!willBeExpanded || detailedPost) return;
+
+        try {
+            setLoadingExpansion(true);
+            setExpansionError(null);
+            setDetailedPost(await loadDetailedPost());
         }
         catch (e) {
             setExpansionError(parseAxiosError(e));
         }
+        finally {
+            setLoadingExpansion(false);
+        }
+    }
+
+    function handleVote(sign: 1 | -1): void {
+        void voteOnWikiPost({title: post.title, sign});
     }
 
     return (
         <div className={"wikiPostWrapper"} ref={wrapperRef}>
-            <button
-                className={"expandButton"}
+            <div className={"wikiPostHeader"}>
+                <button
+                    className={"expandButton"}
                     type={"button"}
                     onClick={handleExpand}
-            >
-                <h2 className={"alignRight"}>
-                    {post.title}
-                </h2>
-                <p className={"alignRight smaller"}>
-                    Posted by {post.createdBy} at {formatDate(post.createdAt)}.
-                </p>
-                {/*TODO: DISPLAY UPVOTES AND DOWNVOTES HERE*/}
-            </button>
+                >
+                    <h2 className={"alignRight"}>
+                        {post.title}
+                    </h2>
+                    <p className={"alignRight smaller"}>
+                        Posted by {post.createdBy} at {formatDate(post.createdAt)}.
+                    </p>
+                </button>
+
+                {/*upvote/downvote*/}
+                <div className={"wikiPostVotes"}>
+                    <button
+                        type={"button"}
+                        className={"voteButton upvote"}
+                        onClick={() => handleVote(1)}
+                        aria-label={"Upvote this post"}
+                    >
+                        <span className={"voteArrow"}>▲</span>
+                        <span className={"voteCount"}>{post.upvotes.length}</span>
+                    </button>
+
+                    <button
+                        type={"button"}
+                        className={"voteButton downvote"}
+                        onClick={() => handleVote(-1)}
+                        aria-label={"Downvote this post"}
+                    >
+                        <span className={"voteArrow"}>▼</span>
+                        <span className={"voteCount"}>{post.downvotes.length}</span>
+                    </button>
+                </div>
+            </div>
 
             {expanded && (
                 <React.Fragment>

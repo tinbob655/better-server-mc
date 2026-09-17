@@ -20,6 +20,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,8 +37,8 @@ public class WikiController implements WikiControllerTemplate {
                         w.getTitle(),
                         w.getCreatedBy().getUsername(),
                         w.getCreatedAt(),
-                        w.getUpvotes(),
-                        w.getDownvotes()
+                        w.getUpvoters().stream().map(User::getUsername).collect(Collectors.toSet()),
+                        w.getDownvoters().stream().map(User::getUsername).collect(Collectors.toSet())
                 ))
                 .toList();
     }
@@ -52,8 +53,8 @@ public class WikiController implements WikiControllerTemplate {
                 wiki.getBody(),
                 wiki.getCreatedAt(),
                 wiki.getCreatedBy().getUsername(),
-                wiki.getUpvotes(),
-                wiki.getDownvotes()
+                wiki.getUpvoters().stream().map(User::getUsername).collect(Collectors.toSet()),
+                wiki.getDownvoters().stream().map(User::getUsername).collect(Collectors.toSet())
         );
     }
 
@@ -61,8 +62,6 @@ public class WikiController implements WikiControllerTemplate {
     public ResponseEntity<?> addWikiPost(NewWikiPostRequest request, Principal principal) {
         Wiki newWiki = new Wiki();
         newWiki.setTitle(request.title());
-        newWiki.setUpvotes(0);
-        newWiki.setDownvotes(0);
         newWiki.setCreatedAt(Instant.now());
         newWiki.setBody(this.sanitiser.sanitise(request.body()));
 
@@ -73,6 +72,38 @@ public class WikiController implements WikiControllerTemplate {
         newWiki.setCreatedBy(poster);
 
         this.wikiRepository.save(newWiki);
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<?> upvoteWikiPost(String title, Principal principal) {
+        Wiki wiki = this.wikiRepository.findByTitle(title).orElseThrow(
+                () -> new NoSuchElementException("Could not find a wiki post with title: " + title)
+        );
+
+        String username = principal.getName();
+        User user = this.userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException("Could not find a user with name: " + username)
+        );
+
+        wiki.removeDownvote(user);
+        wiki.upvote(user);
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
+    public ResponseEntity<?> downvoteWikiPost(String title, Principal principal) {
+        Wiki wiki = this.wikiRepository.findByTitle(title).orElseThrow(
+                () -> new NoSuchElementException("Could not find a wiki post with title: " + title)
+        );
+
+        String username = principal.getName();
+        User user = this.userRepository.findByUsername(username).orElseThrow(
+                () -> new UsernameNotFoundException("Could not find a user with name: " + username)
+        );
+
+        wiki.removeUpvote(user);
+        wiki.downvote(user);
         return ResponseEntity.ok().build();
     }
 
