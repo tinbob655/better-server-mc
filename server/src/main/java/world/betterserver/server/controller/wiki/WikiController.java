@@ -88,6 +88,8 @@ public class WikiController implements WikiControllerTemplate {
 
         wiki.removeDownvote(user);
         wiki.upvote(user);
+        this.wikiRepository.save(wiki);
+
         return ResponseEntity.ok().build();
     }
 
@@ -104,6 +106,8 @@ public class WikiController implements WikiControllerTemplate {
 
         wiki.removeUpvote(user);
         wiki.downvote(user);
+        this.wikiRepository.save(wiki);
+
         return ResponseEntity.ok().build();
     }
 

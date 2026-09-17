@@ -31,19 +31,9 @@ public class Wiki {
     private User createdBy;
 
     @ManyToMany
-    @JoinTable(
-            name = "wiki_upvoters",
-            joinColumns = @JoinColumn(name = "wiki_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
     private Set<User> upvoters = new HashSet<>();
 
     @ManyToMany
-    @JoinTable(
-            name = "wiki_downvoters",
-            joinColumns = @JoinColumn(name = "wiki_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
     private Set<User> downvoters = new HashSet<>();
 
     public void upvote(User user) {
