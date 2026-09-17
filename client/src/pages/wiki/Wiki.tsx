@@ -43,6 +43,8 @@ export default function Wiki(): React.ReactElement {
                 />
                 {fetchError && <p className={"errorText"}>{fetchError}</p>}
                 <div className={"sectionDivider light"} style={{marginBottom: '0.5rem', maxWidth: '55%'}} />
+                {summaries.length === 0 && <p className={"warningText"}>The wiki is empty.</p>}
+                {summaries.length > 0 && filteredItems.length === 0 && <p className={"warningText"}>No items match that search.</p>}
                 {filteredItems.map(summary => (
                     <Suspense>
                         <SingleWikiPost
