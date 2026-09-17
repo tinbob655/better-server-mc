@@ -5,6 +5,7 @@ import './singleWikiPost.scss';
 import formatDate from "../../../functions/formatDate.ts";
 import {parseAxiosError} from "../../../functions/parseAxiosError.ts";
 import SafeHtml from "../../../components/SafeHtml.tsx";
+import ProfilePicture from "../../../components/profilePicture/ProfilePicture.tsx";
 
 const IconButton = lazy(() => import("../../../components/iconButton/IconButton.tsx"));
 
@@ -62,9 +63,12 @@ export default function SingleWikiPost({post, loadDetailedPost, voteOnWikiPost, 
                     type={"button"}
                     onClick={handleExpand}
                 >
-                    <h2 className={"alignRight"}>
-                        {post.title}
-                    </h2>
+                    <div style={{display: 'flex', marginRight: '6.5%', marginLeft: 'auto', width: 'fit-content'}}>
+                        <h2 className={"alignRight"} style={{flexShrink: 0}}>
+                            {post.title}
+                        </h2>
+                        <ProfilePicture username={post.createdBy} size={45} />
+                    </div>
                     <p className={"alignRight smaller"}>
                         Posted by {post.createdBy} on {formatDate(post.createdAt)}.
                     </p>
