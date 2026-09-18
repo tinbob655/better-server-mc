@@ -79,3 +79,18 @@ section.alignRight > .fancyButton, .fancyButton.alignRight {
   filter: grayscale(0.75);
   cursor: not-allowed;
 }
+
+//custom button for "verify with discord" button
+.fancyButton.discord {
+  border-color: #5865F2;
+  color: #5865F2;
+
+  &::before {
+    background-color: rgba(88, 101, 242, 0.18);
+  }
+
+  &:hover {
+    border-color: #5865F2;
+    box-shadow: 0 0 12px rgba(88, 101, 242, 0.35);
+  }
+}
