@@ -3,6 +3,11 @@ export interface CurrentUserResponse {
     permissions: string[];
 }
 
+export interface RegistrationResponse {
+    success: boolean;
+    error?: string;
+}
+
 export interface LoginResponse {
     token: string;
 }
@@ -11,6 +16,7 @@ export interface NewAccountRequest {
     username: string;
     password: string;
     profilePicture: File;
+    discordTicket: string;
 }
 
 export interface AccountRequest {

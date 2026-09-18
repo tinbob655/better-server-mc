@@ -1,6 +1,7 @@
 package world.betterserver.server.controller.auth;
 
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -18,12 +19,15 @@ import org.springframework.web.multipart.MultipartFile;
 import world.betterserver.server.model.dto.request.auth.AccountRequest;
 import world.betterserver.server.model.dto.request.auth.ChangePasswordRequest;
 import world.betterserver.server.model.dto.request.auth.ChangePermissionRequest;
+import world.betterserver.server.model.dto.request.auth.RegisterRequest;
 import world.betterserver.server.model.dto.response.auth.CurrentUserResponse;
 import world.betterserver.server.model.dto.response.auth.LoginResponse;
 import world.betterserver.server.model.dto.response.auth.UserSummary;
 import world.betterserver.server.model.entity.user.Permission;
 import world.betterserver.server.model.entity.user.User;
 import world.betterserver.server.model.entity.user.UserRepository;
+import world.betterserver.server.service.discord.OAuth.DiscordOAuthService;
+import world.betterserver.server.service.discord.ticket.DiscordTicketService;
 import world.betterserver.server.service.jwt.JwtService;
 import world.betterserver.server.service.nofitication.NotificationServiceImpl;
 import world.betterserver.server.service.profilePicture.ProfilePictureService;
@@ -43,12 +47,17 @@ public class AuthController implements AuthControllerTemplate {
     private final JwtService jwtService;
     private final NotificationServiceImpl notifier;
     private final ProfilePictureService profilePictureService;
+    private final DiscordOAuthService discordOAuthService;
+    private final DiscordTicketService discordTicketService;
 
     @Value("${jwt.expiration-ms}")
     private long expirationMs;
 
     @Value("${jwt.cookie.secure:true}")
     private boolean cookieSecure;
+
+    @Value("${client.vite.url}")
+    private String viteURL;
 
     @Override
     public ResponseEntity<?> checkAuth() {
@@ -57,11 +66,20 @@ public class AuthController implements AuthControllerTemplate {
     }
 
     @Override
-    public ResponseEntity<?> register(AccountRequest request, MultipartFile profilePicture) {
+    public ResponseEntity<?> register(@Valid RegisterRequest request, MultipartFile profilePicture) {
+
+        //make sure the user has a valid discord ticket
+        if (!this.discordTicketService.isValid(request.discordTicket())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("Discord verification is missing or has expired. Please verify with Discord again.");
+        }
+
+        //make sure the username does not already exist
         if (this.userRepository.existsByUsername(request.username())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already taken");
         }
 
+        //create the account
         try {
             String filename = this.profilePictureService.store(request.username(), profilePicture);
             String passwordHash = this.encoder.encode(request.password());
@@ -106,6 +124,47 @@ public class AuthController implements AuthControllerTemplate {
                 .map(a -> Permission.valueOf(a.getAuthority()))
                 .collect(Collectors.toSet());
         return ResponseEntity.ok(new CurrentUserResponse(auth.getName(), permissions));
+    }
+
+    @Override
+    public ResponseEntity<String> discordCallback(String code) {
+        boolean verified;
+        String ticket = null;
+
+        try {
+            String accessToken = this.discordOAuthService.exchangeCodeForAccessToken(code);
+            verified = this.discordOAuthService.isGuildMember(accessToken);
+            if (verified) ticket = this.discordTicketService.issueTicket();
+        }
+        catch (Exception e) {
+            System.err.println("Discord verification failed: " + e.getMessage());
+            verified = false;
+        }
+
+        //tiny page that reports the result back to the popup's opener, then closes itself
+        String html = """
+                <!DOCTYPE html>
+                <html>
+                <body>
+                <script>
+                  if (window.opener) {
+                    window.opener.postMessage(
+                      { source: "betterServerDiscordAuth", success: %s, ticket: %s },
+                      "%s"
+                    );
+                  }
+                  window.close();
+                </script>
+                <p>%s You can close this window.</p>
+                </body>
+                </html>
+                """.formatted(
+                verified,
+                verified ? "\"" + ticket + "\"" : "null",
+                this.viteURL,
+                verified ? "Discord membership verified!" : "Could not verify your Discord membership."
+        );
+        return ResponseEntity.ok().body(html);
     }
 
     @Override

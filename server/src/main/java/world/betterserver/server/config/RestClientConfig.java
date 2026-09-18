@@ -31,4 +31,11 @@ public class RestClientConfig {
                 .baseUrl("https://api.geysermc.org")
                 .build();
     }
+
+    @Bean("discordRestClient")
+    public RestClient discordRestClient() {
+        return RestClient.builder()
+                .baseUrl("https://discord.com/api")
+                .build();
+    }
 }

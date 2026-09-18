@@ -51,7 +51,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 
                         //allow users to authenticate
-                        .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/logout").permitAll()
+                        .requestMatchers(
+                                "/api/auth/register",
+                                "/api/auth/login",
+                                "/api/auth/logout",
+                                "/api/auth/discord/callback"
+                        ).permitAll()
 
                         /*EXAMPLE for locking a route behind a newPermission level
                         .requestMatchers("/route/**").hasAuthority(Permission.DEV.name())

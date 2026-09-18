@@ -6,7 +6,7 @@ import type {
     AccountRequest,
     ChangePasswordRequest,
     ChangePermissionRequest,
-    CurrentUserResponse,
+    CurrentUserResponse, RegistrationResponse,
     NewAccountRequest
 } from "../../types/auth";
 import type {AxiosResponse} from "axios";
@@ -23,12 +23,12 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
             .finally(() => setIsLoading(false));
     }, []);
 
-    async function register({username, password, profilePicture}: NewAccountRequest): Promise<{success: boolean, error?: string}> {
+    async function register({username, password, profilePicture, discordTicket}: NewAccountRequest): Promise<RegistrationResponse> {
         try {
             const formData = new FormData();
 
             formData.append('request', new Blob([JSON.stringify({
-                username, password
+                username, password, discordTicket
             })], {type: 'application/json'}));
 
             formData.append('file', profilePicture);

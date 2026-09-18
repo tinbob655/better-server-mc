@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import world.betterserver.server.model.dto.request.auth.AccountRequest;
 import world.betterserver.server.model.dto.request.auth.ChangePasswordRequest;
 import world.betterserver.server.model.dto.request.auth.ChangePermissionRequest;
+import world.betterserver.server.model.dto.request.auth.RegisterRequest;
 import world.betterserver.server.model.dto.response.auth.CurrentUserResponse;
 import world.betterserver.server.model.dto.response.auth.LoginResponse;
 import world.betterserver.server.model.dto.response.auth.UserSummary;
@@ -24,7 +25,7 @@ public interface AuthControllerTemplate {
 
     @PostMapping(value = "/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     ResponseEntity<?> register(
-            @RequestPart("request") @Valid AccountRequest request,
+            @RequestPart("request") @Valid RegisterRequest request,
             @RequestPart("file") MultipartFile profilePicture
     );
 
@@ -33,6 +34,9 @@ public interface AuthControllerTemplate {
 
     @GetMapping("/me")
     ResponseEntity<CurrentUserResponse> getCurrentUser(Authentication auth);
+
+    @GetMapping(value = "/discord/callback", produces = MediaType.TEXT_HTML_VALUE)
+    ResponseEntity<String> discordCallback(@RequestParam String code);
 
     @PostMapping("/logout")
     ResponseEntity<?> logout();
