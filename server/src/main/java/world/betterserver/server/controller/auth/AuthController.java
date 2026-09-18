@@ -1,6 +1,7 @@
 package world.betterserver.server.controller.auth;
 
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,6 +35,8 @@ import world.betterserver.server.service.profilePicture.ProfilePictureService;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -240,10 +243,15 @@ public class AuthController implements AuthControllerTemplate {
     }
 
     @Override
-    public Set<UserSummary> getAllUsers() {
+    public List<UserSummary> getAllUsers() {
         return this.userRepository.findAll().stream()
                 .map(usr -> new UserSummary(usr.getUsername(), usr.getPermission()))
-                .collect(Collectors.toSet());
+                .sorted(
+                        Comparator.comparing(UserSummary::maxPermissionLevel)
+                                .reversed() //highest permission level first
+                                .thenComparing(UserSummary::username)   //alphabetically as secondary sort
+                )
+                .toList();
     }
 
     @Override
@@ -264,5 +272,17 @@ public class AuthController implements AuthControllerTemplate {
                 + " to "
                 + newPermission);
         return ResponseEntity.ok().build();
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> deleteAccount(String username) {
+
+        //we already know the user is a dev, and they are not deleting their own account
+        long deletedCount = this.userRepository.deleteByUsername(username);
+        if (deletedCount == 0) {
+            return ResponseEntity.badRequest().body("Could not find an account with name: " + username);
+        }
+        else return ResponseEntity.ok().build();
     }
 }

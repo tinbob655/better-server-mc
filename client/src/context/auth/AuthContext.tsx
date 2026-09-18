@@ -19,6 +19,7 @@ export interface AuthContextValue {
     changePassword: (request: ChangePasswordRequest) => Promise<void>;
     changePermission: (username: string, request: ChangePermissionRequest) => Promise<void>;
     updateProfilePicture: (file: File) => Promise<void>;
+    deleteUser: (username: string) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextValue | undefined>(undefined);

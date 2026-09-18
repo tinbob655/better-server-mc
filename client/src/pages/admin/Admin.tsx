@@ -15,7 +15,7 @@ export default function Admin(): React.ReactElement {
 
     const navigate = useNavigate();
 
-    const {user} = useAuth();
+    const {user, deleteUser} = useAuth();
     const isDev: boolean = user?.maxPermission === 10;
 
     const [showUserAccounts, setShowUserAccounts] = useState<boolean>(false);
@@ -36,6 +36,11 @@ export default function Admin(): React.ReactElement {
         setAllUsers(prev => prev.map(u =>
             u.username === username ? {...u, maxPermissionLevel: newPermission} : u
         ));
+    }
+
+    function handleDeleteUser(username: string): void {
+        deleteUser(username)
+            .then(() => setAllUsers(prev => prev.filter(u => u.username !== username)));
     }
 
     //only show the page to devs
@@ -60,6 +65,7 @@ export default function Admin(): React.ReactElement {
                             user={summary}
                             key={summary.username}
                             onPermissionChanged={handleUserPermissionChanged}
+                            deleteUser={() => handleDeleteUser(summary.username)}
                         />
                     ))}
                 </Suspense>

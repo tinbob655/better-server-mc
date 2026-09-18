@@ -17,11 +17,33 @@
 
   transition: border-color vars.$transition-base;
 
+
   &:hover {
     border-color: vars.$color-border-strong;
 
     .userSummaryUsername {
       transform: translateX(vars.$space-1);
+    }
+  }
+
+  .userSummaryUsername {
+    flex-grow: 1;
+  }
+
+  .deleteButtonWrapper {
+    width: min-content;
+
+    //if the user is logged in as the account the delete button is for then grey it out
+    &.greyed {
+      opacity: 0.4;
+
+      > .iconButtonWrapper {
+        cursor: not-allowed;
+
+        &:hover {
+          transform: scale(1);
+        }
+      }
     }
   }
 

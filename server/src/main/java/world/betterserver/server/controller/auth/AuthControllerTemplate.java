@@ -15,7 +15,7 @@ import world.betterserver.server.model.dto.response.auth.CurrentUserResponse;
 import world.betterserver.server.model.dto.response.auth.LoginResponse;
 import world.betterserver.server.model.dto.response.auth.UserSummary;
 
-import java.util.Set;
+import java.util.List;
 
 @RequestMapping("/api/auth")
 public interface AuthControllerTemplate {
@@ -58,10 +58,15 @@ public interface AuthControllerTemplate {
     //allow devs to read all user's account info (no passwords)
     @PreAuthorize("hasAuthority('DEV')")
     @GetMapping("/allUsers")
-    Set<UserSummary> getAllUsers();
+    List<UserSummary> getAllUsers();
 
     //allow devs to change account newPermission levels apart from their own
     @PreAuthorize("#username != authentication.name and hasAuthority('DEV')")
     @PutMapping("/users/{username}/permission")
     ResponseEntity<?> changePermissionLevel(@PathVariable String username, @RequestBody @Valid ChangePermissionRequest request);
+
+    //dev only again, dev cannot delete their own account
+    @PreAuthorize("hasAuthority('DEV') and #username != authentication.name")
+    @DeleteMapping("/users/{username}")
+    ResponseEntity<?> deleteAccount(@PathVariable String username);
 }

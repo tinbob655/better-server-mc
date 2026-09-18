@@ -88,6 +88,12 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
         });
     }
 
+    async function deleteUser(username: string): Promise<void> {
+        if (user?.username === username) throw new Error("Cannot delete own account.");
+
+        await axiosInstance.delete(`/auth/users/${username}`);
+    }
+
     return (
         <AuthContext.Provider value={{
             user,
@@ -100,6 +106,7 @@ export function AuthProvider({ children }: { children: ReactNode }): React.React
             changePassword,
             changePermission,
             updateProfilePicture,
+            deleteUser,
         }}>
             {children}
         </AuthContext.Provider>
