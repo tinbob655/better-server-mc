@@ -63,7 +63,7 @@ public class SecurityConfig {
                          */
 
                         //allow users to view the status of the server with no account
-                        .requestMatchers("/api/serverStatus").permitAll()
+                        .requestMatchers("/api/serverStatus", "/ws/serverStatus").permitAll()
 
                         //allow users to get other users' profile pictures
                         .requestMatchers("/api/auth/users/*/profilePicture").permitAll()

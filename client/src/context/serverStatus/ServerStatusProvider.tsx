@@ -1,29 +1,44 @@
 import React, {useEffect, useState} from 'react';
-import axiosInstance from "../../axiosInstance.ts";
 import type {ServerStatusInfo} from "../../types/serverStatus";
 import {ServerStatusContext} from "./ServerStatusContext.tsx";
 
-const PING_DELAY_MS = 5_000;
+/*derives the websocket origin from the REST API base url, e.g.
+//"http://localhost:8080/api" -> "ws://localhost:8080" (https -> wss) */
+const WS_BASE_URL: string = import.meta.env.VITE_API_BASE_URL
+    .replace(/\/api\/?$/, '')
+    .replace(/^http/, 'ws');
+
+const RECONNECT_DELAY_MS = 3_000;
 
 export function ServerStatusProvider({children}: {children: React.ReactNode}): React.ReactElement {
 
-    const [serverStatus, setServerStatus] = useState<ServerStatusInfo|undefined>(undefined);
+    const [serverStatus, setServerStatus] = useState<ServerStatusInfo | undefined>(undefined);
 
     useEffect(() => {
-        function fetchStatus(): void {
-            axiosInstance.get("/serverStatus")
-                .then(res => setServerStatus(res.data));
+        let socket: WebSocket;
+        let reconnectTimeout: ReturnType<typeof setTimeout>;
+        let cancelled = false;
+
+        function connect(): void {
+            socket = new WebSocket(`${WS_BASE_URL}/ws/serverStatus`);
+
+            socket.onmessage = (event: MessageEvent<string>) => {
+                setServerStatus(JSON.parse(event.data));
+            };
+
+            //if the connection drops out, try to reconnect
+            socket.onclose = () => {
+                if (!cancelled) reconnectTimeout = setTimeout(connect, RECONNECT_DELAY_MS);
+            };
         }
 
-        //initial ping
-        setTimeout(() => {
-            fetchStatus();
-        }, 100);
+        connect();
 
-        //recurring ping
-        const interval = setInterval(fetchStatus, PING_DELAY_MS);
-
-        return (() => clearInterval(interval));
+        return () => {
+            cancelled = true;
+            clearTimeout(reconnectTimeout);
+            socket?.close();
+        };
     }, []);
 
     return (
