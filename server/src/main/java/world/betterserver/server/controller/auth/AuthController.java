@@ -88,6 +88,8 @@ public class AuthController implements AuthControllerTemplate {
             String passwordHash = this.encoder.encode(request.password());
             User user = new User(request.username(), passwordHash, filename);
             this.userRepository.save(user);
+
+            this.notifier.notifyDiscord("A new user account was created with username '" + user.getUsername() + "'.");
             return ResponseEntity.ok().build();
         }
         catch (IOException e) {
@@ -265,12 +267,14 @@ public class AuthController implements AuthControllerTemplate {
 
         //save & notify discord
         this.userRepository.save(user);
-        this.notifier.notifyDiscord("The permissions of user "
+        this.notifier.notifyDiscord("The permissions of user '"
                 + username
-                + " were changed from "
+                + "' were changed from '"
                 + oldPermission
-                + " to "
-                + newPermission);
+                + "' to '"
+                + newPermission
+                + "'."
+        );
         return ResponseEntity.ok().build();
     }
 
