@@ -5,6 +5,8 @@ import usePoll from "../../hooks/usePoll.ts";
 import FancyButton from "../../components/fancyButton/FancyButton.tsx";
 import {useAuth} from "../../context/auth/AuthContext.tsx";
 import {Permission} from "../../types/permission.ts";
+import SearchBar from "../../components/searchBar/SearchBar.tsx";
+import useSearch from "../../hooks/useSearch.ts";
 
 const SinglePoll = lazy(() => import("./singlePoll/SinglePoll.tsx"));
 const NewPollForm = lazy(() => import("./newPollForm/NewPollForm.tsx"));
@@ -29,6 +31,8 @@ export default function Polls():React.ReactElement {
     const {user} = useAuth();
     const isDev: boolean = user?.maxPermission === Permission.DEV;
 
+    const {search, setSearch, filteredItems} = useSearch(pollSummaries, p => [p.title]);
+
     const [showAllPolls, setShowAllPolls] = useState<boolean>(false);
     const [creatingNewPoll, setCreatingNewPoll] = useState<boolean>(false);
 
@@ -48,18 +52,33 @@ export default function Polls():React.ReactElement {
                     Please take a look at our polls. To vote in a poll, you will need to be logged into your
                     Better Server account.
                 </p>
-                {fetchError ? (
-                    <p className={"errorText"}>{fetchError}</p>
-                ) : (
+                {fetchError && <p className={"errorText"}>{fetchError}</p>}
+                {!showAllPolls && (
                     <React.Fragment>
                         <p className={"warningText"}>
                             Only showing ongoing polls at the moment.
                         </p>
-                        <FancyButton label={"Click here to show all polls instead"} onClick={toggleShowAllPolls} />
+                        <div style={{marginBottom: '2rem'}}>
+
+                            <FancyButton
+                                label={"Click here to show all polls instead"}
+                                onClick={toggleShowAllPolls}
+                                alignment={"RIGHT"}
+                            />
+                        </div>
                     </React.Fragment>
                 )}
+                <SearchBar
+                    value={search}
+                    onChange={setSearch}
+                    placeholder={"Search polls..."}
+                    alignment={"RIGHT"}
+                />
+                <div className={"sectionDivider light"} />
 
-                {pollSummaries.map(p =>
+                {pollSummaries.length === 0 && <p className={"warningText"}>There are currently no polls available</p>}
+                {pollSummaries.length > 0 && filteredItems.length === 0 && <p className={"warningText"}>No polls for that search</p>}
+                {filteredItems.map(p =>
                     <Suspense>
                         <SinglePoll
                             key={p.title}

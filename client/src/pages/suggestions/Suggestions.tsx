@@ -4,6 +4,8 @@ import GenericMarkupSection from "../../components/genericMarkupSection/GenericM
 import useSuggestion from "../../hooks/useSuggestion.ts";
 import FancyButton from "../../components/fancyButton/FancyButton.tsx";
 import type {Suggestion} from "../../types/suggestion"
+import SearchBar from "../../components/searchBar/SearchBar.tsx";
+import useSearch from "../../hooks/useSearch.ts";
 
 const SingleSuggestion = lazy(() => import("./singleSuggestion/SingleSuggestion.tsx"));
 const NewSuggestionForm = lazy(() => import("./NewSuggestionForm.tsx"));
@@ -19,6 +21,8 @@ export default function Suggestions(): React.ReactElement {
         changeSuggestionAdminResponse,
         changeSuggestionStatus,
     } = useSuggestion();
+
+    const {search, setSearch, filteredItems} = useSearch(suggestions, s => [s.title, s.posterUsername]);
 
     const [showingAll, setShowingAll] = useState<boolean>(false);
     const [makingNewSuggestion, setMakingNewSuggestion] = useState<boolean>(false);
@@ -44,10 +48,20 @@ export default function Suggestions(): React.ReactElement {
                     </React.Fragment>
                 }
 
+                <SearchBar
+                    value={search}
+                    onChange={setSearch}
+                    placeholder={"Search suggestions by name or creator..."}
+                    alignment={"RIGHT"}
+                />
+                <div className={"sectionDivider light"} />
+
                 {fetchError && <p className={"errorText"}>Failed to get suggestions: {fetchError}</p>}
+                {suggestions.length === 0 && <p className={"warningText"}>There are no suggestions available</p>}
+                {suggestions.length > 0 && filteredItems.length === 0 && <p className={"warningText"}>No suggestions match that search</p>}
                 <Suspense>
                     <div style={{marginTop: '1rem'}}>
-                        {suggestions.map((suggestion: Suggestion): React.ReactElement =>
+                        {filteredItems.map((suggestion: Suggestion): React.ReactElement =>
                             <SingleSuggestion
                                 suggestion={suggestion}
                                 key={suggestion.title}
