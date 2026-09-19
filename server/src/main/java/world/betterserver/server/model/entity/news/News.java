@@ -24,6 +24,9 @@ public class News {
     @Column(nullable = false)
     private Instant createdAt;
 
+    @Column(unique = true)
+    private String discordMessageId;
+
     @ManyToOne
     @JoinColumn(name = "users_id", nullable = false)
     private User createdBy;

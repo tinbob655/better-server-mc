@@ -25,22 +25,46 @@ public class ProfilePictureServiceImpl implements ProfilePictureService {
 
     @Override
     public String store(String username, MultipartFile file) throws IOException, IllegalArgumentException {
-        if (!ALLOWED_TYPES.contains(file.getContentType())) {
-            throw new IllegalArgumentException("Only PNG, JPEG or WEBP images are allowed");
+        return store(
+                username,
+                file.getInputStream(),
+                file.getOriginalFilename(),
+                file.getContentType()
+        );
+    }
+
+    @Override
+    public String store(
+            String username,
+            InputStream input,
+            String originalFilename,
+            String contentType
+    ) throws IOException, IllegalArgumentException {
+
+        if (!ALLOWED_TYPES.contains(contentType)) {
+            throw new IllegalArgumentException(
+                    "Content type not allowed"
+            );
         }
 
-        Files.createDirectories(this.uploadRoot);
-        String extension = StringUtils.getFilenameExtension(file.getOriginalFilename());
+        Files.createDirectories(uploadRoot);
+
+        String extension = StringUtils.getFilenameExtension(originalFilename);
         String storedName = username + '_' + UUID.randomUUID() + '.' + extension;
 
-        Path target = this.uploadRoot.resolve(storedName).normalize();
-        if (!target.startsWith(uploadRoot)) throw new IOException("Bad path");
+        Path target = uploadRoot.resolve(storedName).normalize();
 
-        try (InputStream in = file.getInputStream()) {
-            Files.copy(in, target, StandardCopyOption.REPLACE_EXISTING);
+        if (!target.startsWith(uploadRoot)) {
+            throw new IOException("Bad path");
         }
+
+        try (input) {
+            Files.copy(input, target, StandardCopyOption.REPLACE_EXISTING);
+        }
+
         return storedName;
     }
+
 
     @Override
     public void delete(String storedFilename) throws IOException {
