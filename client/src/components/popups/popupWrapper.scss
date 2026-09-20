@@ -47,6 +47,10 @@ div.popupOverlay {
   &.closing {
     animation-name: popupOverlayFadeOut;
   }
+
+  @include vars.mobile {
+    @include vars.relax-alignment;
+  }
 }
 
 div.popupWrapper {

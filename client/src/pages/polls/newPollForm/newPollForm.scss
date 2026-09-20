@@ -89,3 +89,10 @@ section.alignRight > .newPollOptionsWrapper {
     cursor: not-allowed;
   }
 }
+
+@include vars.mobile {
+  section.alignLeft > .newPollOptionsWrapper,
+  section.alignRight > .newPollOptionsWrapper {
+    @include vars.relax-alignment;
+  }
+}

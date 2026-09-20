@@ -140,19 +140,81 @@ header {
     }
   }
 
-  @media (max-width: vars.$breakpoint-md) {
+  //hidden on desktop, only shown once the mobile block below turns it on
+  .navToggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+
+    width: 2.25rem;
+    height: 2.25rem;
+    padding: 0;
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    span {
+      display: block;
+      width: 1.4rem;
+      height: 2px;
+      border-radius: vars.$radius-pill;
+      background-color: vars.$color-text;
+      transition: transform vars.$transition-fast, opacity vars.$transition-fast;
+    }
+
+    //morphs into a cross when the menu is open
+    &.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    &.open span:nth-child(2) { opacity: 0; }
+    &.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  }
+
+  @include vars.mobile {
     padding: 0 vars.$space-4;
 
     .headerBrand span {
       display: none; //icon only once space is tight
     }
 
+    .navToggle {
+      display: flex;
+    }
+
+    //collapses into a dropdown panel anchored under the fixed header
     nav {
-      gap: vars.$space-4;
+      position: fixed;
+      top: 4.5rem; //header's own height
+      left: 0;
+      right: 0;
+      z-index: map.get(vars.$z-index, overlay); //above the status pill (sticky), below popups (modal)
+
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+
+      background-color: vars.$color-bg;
+      border-bottom: 1px solid vars.$color-border;
+      box-shadow: vars.$shadow-md;
+
+      transition: max-height vars.$transition-base ease, opacity vars.$transition-base ease;
+
+      &.open {
+        max-height: 28rem; //comfortably fits every link, including admin
+        opacity: 1;
+        padding: vars.$space-2 0;
+      }
     }
 
     .navLink {
-      font-size: vars.$font-size-xs;
+      padding: vars.$space-3 vars.$space-4;
+      font-size: vars.$font-size-sm;
+      text-align: center;
     }
   }
 }

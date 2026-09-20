@@ -196,3 +196,15 @@
 
   animation: userSummaryFeedbackIn 0.25s ease both;
 }
+
+@include vars.mobile {
+  .userSummaryRow {
+    max-width: none;
+  }
+
+  section.alignLeft > .userSummaryRow,
+  section.alignRight > .userSummaryRow {
+    margin-left: vars.$space-4;
+    margin-right: vars.$space-4;
+  }
+}

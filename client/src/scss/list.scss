@@ -6,6 +6,10 @@ $list-aligned-max-width: 66%; // matches $aligned-text-max-width in text.scss
   margin-left: vars.$global-edge-margin;
   margin-right: auto;
   max-width: $list-aligned-max-width;
+
+  @include vars.mobile {
+    @include vars.relax-alignment;
+  }
 }
 
 %listAlignRight {
@@ -22,6 +26,19 @@ $list-aligned-max-width: 66%; // matches $aligned-text-max-width in text.scss
 
   > li:hover {
     transform: translateX(vars.$space-1 * -1);
+  }
+
+  @include vars.mobile {
+    @include vars.relax-alignment;
+
+    > li {
+      flex-direction: row;
+      text-align: left;
+    }
+
+    > li:hover {
+      transform: translateX(vars.$space-1);
+    }
   }
 }
 

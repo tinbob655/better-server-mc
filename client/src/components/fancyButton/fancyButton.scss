@@ -94,3 +94,10 @@ section.alignRight > .fancyButton, .fancyButton.alignRight {
     box-shadow: 0 0 12px rgba(88, 101, 242, 0.35);
   }
 }
+
+@include vars.mobile {
+  section.alignLeft > .fancyButton, .fancyButton.alignLeft,
+  section.alignRight > .fancyButton, .fancyButton.alignRight {
+    @include vars.relax-alignment;
+  }
+}

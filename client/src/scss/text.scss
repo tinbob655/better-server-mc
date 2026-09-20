@@ -48,6 +48,10 @@ $aligned-text-max-width: 66%;
   text-align: left;
   transform-origin: left;
   max-width: $aligned-text-max-width;
+
+  @include vars.mobile {
+    @include vars.relax-alignment;
+  }
 }
 
 %textAlignRight {
@@ -56,6 +60,11 @@ $aligned-text-max-width: 66%;
   text-align: right;
   transform-origin: right;
   max-width: $aligned-text-max-width;
+
+  @include vars.mobile {
+    @include vars.relax-alignment;
+    text-align: left; //long right-aligned paragraphs are hard to read on narrow screens
+  }
 }
 
 section.alignLeft > p,

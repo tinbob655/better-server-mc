@@ -154,3 +154,10 @@ form.horizontal {
     margin-right: vars.$global-edge-margin;
   }
 }
+
+@include vars.mobile {
+  section.alignLeft > form.horizontal,
+  section.alignRight > form.horizontal {
+    @include vars.relax-alignment;
+  }
+}

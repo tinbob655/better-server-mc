@@ -103,12 +103,14 @@ section.genericMarkupSection {
     opacity: 1;
   }
 
-  @media (max-width: vars.$breakpoint-md) {
+  @include vars.mobile {
+    margin: vars.$space-5 auto; // tighter vertical rhythm once sections stack full-width
     padding: vars.$space-5 vars.$space-4;
     max-width: 100%;
 
-    &::before {
-      display: none; //the decorative ring has no room to breathe on narrow screens
+    &::before,
+    &::after {
+      display: none; // the decorative ring & spine have no room to breathe here
     }
   }
 }

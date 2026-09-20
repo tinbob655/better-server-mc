@@ -13,5 +13,10 @@ footer {
 
     border-radius: vars.$radius-md;
     box-shadow: vars.$glow-orbit;
+
+    @include vars.mobile {
+      height: auto;
+      width: min(60vw, 200px);
+    }
   }
 }

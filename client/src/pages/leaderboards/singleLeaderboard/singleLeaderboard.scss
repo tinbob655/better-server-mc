@@ -94,7 +94,16 @@ div.leaderboardWrapper {
 
   &:hover {
     border-color: vars.$color-border-strong;
-    transform: translateX(98% - $maxWidth);
+    transform: translateX(calc(98% - $maxWidth));
+  }
+
+  @include vars.mobile {
+    $maxWidth: 89%;
+    max-width: $maxWidth;
+
+    &:hover {
+      transform: translateX(calc(90% - $maxWidth));
+    }
   }
 
   //a podium for first, second and third
